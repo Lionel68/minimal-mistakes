@@ -5,14 +5,16 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # `jekyll serve`. If you change this file, please restart the server process.
 
-minimal_mistakes_skin    : "default" # "air", "contrast", "dark", "dirt", "mint", "sunrise"
+theme: minimal-mistakes-jekyll
+
+minimal_mistakes_skin    : "air" # "default", "contrast", "dark", "dirt", "mint", "sunrise"
 
 # Site Settings
 locale                   : "en"
-title                    : "Site Title"
+title                    : "biologyforfun"
 title_separator          : "-"
-name                     : "Your Name"
-description              : "An amazing website."
+name                     : "Lionel Hertzog"
+description              : "Some description to be added"
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -20,7 +22,8 @@ teaser                   : # path of fallback teaser image, e.g. "/assets/images
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
-  provider               : # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "staticman_v2" "custom"
+  provider               : "staticman"
+# false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "staticman_v2" "custom"
   disqus:
     shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
@@ -83,11 +86,11 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  name             : "Lionel"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an amazing person."
-  location         : "Somewhere"
-  email            :
+  bio              : "Ecologico-statistico lost in the wold PostDoc"
+  location         : "Somewhere in Belgium"
+  email            : "lionel.hertzog[a]ugent.be"
   uri              :
   bitbucket        :
   codepen          :
@@ -95,7 +98,7 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           :
+  github           : "htpps://github.com/lionel68/"
   gitlab           :
   google_plus      :
   keybase          :
