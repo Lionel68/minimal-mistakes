@@ -1,11 +1,11 @@
 # main links
 main:
   - title: "About"
-    url: /page/
+    url: /about/
   - title: "Research"
-    url: /page/
+    url: /research/
   - title: "Publications"
-    url: /page/
+    url: /publications/
   - title: "Blog"
     url: /posts/
   # - title: "Sitemap"
