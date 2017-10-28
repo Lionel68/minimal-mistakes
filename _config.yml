@@ -12,11 +12,11 @@ locale                   : "en"
 title                    : "biologyforfun"
 title_separator          : "-"
 name                     : "Lionel Hertzog"
-description              : "Sharing all the daily fun about ecological research, statistical analysis and R"
+description              : ""
 url                      : "https://lionel68.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : /assets/images/teaser_img.JPG
+teaser                   : #̣still to come
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
@@ -85,9 +85,9 @@ analytics:
 # Site Author
 author:
   name             : "Lionel"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Ecologico-statistico lost in the wold PostDoc"
-  location         : "Somewhere in Belgium"
+  avatar           : "/assets/images/ID.jpeg"
+  bio              : "Ecologist with quasi-pathological addiction for data"
+  location         : "Gent, Belgium"
   email            : "lionel.hertzog[a]ugent.be"
   uri              :
   bitbucket        :
