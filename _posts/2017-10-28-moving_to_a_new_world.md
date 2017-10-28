@@ -1,4 +1,7 @@
-#Hello World
+---
+title: Hellow world
+permalink: /_posts/
+---
 
 How cool it is to be able to:
 
