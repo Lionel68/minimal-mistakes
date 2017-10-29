@@ -20,10 +20,10 @@ teaser                   : #̣still to come
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
-  provider               : "staticman_v2"
+  provider               : "disqus"
 # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "staticman_v2" "custom"
   disqus:
-    shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname            : "lionel68" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -33,7 +33,7 @@ comments:
     colorscheme          : # "light" (default), "dark"
 staticman:
   allowedFields          :  #['name', 'email', 'url', 'message']
-  branch                 :  "master"
+  branch                 :  #"master"
   commitMessage          :  #"New comment."
   filename               :  #comment-{@timestamp}
   format                 :  #"yml"
