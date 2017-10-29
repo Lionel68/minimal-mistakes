@@ -7,3 +7,7 @@ comments: true
 ---
 
 This is my blog page.
+
+{% for post in site.post %}
+  {% include archive-single.html %}
+{% endfor %}
