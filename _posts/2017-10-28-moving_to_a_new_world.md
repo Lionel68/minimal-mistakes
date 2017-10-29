@@ -1,5 +1,7 @@
 ---
-title:  "Welcome to Jekyll!"
+title:  "Hello world"
+layout: single
+date: 28/10/2017
 header:
   teaser: ""
 categories: 
