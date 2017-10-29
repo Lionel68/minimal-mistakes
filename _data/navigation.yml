@@ -7,6 +7,6 @@ main:
   - title: "Publications"
     url: /publications/
   - title: "Blog"
-    url: /_posts/
+    url: /blog/
   # - title: "Sitemap"
   #   url: /sitemap/
