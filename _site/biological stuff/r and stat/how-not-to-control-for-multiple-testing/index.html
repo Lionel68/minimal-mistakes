@@ -1,0 +1,670 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>How not to control for multiple testing - biologyforfun</title>
+
+
+
+
+<meta name="description" content="While reading the method section of a recent article by Solivares et al, I came upon the following paragraph:">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="How not to control for multiple testing">
+
+
+  <link rel="canonical" href="http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing/">
+  <meta property="og:url" content="http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing/">
+
+
+
+  <meta property="og:description" content="While reading the method section of a recent article by Solivares et al, I came upon the following paragraph:">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-04-17T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How not to control for multiple testing">
+    <meta itemprop="description" content="While reading the method section of a recent article by Solivares et al, I came upon the following paragraph:">
+    <meta itemprop="datePublished" content="April 17, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">How not to control for multiple testing
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>While reading the method section of a recent article by <a href="https://www.nature.com/nature/journal/v536/n7617/full/nature19092.html">Solivares et al</a>, I came upon the following paragraph:</p>
+
+<p>“The inclusion of many predictors in statistical models increases the chance of type I error (false positives). To account for this we used a Bernoulli process to detect false discovery rates, where the probability (<em>P</em>) of finding a given number of significant predictors (K) just by chance is a proportion of the total number of predictors tested (<em>N</em> = 16 in our case: the abundance and richness of 7 and 9 trophic groups, respectively) and the <em>P</em> value considered significant (<em>α</em> = 0.05 in our case)<a href="http://www.nature.com/nature/journal/v536/n7617/full/nature19092.html#ref39">39</a>, <a href="http://www.nature.com/nature/journal/v536/n7617/full/nature19092.html#ref40">40</a>. The probability of finding three significant predictors on average, as we did, is therefore, <em>P</em> = [16!/(16 − 3)!3!] × 0.053(1 − 0.05)(16 − 3) = 0.0359 [added note from me: 0.053 should actually be: 0.053], indicating that the effects we found are very unlikely to be spurious. The probability of false discovery rates when considering all models and predictors fit (14 ecosystem services × 16 richness and abundance metrics) and the ones that were significant amongst them (52: 25 significant abundance predictors and 27 significant richness predictors) was even lower (<em>P</em> &lt; 0.0001).”</p>
+
+<p>I have never read such an argument before. I am no statistician but I think that the arguments presented by the authors do not account for multiple testing issues. This paragraph is in no way comforting me that the authors took steps to prevent such issues to affect their conclusions. Do note that this post is not a critic of the article in general (even if I would have a couple of things to say) or of the conclusions drawn by the authors.</p>
+
+<h2 id="what-is-a-bernoulli-process">What is a Bernoulli process?</h2>
+
+<p>A Bernoulli process is when you make a series of trials where each single one of them can have only two outcomes (like success and failures) and you can attribute a probability to each outcome. Flipping a coin is a Bernoulli process, only two outcomes are possible, either the coin lands on heads, either it lands on tails. If the coin is fair the probability of getting a head is 0.5. If you flip the coin n times and assume that the throws are independent between them, we can get the probability of getting k heads (k being an integer between 0 and 10) by using the binomial distribution:</p>
+
+<p>P(X=k) = (n! / (n-k)!k!) * pk * (1-p)n-k</p>
+
+<p>The probability of obtaining 10 heads from 10 flips of a fair coin is:</p>
+
+<p>P(X=10) = (10! / (10-10)!10!) * 0.510 * 0.510-10 = 0.0009, so P &lt; 0.001</p>
+
+<h2 id="is-multiple-testing-a-bernoulli-process">Is multiple testing a Bernoulli process?</h2>
+
+<p>It might seem tempting to do so, people often assume that if the p-value is larger than 0.05 then there is no effect (failure) and if the p-value is smaller 0.05 then there is an effect (success). From this rationale we could somehow assume that everything is random, that there are no effects, use the 0.05 threshold as the probability to have a success and see how likely it is to obtain k successes from multiple tests assuming that all p-values are independent. This is wrong. If you feel unsure what exactly are p-values, a nice <a href="http://esajournals.onlinelibrary.wiley.com/hub/issue/10.1002/ecy.2014.95.issue-3/">starting place is the 2014 forum in Ecology</a>.</p>
+
+<p>The core of the arguments from the publication is: “To account for this we used a Bernoulli process to detect false discovery rates, where the probability (<em>P</em>) of finding a given number of significant predictors (K) just by chance is a proportion of the total number of predictors tested […] and the <em>P</em> value considered significant”. No need to invoke a Bernoulli process to detect false discovery, on average 5% of all effects reported significant are wrongly classified. The authors tested (16*14) 224 effects, so at least 11 of the reported significant effect are wrongly classified. In addition, I am unsure what the authors meant with “just by chance”, fitting a specific statistical model does not happen just by chance. I hope that we are doing a bit better in ecology than just assembling random predictors and seeing what affect what. When fitting a series of models, we have developed a rationale for doing so, limiting the amount of tested relationships to the one that fits to our ideas of the world. There is no “just by chance” in detecting a significant effect or not, there are effects that fits with the data at hand and others that do not. So the probabilities reported by the authors are, to my mind, meaningless, they do not account for multiple testing in any way. If I were to test 1 billion relationship and I found 1 million to be significant, what would be the meaning of: P(X=1’000’000) ?</p>
+
+<h2 id="what-could-the-authors-have-done">What could the authors have done?</h2>
+
+<p>The issue of multiple testing is not new, there are many ways to try to account for this issue. Simple correction to the threshold used to class effects into significant or non-significant, like the Bonferroni correction or other methods like the Hochberg procedure can be applied. Other methods that try to control the false discovery rates exist and have been advocated by ecologists like in <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.0030-1299.2005.13727.x/full">Verhoven et al</a> or <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00061.x/full">Pike et al</a>. So there are plenty of methods out there, no need to invent new ones in a paper like this which is primarily interested in reporting ecological patterns.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I guess that the authors got asked by one of the reviewers if they were taking into account the issue of multiple testing, and they added this paragraph as a response. I am a bit baffled that the editor and/or the reviewers accepted such argumentation. Anyhow I sincerely hope that it is the first and only time that I will read such argumentation in an ecological paper. To finish, let me re-emphasize that this post is in no way intended to discredit the work of the authors, it is just expressing my concerns over this paragraph that may appeal to others and flourish in the literature.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ecology" class="page__taxonomy-item" rel="tag">ecology</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#multiple-testing" class="page__taxonomy-item" rel="tag">multiple testing</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#biological-stuff" class="page__taxonomy-item" rel="tag">Biological Stuff</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-04-17T00:00:00+02:00">April 17, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=How+not+to+control+for+multiple+testing%20http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fhow-not-to-control-for-multiple-testing%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fhow-not-to-control-for-multiple-testing%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fhow-not-to-control-for-multiple-testing%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fhow-not-to-control-for-multiple-testing%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/opinion%20posts/about-my-phd-defense-in-germany/" class="pagination--pager" title="About my PhD defense in Germany
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/" class="pagination--pager" title="Simulating SEMs for piecewiseSEM: part 1 the basics
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

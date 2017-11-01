@@ -1,0 +1,696 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Ploting SEMs in R using semPlot - biologyforfun</title>
+
+
+
+
+<meta name="description" content="This is a short post presenting the great package semPlot developed by Sacha Epskamp (check out his nice website: http://sachaepskamp.com/) to make nice plots from your SEMs. SEMs are a modelling tool that allow the researcher to investiguate complex relationships between the variables, you may find here many links to free tutorials: http://www.structuralequations.org/. Here I present a few tricks to plot SEMs in R that I have been using but if you look at ?semPaths or ?qgraph you will see that there are many many options to tune your graphs that I will not present here.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Ploting SEMs in R using semPlot">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/ploting-sems-in-r-using-semplot/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/ploting-sems-in-r-using-semplot/">
+
+
+
+  <meta property="og:description" content="This is a short post presenting the great package semPlot developed by Sacha Epskamp (check out his nice website: http://sachaepskamp.com/) to make nice plots from your SEMs. SEMs are a modelling tool that allow the researcher to investiguate complex relationships between the variables, you may find here many links to free tutorials: http://www.structuralequations.org/. Here I present a few tricks to plot SEMs in R that I have been using but if you look at ?semPaths or ?qgraph you will see that there are many many options to tune your graphs that I will not present here.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-08-10T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Ploting SEMs in R using semPlot">
+    <meta itemprop="description" content="This is a short post presenting the great package semPlot developed by Sacha Epskamp (check out his nice website: http://sachaepskamp.com/) to make nice plots from your SEMs. SEMs are a modelling tool that allow the researcher to investiguate complex relationships between the variables, you may find here many links to free tutorials: http://www.structuralequations.org/. Here I present a few tricks to plot SEMs in R that I have been using but if you look at ?semPaths or ?qgraph you will see that there are many many options to tune your graphs that I will not present here.">
+    <meta itemprop="datePublished" content="August 10, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Ploting SEMs in R using semPlot
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>This is a short post presenting the great package semPlot developed by Sacha Epskamp (check out his nice website: http://sachaepskamp.com/) to make nice plots from your SEMs. SEMs are a modelling tool that allow the researcher to investiguate complex relationships between the variables, you may find here many links to free tutorials: http://www.structuralequations.org/. Here I present a few tricks to plot SEMs in R that I have been using but if you look at ?semPaths or ?qgraph you will see that there are many many options to tune your graphs that I will not present here.</p>
+
+<p>`</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #loading the library
+library(semPlot)
+library(lavaan)
+library(clusterGeneration) #this is to generate a positive definite covariance matrix
+#simulate some data
+set.seed(1222)
+sig&lt;-genPositiveDefMat("onion",dim=5,eta=4)$Sigma #the covariance matrix
+mus&lt;-c(10,5,120,35,6) #the vector of the means
+data&lt;-as.data.frame(mvrnorm(100,mu=mus,Sigma=sig)) #the dataset
+names(data)&lt;-c("CO2","Temp","Nitro","Biom","Rich") #giving it some names
+#building an SEM with a latent variable
+m&lt;-'Abiot =~ CO2 + Temp + Nitro
+Biom ~ Abiot
+Rich ~ Abiot + Biom'
+m.fit&lt;-sem(m,data)
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p>`</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#the plot
+#basic version, the what arguments specify what should be plotted, here we choose to look at the standardized path coefficients
+semPaths(m.fit,what="std",layout="circle")
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/08/semplot1.png"><img src="http://biologyforfun.files.wordpress.com/2014/08/semplot1.png" alt="semPlot1" /></a></p>
+
+<p>Here is just a basic version of the plots, many things can be changed, I will focus on the layout of the graph, the labels going into the nodes and the different groups of variables.</p>
+
+<p>`</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#define the label that will go into the nodes
+lbls&lt;-c("CO2\nconcentration","Temperature","Nitrogen\ncontent","Plant\nbiomass","Plant\nrichness","Abiotic\nenvironment")
+#define the groups
+grps&lt;-list(Abiotic=c("CO2","Temp","Nitro","Abiot"),Plant=c("Biom","Rich"))
+#define the layout
+ly&lt;-matrix(c(-0.5,-0.5,0,-0.5,0.5,-0.5,0,0.5,-0.5,0.5,0,0),ncol=2,byrow=TRUE)
+#new plot
+semPaths(m.fit,what="std",layout=ly,residuals=FALSE,nCharNodes=0,groups=grps,color=c("brown","green"),nodeLabels=lbls,sizeMan=8,posCol=c("blue","red"),edge.label.cex=1.5,legend=FALSE)
+text(0.9,0.9,labels="Some text about\nthe model or\nthe weather in Indonesia")
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/08/semplot21.png"><img src="http://biologyforfun.files.wordpress.com/2014/08/semplot21.png" alt="semPlot2" /></a></p>
+
+<p>In this new plot I used the layout argument to specify my home-made layout, the plot is within a (-1,1)(-1,1) space and the position of each node can be specify using a 2 column matrix containing the X and Y position. To find out the order of the nodes and the edges one can do something like:</p>
+
+<p>`</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>semPaths(m.fit,what="std",nodeLabels=letters[1:6],edgeLabels=1:12,edge.label.cex=1.5,fade=FALSE)
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/08/semplot3.png"><img src="http://biologyforfun.files.wordpress.com/2014/08/semplot3.png" alt="semPlot3" /></a></p>
+
+<p>Using this knowledge we can define our own node labels using the nodeLabel argument (the \n is to add a line break in the label). Finally the groups argument need a list with character vectors of the different groups, each of the nodes belonging to the groups can get a particular color defined by color. sizeMan control the size of the nodes, posCol the color of the edges, when this is two colors the first one will be used for the positive edges and the second one for the negatives.</p>
+
+<p>Again just by looking at the help pages of semPaths you will see much more ways to tailor your graphs to your need. Happy plotting.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#sems" class="page__taxonomy-item" rel="tag">SEMs</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-08-10T00:00:00+02:00">August 10, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Ploting+SEMs+in+R+using+semPlot%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fploting-sems-in-r-using-semplot%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fploting-sems-in-r-using-semplot%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fploting-sems-in-r-using-semplot%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fploting-sems-in-r-using-semplot%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/using-bootmer-to-do-model-comparison-in-r/" class="pagination--pager" title="Using bootMer to do model comparison in R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/first-scientific-conference-inspiration-meetings-and-walking/" class="pagination--pager" title="First scientific conference; Inspiration, Meetings and Walking
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/ploting-sems-in-r-using-semplot/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/ploting-sems-in-r-using-semplot"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

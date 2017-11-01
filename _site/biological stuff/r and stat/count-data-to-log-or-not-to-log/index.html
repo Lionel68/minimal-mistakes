@@ -1,0 +1,733 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Count data: To Log or Not To Log - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Count data are widely collected in ecology, for example when one count the number of birds or the number of flowers. These data follow naturally a Poisson or negative binomial distribution and are therefore sometime tricky to fit with standard LMs. A traditional approach has been to log-transform such data and then fit LMs to the transformed data. Recently a paper advocated against the use of such transformation since it led to high bias in the estimated coefficients. More recently another paper argued that log-transformation of count data followed by LM led to lower type I error rate (ie saying that an effect is significant when it is not) than GLMs. What should we do then?">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Count data: To Log or Not To Log">
+
+
+  <link rel="canonical" href="http://localhost:4000/biological%20stuff/r%20and%20stat/count-data-to-log-or-not-to-log/">
+  <meta property="og:url" content="http://localhost:4000/biological%20stuff/r%20and%20stat/count-data-to-log-or-not-to-log/">
+
+
+
+  <meta property="og:description" content="Count data are widely collected in ecology, for example when one count the number of birds or the number of flowers. These data follow naturally a Poisson or negative binomial distribution and are therefore sometime tricky to fit with standard LMs. A traditional approach has been to log-transform such data and then fit LMs to the transformed data. Recently a paper advocated against the use of such transformation since it led to high bias in the estimated coefficients. More recently another paper argued that log-transformation of count data followed by LM led to lower type I error rate (ie saying that an effect is significant when it is not) than GLMs. What should we do then?">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-07-22T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Count data: To Log or Not To Log">
+    <meta itemprop="description" content="Count data are widely collected in ecology, for example when one count the number of birds or the number of flowers. These data follow naturally a Poisson or negative binomial distribution and are therefore sometime tricky to fit with standard LMs. A traditional approach has been to log-transform such data and then fit LMs to the transformed data. Recently a paper advocated against the use of such transformation since it led to high bias in the estimated coefficients. More recently another paper argued that log-transformation of count data followed by LM led to lower type I error rate (ie saying that an effect is significant when it is not) than GLMs. What should we do then?">
+    <meta itemprop="datePublished" content="July 22, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Count data: To Log or Not To Log
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  7 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Count data are widely collected in ecology, for example when one count the number of birds or the number of flowers. These data follow naturally a Poisson or negative binomial distribution and are therefore sometime tricky to fit with standard LMs. A traditional approach has been to log-transform such data and then fit LMs to the transformed data. Recently a <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00021.x/full">paper</a> advocated against the use of such transformation since it led to high bias in the estimated coefficients. More recently another <a href="http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12386/abstract?userIsAuthenticated=false&amp;deniedAccessCustomisedMessage=">paper</a> argued that log-transformation of count data followed by LM led to lower type I error rate (ie saying that an effect is significant when it is not) than GLMs. What should we do then?</p>
+
+<p>Using a slightly changed version of the code published in the Ives 2015 paper let’s explore the impact of using these different modelling strategies on the rejection of the null hypothesis and the bias of the estimated coefficients.</p>
+
+<p>[code language=”r”]</p>
+
+<p>#load the libraries
+library(MASS)
+library(lme4)
+library(ggplot2)
+library(RCurl)
+library(plyr)</p>
+
+<p>#download and load the functions that will be used
+URL&lt;-“https://raw.githubusercontent.com/Lionel68/Jena_Exp/master/stats/ToLog_function.R”
+download.file(URL,destfile=paste0(getwd(),”/ToLog_function.R”),method=”curl”)
+source(“ToLog_function.R”)</p>
+
+<p>[/code]</p>
+
+<p>Following the paper from Ives and code therein I simulated some predictor (x) and a response (y) that follow a negative binomial distribution and is linearly related to x.
+In the first case I look at the impact of varying the sample size on the rejection of the null hypothesis and the bias in the estimated coefficient between y and x.</p>
+
+<p>[code language=”r”]</p>
+
+<p>######univariate NB case############
+base_theme&lt;-theme(title=element_text(size=20),text=element_text(size=18))
+#range over n
+output&lt;-compute.stats(NRep=500,n.range = c(10,20,40,80,160,320,640,1280))
+ggplot(output,aes(x=n,y=Reject,color=Model))+geom_path(size=2)+scale_x_log10()+labs(x=”Sample Size (log-scale)”,y=”Proportion of Rejected H0”)+base_theme
+ggplot(output,aes(x=n,y=Bias,color=Model))+geom_path(size=2)+scale_x_log10()+labs(x=”Sample Size (log-scale)”,y=”Bias in the slope coefficient”)+base_theme</p>
+
+<p>[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/07/tolog1f.png"><img src="https://biologyforfun.files.wordpress.com/2015/07/tolog1f.png" alt="Figure 1" /></a></p>
+
+<p>For this simulation round the coefficient of the slope (b1) was set to 0 (no effect of x on y), and only the sample size varied. The top panel show the average proportion of time that the p-value of the slope coefficient was lower than 0.05 (H0:b1=0 rejected). We see that for low sample size (&lt;40) the Negative Binomial model has higher proportion of rejected H0 (type I error rate) but this difference between the model disappear as we reached sample size bigger than 100. The bottom panel show the bias (estimated value - true value) in the estimated coefficient. For very low sample size (n=10), Log001, Negative Binomial and Quasipoisson have higher bias than Log1 and LogHalf. For larger sample size the difference between the GLM team (NB and QuasiP) and the LM one (Log1 and LogHalf) gradually decrease and both teams converged to a bias around 0 for larger sample size. Only Log0001 is behaved very badly. From what we saw here it seems that Log1 and LogHalf are good choices for count data, they have low Type I error and Bias along the whole sample size gradient.</p>
+
+<p>The issue is that an effect of exactly 0 never exist in real life where most of the effect are small (but non-zero) thus <a href="http://andrewgelman.com/2015/03/02/what-hypothesis-testing-is-all-about-hint-its-not-what-you-think/">the Null Hypothesis will never be true</a>. Let’s look know how the different models behaved when we vary b1 alone in a first time and crossed with sample size variation.</p>
+
+<p>[code language=”r”]</p>
+
+<p>#range over b1
+outpu&lt;-compute.stats(NRep=500,b1.range = seq(-2,2,length=17))
+ggplot(outpu,aes(x=b1,y=Reject,color=Model))+geom_path(size=2)+base_theme+labs(y=”Proportion of Rejected H0”)
+ggplot(outpu,aes(x=b1,y=Bias,color=Model))+geom_path(size=2)+base_theme+labs(y=”Bias in the slope coefficient”)</p>
+
+<p>[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/07/tolog3f.png"><img src="https://biologyforfun.files.wordpress.com/2015/07/tolog3f.png" alt="Figure2" /></a></p>
+
+<p>Here the sample size was set to 100, what we see in the top graph is that for a slope of exactly 0 all model have a similar average proportion of rejection of the null hypothesis. As b1 become smaller or bigger the average proportion of rejection show very similar increase for all model expect for Log0001 which has a slower increase. This curves basically represent the power of the model to detect an effect and is very similar to the Fig2 in the Ives 2015 paper. Now the bottom panel show that all the LM models have bad behaviour concerning their bias, they have only small bias for very small (close to 0) coefficient, has the coefficient gets bigger the absolute bias increase. This means that even if the LM models are able to detect an effect with similar power the estimated coefficient is wrong. This is due to the value added to the untransformed count data in order to avoid -Inf for 0s. I have no idea on how one may take into account arithmetically these added values and then remove its effects …</p>
+
+<p>Next let’s cross variation in the coefficient with sample size variation:</p>
+
+<p>[code language=”r”]
+#range over n and b1
+output3&lt;-compute.stats(NRep=500,b1.range=seq(-1.5,1.5,length=9),n.range=c(10,20,40,80,160,320,640,1280))
+ggplot(output3,aes(x=n,y=Reject,color=Model))+geom_path(size=2)+scale_x_log10()+facet_wrap(~b1)+base_theme+labs(x=”Sample size (log-scale)”,y=”Proportion of rejected H0”)
+ggplot(output3,aes(x=n,y=Bias,color=Model))+geom_path(size=2)+scale_x_log10()+facet_wrap(~b1)+base_theme+labs(x=”Sample size (log-scale)”,y=”Bias in the slope coefficient”)</p>
+
+<p>[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/07/tolog5f.png"><img src="https://biologyforfun.files.wordpress.com/2015/07/tolog5f.png" alt="Figure 3" /></a></p>
+
+<p>The tope panel show one big issue of focussing only on the significance level: rejection of H0 depend not only on the size of the effect but also on the sample size. For example for b1=0.75 (a rather large value since we work on the exponential scale) less than 50% of all models rejected the null hypothesis for a sample size of 10. Of course as the effect sizes gets larger the impact of the sample size on the rejection of the null hypothesis is reduced. However most effect around the world are small so that we need big sample size to be able to “detect” them using null hypothesis testing. The top graph also shows that NB is slightly better than the other models and that Log0001 is again having the worst performance. The bottom graphs show something interesting, the bias is quasi-constant over the sample size gradient (maybe if we would look closer we would see some variation). Irrespective of how many data point you will collect the LMs will always have bigger bias than the GLMs (expect for the artificial case of b1=0)</p>
+
+<p>To finish with in Ives 2015 the big surprise was the explosion of type I error with the increase in the variation in individual-level random error (adding a random normally distributed value to the linear predictor of each data point and varying the standard deviation of these random values) as can be seen in the Fig3 of the paper.</p>
+
+<p>[code language=”r”]</p>
+
+<p>#range over b1 and sd.eps
+output4&lt;-compute.statsGLMM(NRep=500,b1.range=seq(-1.5,1.5,length=9),sd.eps.range=seq(0.01,2,length=10))
+ggplot(output4,aes(x=sd.eps,y=Reject,color=Model))+geom_path(size=2)+facet_wrap(~b1)+base_theme+labs(x=”“,y=”Proportion of rejected H0”)
+ggplot(output4,aes(x=sd.eps,y=Bias,color=Model))+geom_path(size=2)+facet_wrap(~b1)+base_theme+labs(x=”Standard Deviation of the random error”,y=”Bias of the slope coefficient”)
+[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/07/tolog7f.png"><img src="https://biologyforfun.files.wordpress.com/2015/07/tolog7f.png" alt="Figure 4" /></a></p>
+
+<p>Before looking at the figure in detail please note that a standard deviation of 2 in this context is very high, remember that these values will be added to the linear predictor which will be exponentiated so that we will end up with very large deviation. In the top panel there are two surprising results, the sign of the coefficient affect the pattern of null hypothesis rejection and I do not see the explosion of rejection rates for NB or QuasiP that are presented in Ives 2015. In his paper Ives reported the LRT test for the NB models when I am reporting the p-values from the model summary directly (Wald test). If some people around have computing power it would be interesting to see if changing the seed and/or increasing the number of replication lead to different patterns … The bottom panel show again that the LMs bias are big, the NB and QuasiP models have an increase in the bias with the standard deviation but only if the coefficient is negative (I suspect some issue with the exponentiating of large random positive error), as expected the GLMM perform the best in this context.</p>
+
+<p>Pre-conclusion, in real life of course we would rarely have a model with only one predictor, most of the time we will build larger models with complex interaction structure between the predictors. This will of course affect both H0 rejection and Bias, but this is material for a next post :)</p>
+
+<p>Let’s wrap it up; we’ve seen that even if LM transformation seem to be a good choice for having a lower type I error rate than GLMs this advantage will be rather minimal when using empirical data (no effect are equal to 0) and potentially dangerous (large bias). Ecologists have sometime the bad habits to turn their analysis into a star hunt (R standard model output gives stars to significant effects) and focusing only on using models that have the best behavior towards significance (but large bias) does not seem to be a good strategy to me. <a href="https://dynamicecology.wordpress.com/2012/11/27/ecologists-need-to-do-a-better-job-of-prediction-part-i-the-insidious-evils-of-anova/">More</a> and <a href="http://jabberwocky.weecology.org/2014/01/28/why-i-like-this-testing-the-roles-of-competition-facilitation-and-stochasticity-on-community-structure-in-a-species-rich-assemblage/">more</a> people call for increasing the predictive power of ecological model, we need then modelling techniques that are able to precisely (low bias) estimate the effects. In this context transforming the data to make them somehow fit normal assumption is sub-optimal, it is much more natural to think about what type of processes generated the data (normal, poisson, negative binomial, with or without hierarchical structure) and then model it accordingly. There are extensive discussion nowadays about the use and abuse of p-values in science and I think that in our analysis we should slowly but surely shifts our focus from “significance/p-values&lt;0.05/star hunting” only to a more balanced mix of effect-sizes (or standardized slopes), p-values and R-square.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ecology" class="page__taxonomy-item" rel="tag">ecology</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glm" class="page__taxonomy-item" rel="tag">GLM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#biological-stuff" class="page__taxonomy-item" rel="tag">Biological Stuff</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-07-22T00:00:00+02:00">July 22, 2015</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Count+data%3A+To+Log+or+Not+To+Log%20http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fcount-data-to-log-or-not-to-log%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fcount-data-to-log-or-not-to-log%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fcount-data-to-log-or-not-to-log%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fcount-data-to-log-or-not-to-log%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/confidence-intervals-for-prediction-in-glmms/" class="pagination--pager" title="Confidence Intervals for prediction in GLMMs
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/two-little-annoying-stats-detail/" class="pagination--pager" title="Two little annoying stats detail
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/biological%20stuff/r%20and%20stat/count-data-to-log-or-not-to-log/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/biological%20stuff/r%20and%20stat/count-data-to-log-or-not-to-log"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

@@ -1,0 +1,884 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Hierarchical models with RStan (Part 1) - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Real-world data sometime show complex structure that call for the use of special models. When data are organized in more than one level, hierarchical models are the most relevant tool for data analysis. One classic example is when you record student performance from different schools, you might decide to record student-level variables (age, ethnicity, social background) as well as school-level variable (number of student, budget). In this post I will show how to fit such models using RStan. As there is much to say and try on such models I restrict myself in this post to a rather simple example, I will extend this to more complex situations in latter posts.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Hierarchical models with RStan (Part 1)">
+
+
+  <link rel="canonical" href="http://localhost:4000/informatic%20language/r%20and%20stat/hierarchical-models-with-rstan-part-1/">
+  <meta property="og:url" content="http://localhost:4000/informatic%20language/r%20and%20stat/hierarchical-models-with-rstan-part-1/">
+
+
+
+  <meta property="og:description" content="Real-world data sometime show complex structure that call for the use of special models. When data are organized in more than one level, hierarchical models are the most relevant tool for data analysis. One classic example is when you record student performance from different schools, you might decide to record student-level variables (age, ethnicity, social background) as well as school-level variable (number of student, budget). In this post I will show how to fit such models using RStan. As there is much to say and try on such models I restrict myself in this post to a rather simple example, I will extend this to more complex situations in latter posts.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-11-10T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Hierarchical models with RStan (Part 1)">
+    <meta itemprop="description" content="Real-world data sometime show complex structure that call for the use of special models. When data are organized in more than one level, hierarchical models are the most relevant tool for data analysis. One classic example is when you record student performance from different schools, you might decide to record student-level variables (age, ethnicity, social background) as well as school-level variable (number of student, budget). In this post I will show how to fit such models using RStan. As there is much to say and try on such models I restrict myself in this post to a rather simple example, I will extend this to more complex situations in latter posts.">
+    <meta itemprop="datePublished" content="November 10, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Hierarchical models with RStan (Part 1)
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  7 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Real-world data sometime show complex structure that call for the use of special models. When data are organized in more than one level, <a href="http://www.cambridge.org/de/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models?format=PB&amp;isbn=9780521686891">hierarchical models</a> are the most relevant tool for data analysis. One classic example is when you record student performance from different schools, you might decide to record student-level variables (age, ethnicity, social background) as well as school-level variable (number of student, budget). In this post I will show how to fit such models using RStan. As there is much to say and try on such models I restrict myself in this post to a rather simple example, I will extend this to more complex situations in latter posts.</p>
+
+<h2 id="a-few-words-about-rstan">A few words about RStan:</h2>
+
+<p>If you don’t know anything about STAN and RStan make sure to check out <a href="http://mc-stan.org/">this</a> webpage. In a few words RStan is an R interface to the STAN programming language that let’s you fit Bayesian models. A classical workflow looks like this:</p>
+
+<ol>
+  <li>
+    <p>Write a STAN model file ending with a .stan</p>
+  </li>
+  <li>
+    <p>In R fit the model using the <strong>RStan</strong> package passing the model file and the data to the <em>stan</em> function</p>
+  </li>
+  <li>
+    <p>Check model fit, a great way to do it is to use the <a href="https://cran.r-project.org/web/packages/shinystan/index.html"><strong>shinystan</strong></a> package</p>
+  </li>
+</ol>
+
+<h2 id="first-example-with-simulated-data">First example with simulated data:</h2>
+
+<p>Say that we recorded the response of 10 different plant species to rising temperature and nitrogen concentration. We measured the biomass of 10 individuals per species along a gradient of both temperature and nitrogen concentration and we would like to know how these two variables affect plant biomass. In hierarchical model we let regression parameters vary between the species, this means that, for example, species A might have a more positive slope between temperature and biomass than species B. Note however that we do not fit separate regression to each species, rather the regression parameters for the different species are themselves being fitted to a statistical distribution.</p>
+
+<p>In mathematical terms this example can be written:</p>
+
+<p>$latex \mu_{ij} = \beta_{0j} + \beta_{1j} * Temperature_{ij} + \beta_{2j} * Nitrogen_{ij}$</p>
+
+<p>$latex \beta_{0j} \sim N(\gamma_{0},\tau_{0})$</p>
+
+<p>… (same for all regression coefficients) …</p>
+
+<p>$latex y_{ij} \sim N(\mu_{ij},\sigma)$</p>
+
+<p>For observations i: 1 … N and species j: 1 … J.</p>
+
+<p>This is how such a model looks like in STAN:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">/*</span><span class="n">A</span> <span class="n">simple</span> <span class="n">example</span> <span class="k">of</span> <span class="n">an</span> <span class="n">hierarchical</span> <span class="k">model</span><span class="p">*/</span>
+<span class="n">data</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">&gt;</span> <span class="n">N</span><span class="p">;</span> <span class="p">//</span><span class="n">the</span> <span class="n">number</span> <span class="k">of</span> <span class="n">observations</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">&gt;</span> <span class="n">J</span><span class="p">;</span> <span class="p">//</span><span class="n">the</span> <span class="n">number</span> <span class="k">of</span> <span class="n">groups</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">&gt;</span> <span class="n">K</span><span class="p">;</span> <span class="p">//</span><span class="n">number</span> <span class="k">of</span> <span class="n">columns</span> <span class="k">in</span> <span class="n">the</span> <span class="k">model</span> <span class="n">matrix</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">,</span><span class="n">upper</span><span class="p">=</span><span class="n">J</span><span class="p">&gt;</span> <span class="n">id</span><span class="p">[</span><span class="n">N</span><span class="p">];</span> <span class="p">//</span><span class="n">vector</span> <span class="k">of</span> <span class="n">group</span> <span class="n">indeces</span>
+<span class="err"> </span> <span class="n">matrix</span><span class="p">[</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">]</span> <span class="n">X</span><span class="p">;</span> <span class="p">//</span><span class="n">the</span> <span class="k">model</span> <span class="n">matrix</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">y</span><span class="p">;</span> <span class="p">//</span><span class="n">the</span> <span class="n">response</span> <span class="n">variable</span>
+<span class="p">}</span>
+<span class="k">parameters</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">K</span><span class="p">]</span> <span class="n">gamma</span><span class="p">;</span> <span class="p">//</span><span class="n">population</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;[</span><span class="n">K</span><span class="p">]</span> <span class="n">tau</span><span class="p">;</span> <span class="p">//</span><span class="n">the</span> <span class="n">standard</span> <span class="n">deviation</span> <span class="k">of</span> <span class="n">the</span> <span class="n">regression</span> <span class="n">coefficients</span>
+
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">K</span><span class="p">]</span> <span class="n">beta</span><span class="p">[</span><span class="n">J</span><span class="p">];</span> <span class="p">//</span><span class="n">matrix</span> <span class="k">of</span> <span class="n">group</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">sigma</span><span class="p">;</span> <span class="p">//</span><span class="n">standard</span> <span class="n">deviation</span> <span class="k">of</span> <span class="n">the</span> <span class="n">individual</span> <span class="n">observations</span>
+<span class="p">}</span>
+<span class="k">model</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">mu</span><span class="p">;</span> <span class="p">//</span><span class="n">linear</span> <span class="n">predictor</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">priors</span>
+<span class="err"> </span> <span class="n">gamma</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5</span><span class="p">);</span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span> <span class="n">on</span> <span class="n">the</span> <span class="n">regression</span> <span class="n">coefficients</span>
+<span class="err"> </span> <span class="n">tau</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2.5</span><span class="p">);</span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span><span class="p">,</span> <span class="n">see</span> <span class="n">section</span> <span class="m">6.9</span> <span class="k">in</span> <span class="n">STAN</span> <span class="n">user</span> <span class="n">guide</span>
+<span class="err"> </span> <span class="n">sigma</span> <span class="p">~</span> <span class="n">gamma</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">0.1</span><span class="p">);</span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span><span class="p">,</span> <span class="n">see</span> <span class="n">section</span> <span class="m">6.9</span> <span class="k">in</span> <span class="n">STAN</span> <span class="n">user</span> <span class="n">guide</span>
+<span class="err"> </span> 
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">j</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">J</span><span class="p">){</span>
+<span class="err">  </span> <span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span><span class="n">tau</span><span class="p">);</span> <span class="p">//</span><span class="n">fill</span> <span class="n">the</span> <span class="n">matrix</span> <span class="k">of</span> <span class="n">group</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span> 
+<span class="err"> </span> <span class="p">}</span>
+<span class="err"> </span> 
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">N</span><span class="p">){</span>
+<span class="err">   </span> <span class="n">mu</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">=</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">*</span> <span class="n">beta</span><span class="p">[</span><span class="n">id</span><span class="p">[</span><span class="n">n</span><span class="p">]];</span> <span class="p">//</span><span class="n">compute</span> <span class="n">the</span> <span class="n">linear</span> <span class="n">predictor</span> <span class="n">using</span> <span class="n">relevant</span> <span class="n">group</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span> 
+<span class="err"> </span> <span class="p">}</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">likelihood</span>
+<span class="err"> </span> <span class="n">y</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You can copy/paste the code into an empty text editor and save it under a .stan file.</p>
+
+<p>Now we turn into R:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#load libraries
+library(rstan)
+library(RColorBrewer)
+#where the STAN model is saved
+setwd("~/Desktop/Blog/STAN/")
+#simulate some data
+set.seed(20161110)
+N&lt;-100 #sample size
+J&lt;-10 #number of plant species
+id&lt;-rep(1:J,each=10) #index of plant species
+K&lt;-3 #number of regression coefficients
+#population-level regression coefficient
+gamma&lt;-c(2,-1,3)
+#standard deviation of the group-level coefficient
+tau&lt;-c(0.3,2,1)
+#standard deviation of individual observations
+sigma&lt;-1
+#group-level regression coefficients
+beta&lt;-mapply(function(g,t) rnorm(J,g,t),g=gamma,t=tau) 
+#the model matrix
+X&lt;-model.matrix(~x+y,data=data.frame(x=runif(N,-2,2),y=runif(N,-2,2)))
+y&lt;-vector(length = N)
+for(n in 1:N){
+  #simulate response data
+  y[n]&lt;-rnorm(1,X[n,]%*%beta[id[n],],sigma)
+}
+#run the model
+m_hier&lt;-stan(file="hierarchical1.stan",data=list(N=N,J=J,K=K,id=id,X=X,y=y))
+</code></pre></div></div>
+
+<p>The MCMC sampling takes place (took about 90 sec per chain on my computer), and then I got this warning message: “Warning messages:
+1: There were 61 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup 
+2: Examine the pairs() plot to diagnose sampling problems”</p>
+
+<p>Here is an explanation for this warning: “For some intuition, imagine walking down a steep mountain. If you take too big of a step you will fall, but if you can take very tiny steps you might be able to make your way down the mountain, albeit very slowly. Similarly, we can tell Stan to take smaller steps around the posterior distribution, which (in some but not all cases) can help avoid these divergences.” from <a href="http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup">here</a>. This issue occur quite often in hierarchical model with limited sample size, the simplest solution being to re-parameterize the model, in other words to re-write the equations so that the MCMC sampler has an easier time sampling the posterior distribution.</p>
+
+<p>Below is a new STAN model with a non-centered parameterization (See Section 22.6 in STAN user guide):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">parameters</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">K</span><span class="p">]</span> <span class="n">gamma</span><span class="p">;</span> <span class="p">//</span><span class="n">population</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;[</span><span class="n">K</span><span class="p">]</span> <span class="n">tau</span><span class="p">;</span> <span class="p">//</span><span class="n">the</span> <span class="n">standard</span> <span class="n">deviation</span> <span class="k">of</span> <span class="n">the</span> <span class="n">regression</span> <span class="n">coefficients</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">implementing</span> <span class="n">Matt</span><span class="s1">'s trick
+  vector[K] beta_raw[J];
+  real&lt;lower=0&gt; sigma; //standard deviation of the individual observations
+}
+transformed parameters {
+  vector[K] beta[J]; //matrix of group-level regression coefficients
+  //computing the group-level coefficient, based on non-centered parametrization based on section 22.6 STAN (v2.12) user'</span><span class="n">s</span> <span class="n">guide</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">j</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">J</span><span class="p">){</span>
+<span class="err">   </span> <span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="n">gamma</span> <span class="p">+</span> <span class="n">tau</span> <span class="p">.*</span> <span class="n">beta_raw</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="err"> </span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">model</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">mu</span><span class="p">;</span> <span class="p">//</span><span class="n">linear</span> <span class="n">predictor</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">priors</span>
+<span class="err"> </span> <span class="n">gamma</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5</span><span class="p">);</span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span> <span class="n">on</span> <span class="n">the</span> <span class="n">regression</span> <span class="n">coefficients</span>
+<span class="err"> </span> <span class="n">tau</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2.5</span><span class="p">);</span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span><span class="p">,</span> <span class="n">see</span> <span class="n">section</span> <span class="m">6.9</span> <span class="k">in</span> <span class="n">STAN</span> <span class="n">user</span> <span class="n">guide</span>
+<span class="err"> </span> <span class="n">sigma</span> <span class="p">~</span> <span class="n">gamma</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">0.1</span><span class="p">);</span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span><span class="p">,</span> <span class="n">see</span> <span class="n">section</span> <span class="m">6.9</span> <span class="k">in</span> <span class="n">STAN</span> <span class="n">user</span> <span class="n">guide</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">j</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">J</span><span class="p">){</span>
+<span class="err">  </span> <span class="n">beta_raw</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">);</span> <span class="p">//</span><span class="n">fill</span> <span class="n">the</span> <span class="n">matrix</span> <span class="k">of</span> <span class="n">group</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span> 
+<span class="err"> </span> <span class="p">}</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">N</span><span class="p">){</span>
+<span class="err">   </span> <span class="n">mu</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">=</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">*</span> <span class="n">beta</span><span class="p">[</span><span class="n">id</span><span class="p">[</span><span class="n">n</span><span class="p">]];</span> <span class="p">//</span><span class="n">compute</span> <span class="n">the</span> <span class="n">linear</span> <span class="n">predictor</span> <span class="n">using</span> <span class="n">relevant</span> <span class="n">group</span><span class="p">-</span><span class="n">level</span> <span class="n">regression</span> <span class="n">coefficients</span> 
+<span class="err"> </span> <span class="p">}</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">likelihood</span>
+<span class="err"> </span> <span class="n">y</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Note that the _data _model block is identical in the two cases.</p>
+
+<p>We turn back to R:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#re-parametrize the model
+m_hier&lt;-stan(file="hierarchical1_reparam.stan",data=list(N=N,J=J,K=K,id=id,X=X,y=y))
+#no more divergent iterations, we can start exploring the model
+#a great way to start is to use the shinystan library
+#library(shinystan)
+#launch_shinystan(m_hier)
+#model inference
+print(m_hier,pars=c("gamma","tau","sigma"))
+Inference for Stan model: hierarchical1_reparam.
+4 chains, each with iter=2000; warmup=1000; thin=1; 
+post-warmup draws per chain=1000, total post-warmup draws=4000.
+
+          mean se_mean   sd  2.5%   25%   50%  75% 97.5% n_eff Rhat
+gamma[1]  1.96    0.00 0.17  1.61  1.86  1.96 2.07  2.29  2075    1
+gamma[2] -0.03    0.02 0.77 -1.53 -0.49 -0.04 0.43  1.55  1047    1
+gamma[3]  2.81    0.02 0.49  1.84  2.52  2.80 3.12  3.79   926    1
+tau[1]    0.34    0.01 0.21  0.02  0.19  0.33 0.46  0.79  1135    1
+tau[2]    2.39    0.02 0.66  1.47  1.94  2.26 2.69  4.04  1234    1
+tau[3]    1.44    0.01 0.41  0.87  1.16  1.37 1.65  2.43  1317    1
+sigma     1.04    0.00 0.09  0.89  0.98  1.04 1.10  1.23  2392    1
+
+Samples were drawn using NUTS(diag_e) at Thu Nov 10 14:11:41 2016.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).
+</code></pre></div></div>
+
+<p>The regression parameters were all decently estimated except for the second slope coefficient, the simulated value was -1.</p>
+
+<p>All MCMC samples for all coefficient can be easily extracted and used to compute whatever your interest is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#extract the MCMC samples
+mcmc_hier&lt;-extract(m_hier)
+str(mcmc_hier)
+
+#plot average response to explanatory variables
+X_new&lt;-model.matrix(~x+y,data=data.frame(x=seq(-2,2,by=0.2),y=0))
+#get predicted values for each MCMC sample
+pred_x1&lt;-apply(mcmc_hier$gamma,1,function(beta) X_new %*% beta)
+#now get median and 95% credible intervals
+pred_x1&lt;-apply(pred_x1,1,quantile,probs=c(0.025,0.5,0.975))
+#same stuff for the second explanatory variables
+X_new&lt;-model.matrix(~x+y,data=data.frame(x=0,y=seq(-2,2,by=0.2)))
+pred_x2&lt;-apply(mcmc_hier$gamma,1,function(beta) X_new %*% beta)
+pred_x2&lt;-apply(pred_x2,1,quantile,probs=c(0.025,0.5,0.975))
+</code></pre></div></div>
+
+<p>Here we basically generated new model matrices where only one variable was moving at a time, this allowed us to get the model prediction for the effect of say temperature on plant biomass under average nutrient conditions. These predictions were obtained by multiplying the model matrix with the coefficients for each MCMC sample (the first apply command), and then we can get from these samples the median with 95% credible intervals (the second apply command).</p>
+
+<p>Now we can plot this (code for the plots at the end of the post)</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/11/hier1.png" alt="hier1" /></p>
+
+<p>Another important plot is the variation in the regression parameters between the species, again this is easily done using the MCMC samples:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#now we could look at the variation in the regression coefficients between the groups doing caterpillar plots
+ind_coeff&lt;-apply(mcmc_hier$beta,c(2,3),quantile,probs=c(0.025,0.5,0.975))
+df_ind_coeff&lt;-data.frame(Coeff=rep(c("(Int)","X1","X2"),each=10),LI=c(ind_coeff[1,,1],ind_coeff[1,,2],ind_coeff[1,,3]),Median=c(ind_coeff[2,,1],ind_coeff[2,,2],ind_coeff[2,,3]),HI=c(ind_coeff[3,,1],ind_coeff[3,,2],ind_coeff[3,,3]))
+gr&lt;-paste("Gr",1:10)
+df_ind_coeff$Group&lt;-factor(gr,levels=gr)
+#we may also add the population-level median estimate
+pop_lvl&lt;-data.frame(Coeff=c("(Int)","X1","X2"),Median=apply(mcmc_hier$gamma,2,quantile,probs=0.5))
+ggplot(df_ind_coeff,aes(x=Group,y=Median))+geom_point()+
+  geom_linerange(aes(ymin=LI,ymax=HI))+coord_flip()+
+  facet_grid(.~Coeff)+
+  geom_hline(data=pop_lvl,aes(yintercept=Median),color="blue",linetype="dashed")+
+  labs(y="Regression parameters")
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/11/hier2.png" alt="hier2" /></p>
+
+<p>The cool thing with using STAN is that we can extend or modify the model in many ways. This will be the topics of future posts which will include: crossed and nested design, multilevel modelling, non-normal distributions and much more, stay tuned!</p>
+
+<p>Code for the first plot:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cols&lt;-brewer.pal(10,"Set3")
+par(mfrow=c(1,2),mar=c(4,4,0,1),oma=c(0,0,3,5))
+plot(y~X[,2],pch=16,xlab="Temperature",ylab="Response variable",col=cols[id])
+lines(seq(-2,2,by=0.2),pred_x1[1,],lty=2,col="red")
+lines(seq(-2,2,by=0.2),pred_x1[2,],lty=1,lwd=3,col="blue")
+lines(seq(-2,2,by=0.2),pred_x1[3,],lty=2,col="red")
+plot(y~X[,3],pch=16,xlab="Nitrogen concentration",ylab="Response variable",col=cols[id])
+lines(seq(-2,2,by=0.2),pred_x2[1,],lty=2,col="red")
+lines(seq(-2,2,by=0.2),pred_x2[2,],lty=1,lwd=3,col="blue")
+lines(seq(-2,2,by=0.2),pred_x2[3,],lty=2,col="red")
+mtext(text = "Population-level response to the two\nexplanatory variables with 95% CrI",side = 3,line = 0,outer=TRUE)
+legend(x=2.1,y=10,legend=paste("Gr",1:10),ncol = 1,col=cols,pch=16,bty="n",xpd=NA,title = "Group\nID")
+</code></pre></div></div>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#bayesian" class="page__taxonomy-item" rel="tag">Bayesian</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#stan" class="page__taxonomy-item" rel="tag">STAN</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#informatic-language" class="page__taxonomy-item" rel="tag">Informatic Language</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-11-10T00:00:00+01:00">November 10, 2016</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Hierarchical+models+with+RStan+%28Part+1%29%20http%3A%2F%2Flocalhost%3A4000%2Finformatic%2520language%2Fr%2520and%2520stat%2Fhierarchical-models-with-rstan-part-1%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Finformatic%2520language%2Fr%2520and%2520stat%2Fhierarchical-models-with-rstan-part-1%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Finformatic%2520language%2Fr%2520and%2520stat%2Fhierarchical-models-with-rstan-part-1%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Finformatic%2520language%2Fr%2520and%2520stat%2Fhierarchical-models-with-rstan-part-1%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/150-years-of-ecology-lessons-for-the-future/" class="pagination--pager" title="150 years of ecology: lessons for the future
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/crossed-and-nested-hierarchical-models-with-stan-and-r/" class="pagination--pager" title="Crossed and Nested hierarchical models with STAN and R
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/informatic%20language/r%20and%20stat/hierarchical-models-with-rstan-part-1/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/informatic%20language/r%20and%20stat/hierarchical-models-with-rstan-part-1"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

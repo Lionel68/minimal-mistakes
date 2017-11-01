@@ -1,0 +1,26 @@
+---
+title: Will the next generation ecologists be parasites?
+wordpress_id: 188
+categories:
+- Biological Stuff
+tags:
+- data
+- ecology
+- science
+---
+
+A recent article by [Lidenmeyer and Likens](http://www.esajournals.org/doi/full/10.1890/0012-9623-94.4.338) talking about the new development of open-access data in ecology (the fact that dataset are published through a peer-review system and then freely accessible for others) has led to some debate in the ecology blogospere (see Brian McGill [post](dynamicecology.wordpress.com/2013/11/07/the-one-true-route-to-good-science-is/) and comments therein).
+
+The author develop their vision of potential pitfalls from the recent development of the use of 'big' dataset in ecology. They fear an explosion of 'junk-science' studies where questions are asked a posteriori once that the data have been collected. They advocate studies with well-thought questions, followed by relevant data collection.
+
+There are several points where I do not share the vision of the authors:
+
+1. The linear workflow in ecology: “We need to pose questions first, and then determine which data are suited and well matched to answering those questions”, usually in real life we indeed start by asking ourselves questions leading to testable hypothesis and then collect and analyze the data. However most of the time we do not get definitive answer rather we end up with more questions than we started with leading to a new cycle. In this context the ability to have access to large amount of data collected to answer similar questions is a great opportunity to generalize results.
+
+2. Knowledge transfer from the field to the computer: “We therefore suggest that it is essential that those intending to use large, composite open-access data sets must work in close collaboration with those responsible for gathering those data sets.” ; as was pointed in Brian McGill post, ecologist using others' data in their analysis spend a considerable amount of time to understand the data. Otherwise results are most of the time un-interpretable. So ecologists analyzing large dataset didn't wait for this article to take the time with data collectors to get to know the data intimately.
+
+3. What is good science? “the principles and practices of good science driven by well-developed questions”; I do not like the use of subjective words in science (I think it is bad to do so :) ). Definitions of good/bad science are extremely changeable concepts both in time and between persons, the work of Aristotle was good science at his time but would never pass a peer-review process. I would say there is powerful science (when the data you collected and analyze provide useful insights into the mechanism you are trying to understand) and weak science (when you cannot answer your questions due to a lack of them, poorly designed study, non-adequate analysis...).
+
+More generally ecologists are very possessive concerning their data as was pointed out in Brian McGill post scientists in other field in science are heavily sharing their datasets leading to knowledge advance and (maybe more importantly) clearer message to policy-maker and grant provider. The onset of journals entirely dedicated to the publication of peer-reviewed ecological dataset ([link](http://proj.badc.rl.ac.uk/preparde/blog/DataJournalsList)) is a great step forward since it enables large-scale study and generalization of results.
+
+I think such articles is a sign that ecology is changing, an ecologist today do not need any more to go and catch butterfly on the field (see Tom Webb [post](http://www.scilogs.com/mola_mola/natural-history-and-desk-based-ecology/) on natural history knowledge amongst ecologists), more and more of the work involve computer-based activities (data analysis, modelling, paper writing, grant proposals...). Ecology might follow a trajectory similar to astronomy where in past ages scientific would spend entire nights looking at celestial objects but spend now all of their time analyzing results on computer-screens. Is it a bad thing? I'll let you judge of that.

@@ -1,0 +1,694 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Importing 100 years of climate change into R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="This is a flashback post, I was working on species distribution shifts over the last 40 years last summer and recently Rémi Genevest contacted me asking me how I managed to import the CRU TS 1.2 dataset into R. As always a more readable version of the code can be found here.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Importing 100 years of climate change into R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/importing-100-years-of-climate-change-into-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/importing-100-years-of-climate-change-into-r/">
+
+
+
+  <meta property="og:description" content="This is a flashback post, I was working on species distribution shifts over the last 40 years last summer and recently Rémi Genevest contacted me asking me how I managed to import the CRU TS 1.2 dataset into R. As always a more readable version of the code can be found here.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-05-05T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Importing 100 years of climate change into R">
+    <meta itemprop="description" content="This is a flashback post, I was working on species distribution shifts over the last 40 years last summer and recently Rémi Genevest contacted me asking me how I managed to import the CRU TS 1.2 dataset into R. As always a more readable version of the code can be found here.">
+    <meta itemprop="datePublished" content="May 05, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Importing 100 years of climate change into R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>This is a flashback post, I was working on species distribution shifts over the last 40 years last summer and recently <a href="https://www1.montpellier.inra.fr/CBGP/?q=fr/content/genevest-r%C3%A9mi">Rémi Genevest </a>contacted me asking me how I managed to import the <a href="http://www.cru.uea.ac.uk/cru/data/hrg/timm/grid/CRU_TS_1_2.html">CRU TS 1.2</a> dataset into R. As always a more readable version of the code can be found <a href="http://rpubs.com/hughes/16606">here</a>.</p>
+
+<p>At that time I used a not very elegant coding involving SpatialPixels and SpatilGridDataFrame, scrolling back to the <a href="http://r-sig-geo.2731867.n2.nabble.com/Turning-SpatialPointsDataFrame-to-Raster-using-rasterize-td7582452.html">question</a> I asked to the R-sig-geo mailing list back then I stumbles across the answer from Robert Hijmans that I did not take into account at that time. Now one year after I found his answer going in the right direction and made some heavy change in the coding.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#reading in CRU files into R
+library(raster)
+
+#for the CRU TS 1.2 download the .zip at http://www.cru.uea.ac.uk/cru/data/hrg/timm/grid/CRU_TS_1_2.html
+
+#the raster we get at the end, the data are monthly for all the years between 1901 and 2000
+temp&lt;-brick(nrows=228,ncols=258,xmn=-11,xmx=32,ymn=34,ymx=72,nl=1200,crs=CRS("+proj=longlat +datum=WGS84"))
+
+#example using the temperature
+all_dat&lt;-scan("/home/lionel/Documents/Master/CRU/obs.1901-2000.tmp",skip=5,what="list")
+
+#now turn the data into a matrix format with every line corresponding to a raster cell and the first two columns the column and row number of the cell
+xs&lt;-all_dat[seq(2,37465029,1203)]
+xs&lt;-gsub(",","",xs)
+xs&lt;-as.numeric(xs)
+ys&lt;-as.numeric(all_dat[seq(3,37465029,1203)])
+mat&lt;-matrix(c(xs,ys),ncol=2,byrow=FALSE)
+#now add the temperature data from these cells for all month all year
+numb&lt;-matrix(4:1203,ncol=1)
+numb&lt;-apply(numb,1,function(x) seq(x[1],37465029,1203))
+mat&lt;-cbind(mat,apply(numb,2,function(x) as.numeric(all_dat[x])))
+
+#reverse the rows number since they are numbered from bottom to top in CRU and from top to bottom in rasters
+ys_inv&lt;-ys-((ys-113.5)-1)*2
+mat[,2]&lt;-ys_inv
+
+#get the cell numbers of each box defined in the CRU dataset
+ce&lt;-cellFromRowCol(temp,rownr=mat[,2],colnr=mat[,1])
+#attribute to these cells the temperature values
+values(temp)[ce,]&lt;-mat[,3:1202]
+#divide by 10 to get the temperature in degree celsius
+values(temp)&lt;-values(temp)/10
+#put names to the layers
+month&lt;-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Okt","Nov","Dec")
+years&lt;-1901:2000
+names(temp)&lt;-paste(rep(month,times=100),rep(years,each=12),sep="_")
+
+#the winter mean temperature between 1914 and 1918
+winter_1418&lt;-calc(temp[[which(names(temp)%in%paste(rep(c("Dec","Jan","Feb"),times=5),rep(1914:1918,each=3),sep="_"))]],mean)
+plot(winter_1418)
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/05/raster1.png"><img src="http://biologyforfun.files.wordpress.com/2014/05/raster1.png" alt="raster1" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#the standard deviation in temperature for the years 1901 and 2000
+sd_100&lt;-stack(calc(temp[[grep("1901",names(temp))]],sd),calc(temp[[grep("2000",names(temp))]],sd))
+plot(sd_100)
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/05/raster2.png"><img src="http://biologyforfun.files.wordpress.com/2014/05/raster2.png" alt="raster2" /></a></p>
+
+<p>The only mathematical magic involve here is changing the row numbers. Then from this huge dataset we can do lots of neat thing, like we can see how cold did the soldier of the first world war were (first raster plot), or we can look at changes in standard deviation in temperature between the year 1901 and 2000 after one century of climate change.</p>
+
+<p>If you use such data in your work do not forget to cite the owners: Mitchell, T.D., Carter, T.R., Jones, P.D., Hulme,M., New, M., 2003: A comprehensive set of high-resolution grids of monthly climate for Europe and the globe: the observed record (1901-2000) and 16 scenarios (2001-2100). Journal of Climate: submitted</p>
+
+<p>And if you have some knowledge of similar dataset (monthly values over Europe) at a finer spatial resolution please contact me!</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#time-series" class="page__taxonomy-item" rel="tag">time-series</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-05-05T00:00:00+02:00">May 05, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Importing+100+years+of+climate+change+into+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fimporting-100-years-of-climate-change-into-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fimporting-100-years-of-climate-change-into-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fimporting-100-years-of-climate-change-into-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fimporting-100-years-of-climate-change-into-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/informatic%20language/fonctions-recursives-avec-r/" class="pagination--pager" title="Fonctions récursives (avec R)
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/opinion%20posts/pourquoi-je-vais-aller-voter-le-25-mai/" class="pagination--pager" title="Pourquoi je vais aller voter le 25 mai
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/importing-100-years-of-climate-change-into-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/importing-100-years-of-climate-change-into-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

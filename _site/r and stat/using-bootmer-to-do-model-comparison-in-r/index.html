@@ -1,0 +1,742 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Using bootMer to do model comparison in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Setting the right random effect part in mixed effect models can be tricky in many applied situation. I will not talk here about choosing whether a grouping variable (sites, individuals …) should be included as a fixed term or as a random term, please see Gelman and Hill (2006) and Zuur et al (2009) for informations. Here I will present the use of the bootMer function in the package lme4 to compare two models with different random effect terms specification and decide whether one model do a (significantly) better job at fitting the data. The standard way to compare two model is to derive the likelihood ratio test (LRT) value and since these should follow a chi-square distribution derive a p-value corresponding to the probability to observe such an extreme LRT under the null hypothesis that both model perform equally well. This approach works relatively fine for GLM but for (G)LMM several problem arises due mainly to boundary effects (the null hypothesis being in this case that the variance of the random effects is 0) see Bolker et al (2009). One way to do model comparison in (G)LMM is to derive bootstrapped likelihood values from the two competing models and to draw confidence intervals around the observed values to decide if one model perform better than the other. Below are some code with simulated data (a cleaner version with more graphs can be found here: http://rpubs.com/hughes/22059):">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Using bootMer to do model comparison in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/using-bootmer-to-do-model-comparison-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/using-bootmer-to-do-model-comparison-in-r/">
+
+
+
+  <meta property="og:description" content="Setting the right random effect part in mixed effect models can be tricky in many applied situation. I will not talk here about choosing whether a grouping variable (sites, individuals …) should be included as a fixed term or as a random term, please see Gelman and Hill (2006) and Zuur et al (2009) for informations. Here I will present the use of the bootMer function in the package lme4 to compare two models with different random effect terms specification and decide whether one model do a (significantly) better job at fitting the data. The standard way to compare two model is to derive the likelihood ratio test (LRT) value and since these should follow a chi-square distribution derive a p-value corresponding to the probability to observe such an extreme LRT under the null hypothesis that both model perform equally well. This approach works relatively fine for GLM but for (G)LMM several problem arises due mainly to boundary effects (the null hypothesis being in this case that the variance of the random effects is 0) see Bolker et al (2009). One way to do model comparison in (G)LMM is to derive bootstrapped likelihood values from the two competing models and to draw confidence intervals around the observed values to decide if one model perform better than the other. Below are some code with simulated data (a cleaner version with more graphs can be found here: http://rpubs.com/hughes/22059):">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-07-13T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Using bootMer to do model comparison in R">
+    <meta itemprop="description" content="Setting the right random effect part in mixed effect models can be tricky in many applied situation. I will not talk here about choosing whether a grouping variable (sites, individuals …) should be included as a fixed term or as a random term, please see Gelman and Hill (2006) and Zuur et al (2009) for informations. Here I will present the use of the bootMer function in the package lme4 to compare two models with different random effect terms specification and decide whether one model do a (significantly) better job at fitting the data. The standard way to compare two model is to derive the likelihood ratio test (LRT) value and since these should follow a chi-square distribution derive a p-value corresponding to the probability to observe such an extreme LRT under the null hypothesis that both model perform equally well. This approach works relatively fine for GLM but for (G)LMM several problem arises due mainly to boundary effects (the null hypothesis being in this case that the variance of the random effects is 0) see Bolker et al (2009). One way to do model comparison in (G)LMM is to derive bootstrapped likelihood values from the two competing models and to draw confidence intervals around the observed values to decide if one model perform better than the other. Below are some code with simulated data (a cleaner version with more graphs can be found here: http://rpubs.com/hughes/22059):">
+    <meta itemprop="datePublished" content="July 13, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Using bootMer to do model comparison in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Setting the right random effect part in mixed effect models can be tricky in many applied situation. I will not talk here about choosing whether a grouping variable (sites, individuals …) should be included as a fixed term or as a random term, please see Gelman and Hill (2006) and Zuur et al (2009) for informations. Here I will present the use of the bootMer function in the package lme4 to compare two models with different random effect terms specification and decide whether one model do a (significantly) better job at fitting the data. The standard way to compare two model is to derive the likelihood ratio test (LRT) value and since these should follow a chi-square distribution derive a p-value corresponding to the probability to observe such an extreme LRT under the null hypothesis that both model perform equally well. This approach works relatively fine for GLM but for (G)LMM several problem arises due mainly to boundary effects (the null hypothesis being in this case that the variance of the random effects is 0) see Bolker et al (2009). One way to do model comparison in (G)LMM is to derive bootstrapped likelihood values from the two competing models and to draw confidence intervals around the observed values to decide if one model perform better than the other. Below are some code with simulated data (a cleaner version with more graphs can be found here: <a href="http://rpubs.com/hughes/22059">http://rpubs.com/hughes/22059</a>):</p>
+
+<p>`</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(lme4)
+library(arm)
+library(RColorBrewer)
+
+##### work on model comparison using bootMer ##### simulate some data and fit a
+##### random intercept model to them
+x &lt;- runif(100, 0, 10)
+# the grouping variable
+site &lt;- gl(n = 10, k = 10)
+# the random intercept effect, the simulated standard deviation around the
+# intercept is 1
+rnd &lt;- rnorm(10, 0, 1)
+# the simulated resposne variable, note that the fixed effect coefficient
+# are 1 for the intercept and 3 for the slope. Also the simulated residuals
+# will have a standard deviation of one
+y &lt;- rep(1 + rnd, each = 10) + 3 * x + rnorm(100, 0, 1)
+# fit the model using Maximum Likelihood to be able to use the LRT
+m1 &lt;- lmer(y ~ x + (1 | site), REML = FALSE)
+
+# simulate to generate credible intervals
+simu &lt;- sim(m1, n.sims = 1000)
+# a new model matrix with ordered and equally spaced predictor values
+new.x &lt;- model.matrix(~x, data = data.frame(x = seq(0, 10, length.out = 100)))
+new.y &lt;- matrix(ncol = 1000, nrow = 100)
+# get the predicted response values for each 1000 simulations of the fixed
+# effect model parameters
+new.y &lt;- apply(simu@fixef, 1, function(x) new.x %*% x)
+# compute the lower/upper quantile
+lower &lt;- apply(new.y, 1, function(x) quantile(x, prob = 0.025))
+upper &lt;- apply(new.y, 1, function(x) quantile(x, prob = 0.975))
+median &lt;- apply(new.y, 1, function(x) quantile(x, prob = 0.5))
+
+# nice plot
+pal &lt;- brewer.pal(10, "RdYlBu")
+plot(y ~ x, col = rep(pal, each = 10), pch = 16)
+lines(new.x[, 2], median, col = "blue", lwd = 2)
+lines(new.x[, 2], lower, col = "red", lwd = 2, lty = 2)
+lines(new.x[, 2], upper, col = "red", lwd = 2, lty = 2)
+
+&lt;a href="https://biologyforfun.files.wordpress.com/2014/07/fig11.png"&gt;&lt;img src="http://biologyforfun.files.wordpress.com/2014/07/fig11.png" alt="fig1" height="326" class="aligncenter size-full wp-image-298" width="497"&gt;&lt;/img&gt;&lt;/a&gt;
+
+# fit a second model with a random slope effect
+m2 &lt;- lmer(y ~ x + (x | site), REML = FALSE)
+
+# using bootMer to compute 100 bootstrapped log-likelihood
+b1 &lt;- bootMer(m1, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+b2 &lt;- bootMer(m2, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+
+# the observed LRT value
+lrt &lt;- as.numeric(-2 * logLik(m1) + 2 * logLik(m2))
+# the 100 bootstrapped LRT
+lrt.b &lt;- -2 * b1$t + 2 * b2$t
+# plot
+quant &lt;- quantile(lrt.b, probs = c(0.025, 0.975))
+plot(1, lrt, xlab = "", ylab = "Likelihood ratio test", xaxt = "n", ylim = c(quant[1] + 
+    1, quant[2] + 1))
+abline(h = 0, lty = 2, lwd = 2, col = "red")
+segments(1, quant[1], 1, quant[2], lend = 1)
+
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p>In the above example the 95% CI of the bootstrapped LRT cross the 0 line which means that one model do not fit the data better than the other. In this case the rule use would be to use the most simple model (the one with the lower number of parameters) which is the random-intercept model.</p>
+
+<p>Let’s make another example:</p>
+
+<p>`</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># now simulate data from random intercept/ slope
+rnd.slope &lt;- rnorm(10, 0, 0.5)
+y &lt;- rep(1 + rnd, each = 10) + rep(3 + rnd.slope, each = 10) * x + rnorm(100, 
+    0, 1)
+
+# the new models
+m3 &lt;- lmer(y ~ x + (x | site), REML = FALSE)
+m4 &lt;- lmer(y ~ x + (1 | site), REML = FALSE)
+
+# LRT the observed values
+lrt &lt;- -2 * logLik(m4) + 2 * logLik(m3)
+# the bootstrap
+b3 &lt;- bootMer(m3, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+b4 &lt;- bootMer(m4, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+
+# the 100 bootstrapped LRT
+lrt.b &lt;- -2 * b4$t + 2 * b3$t
+
+# the nice plot
+quant &lt;- quantile(lrt.b, probs = c(0.025, 0.975))
+plot(1, lrt, xlab = "", ylab = "Likelihood ratio test", xaxt = "n", ylim = c(0, 
+    quant[2] + 1))
+abline(h = 0, lty = 2, lwd = 2, col = "red")
+segments(1, quant[1], 1, quant[2], lend = 1)
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p>In this second example the random intercept/slope model fits much better to the data than the random intercept. This random effect structure should be kept. As mentioned in Bolker et al (2009) the LRT will be relevant depending on the design and the interest that is put on the random terms. In the case were random terms are due to the particular design of the study (site, blocks …) and when there are considered as a “nuisance” they may be included in the models without testing for the increase in fitness that their inclusion provide. In the case where the random term effects is of interest (individual sampling units …) then using LRT is a sensible way to detect and interpret the effect of the random terms. The function PBmodcomp in the package pbkrtest allows one to do all the preceding code in just one line with various ways to test for the significance of the likelihood ratio (thanks to Ben Bolker for his comment).</p>
+
+<p>Biblio: 
+Bolker, B. M., Brooks, M. E., Clark, C. J., Geange, S. W., Poulsen, J. R., Stevens, M. H. H., &amp; White, J. S. S. (2009). Generalized linear mixed models: a practical guide for ecology and evolution. Trends in ecology &amp; evolution, 24(3), 127-135. 
+Gelman, A., &amp; Hill, J. (2006). Data analysis using regression and multilevel/hierarchical models. Cambridge University Press. 
+Zuur, A., Ieno, E. N., Walker, N., Saveliev, A. A., &amp; Smith, G. M. (2009). Mixed effects models and extensions in ecology with R. Springer.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glmm" class="page__taxonomy-item" rel="tag">GLMM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lrt" class="page__taxonomy-item" rel="tag">LRT</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-07-13T00:00:00+02:00">July 13, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Using+bootMer+to+do+model+comparison+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fusing-bootmer-to-do-model-comparison-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fusing-bootmer-to-do-model-comparison-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fusing-bootmer-to-do-model-comparison-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fusing-bootmer-to-do-model-comparison-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/regular-expression-and-associated-functions-in-r/" class="pagination--pager" title="Regular expression and associated functions in R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/ploting-sems-in-r-using-semplot/" class="pagination--pager" title="Ploting SEMs in R using semPlot
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/using-bootmer-to-do-model-comparison-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/using-bootmer-to-do-model-comparison-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

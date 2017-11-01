@@ -1,0 +1,855 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Generating ANOVA-like table from GLMM using parametric bootstrap - biologyforfun</title>
+
+
+
+
+<meta name="description" content="[UPDATE: I modified a bit the code of the function, now you do not need to pass as character the random effect terms]">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Generating ANOVA-like table from GLMM using parametric bootstrap">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/generating-anova-like-table-from-glmm-using-parametric-bootstrap/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/generating-anova-like-table-from-glmm-using-parametric-bootstrap/">
+
+
+
+  <meta property="og:description" content="[UPDATE: I modified a bit the code of the function, now you do not need to pass as character the random effect terms]">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-02-26T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Generating ANOVA-like table from GLMM using parametric bootstrap">
+    <meta itemprop="description" content="[UPDATE: I modified a bit the code of the function, now you do not need to pass as character the random effect terms]">
+    <meta itemprop="datePublished" content="February 26, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Generating ANOVA-like table from GLMM using parametric bootstrap
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>[UPDATE: I modified a bit the code of the function, now you do not need to pass as character the random effect terms]</p>
+
+<p>[UPDATE 2: I added some lines to pass glmer.nb models to the functions, be aware that passing such models to the function will take quite some computing time]</p>
+
+<p>This article may also be found on RPubs: http://rpubs.com/hughes/63269</p>
+
+<p>In the list of worst to best way to test for effect in GLMM the list on http://glmm.wikidot.com/faq state that parametric bootstrapping is among the best options. PBmodcomp in the pbkrtest package implement such parametric bootstrapping by comparing a full model to a null one. The function simulate data (the response vector) from the null model then fit these data to the null and full model and derive a likelihood ratio test for each of the simulated data. Then we can compare the observed likelihood ratio test to the null distribution generated from the many simulation and derive a p-value. The advantage of using such a method over the classical p-values derived from a chi-square test on the likelihood ratio test is that in the parametric bootstrap we do not assume any null distribution (like chi-square) but instead derive our own null distribution from the model and the data at hand. We do not make the assumption then that the likelihood ratio test statistic is chi-square distributed. I have made a little function that wraps around the PBmodcomp function to compute bootstrapped p-values for each term in a model by sequentially adding them. This lead to anova-like table that are typically obtained when one use the command anova on a glm object.</p>
+
+<p>[code language=”r”]
+#the libraries used
+library(lme4)
+library(arm)
+library(pbkrtest)
+#the function with the following arguments
+#@model the merMod model fitted by lmer or glmer
+#@w the weights used in a binomial fit
+#@seed you can set a seed to find back the same results after bootstrapping
+#@nsim the number of bootstrapped simulation, if set to 0 return the Chisq p-value from the LRT test
+#@fixed should the variable be dropped based on the order given in the model (TRUE) or the the dropping goes from worst to best variable (FALSE)
+anova_merMod&lt;-function(model,w=FALSE,seed=round(runif(1,0,100),0),nsim=0,fixed=TRUE){
+  require(pbkrtest)
+  data&lt;-model@frame
+  if(w){
+    weight&lt;-data[,which(names(data)==”(weights)”)]
+    data&lt;-data[,-which(names(data)==”(weights)”)]
+  }
+  f&lt;-formula(model)
+  resp&lt;-as.character(f)[2]
+  rand&lt;-lme4:::findbars(f)
+  rand&lt;-lapply(rand,function(x) as.character(x))
+  rand&lt;-lapply(rand,function(x) paste(“(“,x[2],x[1],x[3],”)”,sep=” “))
+  rand&lt;-paste(rand,collapse=” + “)</p>
+
+<p>#generate a list of reduced model formula
+  fs&lt;-list()
+  fs[[1]]&lt;-as.formula(paste(resp,”~ 1 +”,rand))
+  nb_terms&lt;-length(attr(terms(model),”term.labels”))
+  if(nb_terms&gt;1){
+    #the next two line will make that the terms in the formula will add first the most important term, and the least important one at the end 
+    #going first through the interactions and then through the main effects
+    mat&lt;-data.frame(term=attr(terms(model),”term.labels”),SSQ=anova(model)[,3],stringsAsFactors = FALSE)
+    mat_inter&lt;-mat[grep(“:”,mat$term),]
+    mat_main&lt;-mat[!rownames(mat)%in%rownames(mat_inter),]
+    if(!fixed){
+      mat_main&lt;-mat_main[do.call(order,list(-mat_main$SSQ)),]
+      mat_inter&lt;-mat_inter[do.call(order,list(-mat_inter$SSQ)),]
+      mat&lt;-rbind(mat_main,mat_inter)
+    } <br />
+    for(i in 1:nb_terms){
+      tmp&lt;-c(mat[1:i,1],rand)
+      fs[[i+1]]&lt;-reformulate(tmp,response=resp)
+    }    <br />
+  }
+  else{
+    mat&lt;-data.frame(term=attr(terms(model),”term.labels”),stringsAsFactors = FALSE)
+  }</p>
+
+<p>#fit the reduced model to the data</p>
+
+<p>fam&lt;-family(model)[1]$family</p>
+
+<p>if(fam==”gaussian”){
+    m_fit&lt;-lapply(fs,function(x) lmer(x,data,REML=FALSE))
+  }
+  else if(fam==”binomial”){
+    m_fit&lt;-lapply(fs,function(x) glmer(x,data,family=fam,weights=weight))
+  }
+  else if(“Negative Binomial” %in% substr(fam,1,17)){
+    m_fit&lt;-lapply(fs,function(x) glmer.nb(x,data))
+  }
+  else{
+    m_fit&lt;-lapply(fs,function(x) glmer(x,data,family=fam))
+  }</p>
+
+<p>if(nb_terms==1){
+    if(fam==”gaussian”){
+      m_fit[[2]]&lt;-lmer(formula(model),data,REML=FALSE)
+    }
+    else if(fam==”binomial”){
+      m_fit[[2]]&lt;-glmer(formula(model),data,family=fam,weights=weight)
+    }
+    else if(“Negative Binomial” %in% substr(fam,1,17)){
+      m_fit[[2]]&lt;-glmer.nb(formula(model),data)
+    }
+    else{
+      m_fit[[2]]&lt;-glmer(formula(model),data,family=fam)
+    }
+  }
+  #compare nested model with one another and get LRT values (ie increase in the likelihood of the models as parameters are added)
+  tab_out&lt;-NULL</p>
+
+<p>for(i in 1:(length(m_fit)-1)){
+    if(nsim&gt;0){
+      comp&lt;-PBmodcomp(m_fit[[i+1]],m_fit[[i]],seed=seed,nsim=nsim)  <br />
+      term_added&lt;-mat[i,1]
+      #here are reported the bootstrapped p-values, ie not assuming any parametric distribution like chi-square to the LRT values generated under the null model
+      #these p-values represent the number of time the simulated LRT value (under null model) are larger than the observe one
+      tmp&lt;-data.frame(term=term_added,LRT=comp$test$stat[1],p_value=comp$test$p.value[2])
+      tab_out&lt;-rbind(tab_out,tmp)
+      print(paste(“Variable “,term_added,” tested”,sep=””))
+    }
+    else{
+      comp&lt;-anova(m_fit[[i+1]],m_fit[[i]])
+      term_added&lt;-mat[i,1]
+      tmp&lt;-data.frame(term=term_added,LRT=comp[2,6],p_value=comp[2,8])
+      tab_out&lt;-rbind(tab_out,tmp)
+    }</p>
+
+<p>}<br />
+  print(paste(“Seed set to:”,seed))
+  return(tab_out)<br />
+}
+[/code]</p>
+
+<p>You pass your GLMM model to the function together with the random part as character (see example below), if you fitted a binomial GLMM you also need to provide the weights as a vector, you can then set a seed and the last argument is the number of simulation to do, it is set by default to 50 for rapid checking purpose but if you want to report these results larger values (ie 1000, 10000) should be used.</p>
+
+<p>Let’s look at a simple LMM example:</p>
+
+<p>[code language=”r”]
+data(grouseticks)
+m&lt;-lmer(TICKS~cHEIGHT+YEAR+(1|BROOD),grouseticks)
+summary(m)</p>
+<h2 id="linear-mixed-model-fit-by-reml-lmermod">Linear mixed model fit by REML [‘lmerMod’]</h2>
+<h2 id="formula-ticks--cheight--year--1--brood">Formula: TICKS ~ cHEIGHT + YEAR + (1 | BROOD)</h2>
+<h2 id="data-grouseticks">Data: grouseticks</h2>
+<p>##</p>
+<h2 id="reml-criterion-at-convergence-2755">REML criterion at convergence: 2755</h2>
+<p>##</p>
+<h2 id="scaled-residuals">Scaled residuals:</h2>
+<h2 id="min-----1q-median-----3q----max">Min     1Q Median     3Q    Max</h2>
+<h2 id="-3406--0246--0036--0146--5807">-3.406 -0.246 -0.036  0.146  5.807</h2>
+<p>##</p>
+<h2 id="random-effects">Random effects:</h2>
+<h2 id="groups---name--------variance-stddev">Groups   Name        Variance Std.Dev.</h2>
+<h2 id="brood----intercept-873-----934">BROOD    (Intercept) 87.3     9.34</h2>
+<h2 id="residual-------------281-----530">Residual             28.1     5.30</h2>
+<h2 id="number-of-obs-403-groups--brood-118">Number of obs: 403, groups:  BROOD, 118</h2>
+<p>##</p>
+<h2 id="fixed-effects">Fixed effects:</h2>
+<h2 id="estimate-std-error-t-value">Estimate Std. Error t value</h2>
+<h2 id="intercept---54947-----16238----338">(Intercept)   5.4947     1.6238    3.38</h2>
+<h2 id="cheight-------01045-----00264----395">cHEIGHT      -0.1045     0.0264   -3.95</h2>
+<h2 id="year96--------41910-----22424----187">YEAR96        4.1910     2.2424    1.87</h2>
+<h2 id="year97--------43304-----22708----191">YEAR97       -4.3304     2.2708   -1.91</h2>
+<p>##</p>
+<h2 id="correlation-of-fixed-effects">Correlation of Fixed Effects:</h2>
+<h2 id="intr-cheigh-year96">(Intr) cHEIGH YEAR96</h2>
+<h2 id="cheight--0091">cHEIGHT -0.091</h2>
+<h2 id="year96---0726--0088">YEAR96  -0.726  0.088</h2>
+<h2 id="year97---0714--0052--0518">YEAR97  -0.714  0.052  0.518</h2>
+<p>anova_merMod(model=m,nsim=100)</p>
+<h2 id="1-variable-cheight-tested">[1] “Variable cHEIGHT tested”</h2>
+<h2 id="1-variable-year-tested">[1] “Variable YEAR tested”</h2>
+<h2 id="1-seed-set-to-23">[1] “Seed set to: 23”</h2>
+<h2 id="term------lrt----p_value">term      LRT    p_value</h2>
+<h2 id="1-cheight-1455054-000990099">1 cHEIGHT 14.55054 0.00990099</h2>
+<h2 id="2----year-1440440-000990099">2    YEAR 14.40440 0.00990099</h2>
+<p>[/code]</p>
+
+<p>The resulting table show for each term in the model the likelihood ratio test, which is basically the decrease in deviance when going from the null to the full model and the p value, you may look at the PBtest line in the details of ?PBmodcomp to see how it is computed.</p>
+
+<p>Now let’s see how to use the function with binomial GLMM:</p>
+
+<p>[code language=”r”]
+#simulate some binomial data
+x1&lt;-runif(100,-2,2)
+x2&lt;-runif(100,-2,2)
+group&lt;-gl(n = 20,k = 5)
+rnd.eff&lt;-rnorm(20,mean=0,sd=1.5)
+p&lt;-1+0.5<em>x1-2</em>x2+rnd.eff[group]+rnorm(100,0,0.3)
+y&lt;-rbinom(n = 100,size = 10,prob = invlogit(p))
+prop&lt;-y/10
+#fit a model
+m&lt;-glmer(prop~x1+x2+(1|group),family=”binomial”,weights = rep(10,100))
+summary(m)</p>
+<h2 id="generalized-linear-mixed-model-fit-by-maximum-likelihood-laplace">Generalized linear mixed model fit by maximum likelihood (Laplace</h2>
+<h2 id="approximation-glmermod">Approximation) [glmerMod]</h2>
+<h2 id="family-binomial---logit-">Family: binomial  ( logit )</h2>
+<h2 id="formula-prop--x1--x2--1--group">Formula: prop ~ x1 + x2 + (1 | group)</h2>
+<h2 id="weights-rep10-100">Weights: rep(10, 100)</h2>
+<p>##</p>
+<h2 id="aic------bic---loglik-deviance-dfresid">AIC      BIC   logLik deviance df.resid</h2>
+<h2 id="2886----2991----1403----2806-------96">288.6    299.1   -140.3    280.6       96</h2>
+<p>##</p>
+<h2 id="scaled-residuals-1">Scaled residuals:</h2>
+<h2 id="min-----1q-median-----3q----max-1">Min     1Q Median     3Q    Max</h2>
+<h2 id="-2334--0503--0181--0580--2466">-2.334 -0.503  0.181  0.580  2.466</h2>
+<p>##</p>
+<h2 id="random-effects-1">Random effects:</h2>
+<h2 id="groups-name--------variance-stddev">Groups Name        Variance Std.Dev.</h2>
+<h2 id="group--intercept-138-----118">group  (Intercept) 1.38     1.18</h2>
+<h2 id="number-of-obs-100-groups--group-20">Number of obs: 100, groups:  group, 20</h2>
+<p>##</p>
+<h2 id="fixed-effects-1">Fixed effects:</h2>
+<h2 id="estimate-std-error-z-value-prz">Estimate Std. Error z value Pr(&gt;|z|)</h2>
+<h2 id="intercept----0748------0287----261---00092-">(Intercept)    0.748      0.287    2.61   0.0092 **</h2>
+<h2 id="x1-------------0524------0104----502--53e-07-">x1             0.524      0.104    5.02  5.3e-07 ***</h2>
+<h2 id="x2-------------2083------0143---1456---2e-16-">x2            -2.083      0.143  -14.56  &lt; 2e-16 ***</h2>
+<h2>—</h2>
+<h2 id="signif-codes--0--0001--001--005--01---1">Signif. codes:  0 ‘<em><strong>’ 0.001 ‘</strong>’ 0.01 ‘</em>’ 0.05 ‘.’ 0.1 ‘ ‘ 1</h2>
+<p>##</p>
+<h2 id="correlation-of-fixed-effects-1">Correlation of Fixed Effects:</h2>
+<h2 id="intr-x1">(Intr) x1</h2>
+<h2 id="x1--0090">x1  0.090</h2>
+<h2 id="x2--0205--0345codepre">x2 -0.205 -0.345&lt;/code&gt;&lt;/pre&gt;</h2>
+<p>#takes some time
+anova_merMod(m,w = rep(10,100),nsim=100)&lt;/pre&gt;</p>
+<h2 id="1-variable-x1-tested">[1] “Variable x1 tested”</h2>
+<h2 id="1-variable-x2-tested">[1] “Variable x2 tested”</h2>
+<h2 id="1-seed-set-to-98">[1] “Seed set to: 98”</h2>
+<h2 id="term------lrt-p_value">term      LRT p_value</h2>
+<h2 id="1---x1---00429-080392">1   x1   0.0429 0.80392</h2>
+<h2 id="2---x2-5020921-001961">2   x2 502.0921 0.01961</h2>
+<p>[/code]</p>
+
+<p>For binomial model, the model must be fitted with proportion data and a vector of weights (ie the number of binomial trial) must be passed to the ‘w’ argument. Some warning message may pop up at the end of the function, this comes from convergence failure in PBmodcomp, this do not affect the results, you may read the article from the pbkrtest package: http://www.jstatsoft.org/v59/i09/ to understand better where this comes from.</p>
+
+<p>Happy modeling and as Ben Bolker say: “When all else fails, don’t forget to keep p-values in perspective: http://www.phdcomics.com/comics/archive.php?comicid=905 “</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#bootstrap" class="page__taxonomy-item" rel="tag">bootstrap</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glmm" class="page__taxonomy-item" rel="tag">GLMM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-02-26T00:00:00+01:00">February 26, 2015</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Generating+ANOVA-like+table+from+GLMM+using+parametric+bootstrap%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgenerating-anova-like-table-from-glmm-using-parametric-bootstrap%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgenerating-anova-like-table-from-glmm-using-parametric-bootstrap%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgenerating-anova-like-table-from-glmm-using-parametric-bootstrap%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgenerating-anova-like-table-from-glmm-using-parametric-bootstrap%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/evenness-effect-on-ecosystem-functioning/" class="pagination--pager" title="Evenness effect on ecosystem functioning
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/a-function-to-help-graphical-model-checks-of-lm-and-anova/" class="pagination--pager" title="A function to help graphical model checks of lm and ANOVA
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/generating-anova-like-table-from-glmm-using-parametric-bootstrap/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/generating-anova-like-table-from-glmm-using-parametric-bootstrap"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

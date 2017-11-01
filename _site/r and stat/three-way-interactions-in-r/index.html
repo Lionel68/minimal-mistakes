@@ -1,0 +1,763 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Interpreting three-way interactions in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one continuous variable. Rather than just dwelling on this particular case, here is a full blog post with all possible combination of categorical and continuous variables and how to interprete standard model outputs. Do note that three-way interactions can be (relatively) easy to understand conceptually but when it comes down to interpreting the meaning of individual coefficients it will get pretty tricky.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Interpreting three-way interactions in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/">
+
+
+
+  <meta property="og:description" content="A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one continuous variable. Rather than just dwelling on this particular case, here is a full blog post with all possible combination of categorical and continuous variables and how to interprete standard model outputs. Do note that three-way interactions can be (relatively) easy to understand conceptually but when it comes down to interpreting the meaning of individual coefficients it will get pretty tricky.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-10-03T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Interpreting three-way interactions in R">
+    <meta itemprop="description" content="A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one continuous variable. Rather than just dwelling on this particular case, here is a full blog post with all possible combination of categorical and continuous variables and how to interprete standard model outputs. Do note that three-way interactions can be (relatively) easy to understand conceptually but when it comes down to interpreting the meaning of individual coefficients it will get pretty tricky.">
+    <meta itemprop="datePublished" content="October 03, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Interpreting three-way interactions in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>A reader asked in a comment to my post on <a href="https://biologyforfun.wordpress.com/2014/04/08/interpreting-interaction-coefficient-in-r-part1-lm/">interpreting two-way interactions</a> if I could also explain interaction between two categorical variables and one continuous variable. Rather than just dwelling on this particular case, here is a full blog post with all possible combination of categorical and continuous variables and how to interprete standard model outputs. Do note that three-way interactions can be (relatively) easy to understand conceptually but when it comes down to interpreting the meaning of individual coefficients it will get pretty tricky.</p>
+
+<h2 id="three-categorical-variables">Three categorical variables</h2>
+
+<p>The first case is when all three interacting variables are categorical, something like: country, sex, education level.</p>
+
+<p>The key insight to understand three-way interactions involving categorical variables is to realize that each model coefficient can be switched on or off depending on the level of the factors. It is worth considering the equation for such a model:</p>
+
+<p>y = Intercept + F12 * (F1 == 2) + F22 * (F2 == 2) + F23 * (F2 == 3) + F24 * (F2 == 4) + \ F32 * (F3 == 2) + F12:F22 * (F1 == 2) * (F2 == 2) + F12:F23 * (F1 ==2) * (F2 == 3) + \ F12:F24 * (F1 == 2) * (F2 == 4) + F12:F32 * (F1 == 2) * (F3 == 2) + F22:F32 * (F2 == 2) * (F3 == 2) + \ F23:F32 * (F2 == 3) * (F3 == 2) + F24:F32 * (F2 == 4) * (F3 == 2) + F12:F22:F32 * (F1 == 2) * (F2 == 2) * (F3 == 2) + \ F12:F23:F32 * (F1 == 2) * (F2 == 3) * (F3 == 2) + F12:F24:F32 * (F1 == 2) * (F2 == 4) * (F3 == 2)</p>
+
+<p>This might seem overwhelming at first but bear with me a little while longer. In this equation the (FX == Y) are so-called indicator functions, for instance (F1 == 2) returns a 1 when the level of the factor F1 is equal to 2 and return 0 in all other cases. These indicator function will switch on or off the regression coefficient depending on the particular combination of factor levels.</p>
+
+<p>Got it? No? Then let’s simulate some data to see how an example can help us get a better understanding:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set.seed(20170925) #to get stable results for nicer plotting
+#three categorical variables
+dat &lt;- data.frame(F1=gl(n = 2,k = 50),
+                  F2=factor(rep(rep(1:4,times=c(12,12,13,13)),2)),
+                  F3=factor(rep(c(1,2),times=50)))
+#the model matrix
+modmat &lt;- model.matrix(~F1*F2*F3,dat)
+#effects
+betas &lt;- runif(16,-2,2)
+#simulate some response
+dat$y &lt;- rnorm(100,modmat%*%betas,1)
+#check the design
+xtabs(~F1+F2+F3,dat)
+#model
+m &lt;- lm(y~F1*F2*F3,dat) 
+summary(m) 
+Call: lm(formula = y ~ F1 * F2 * F3, data = dat)  
+ Residuals: Min 1Q Median 3Q Max   
+-2.23583 -0.49807 0.01231 0.60524 2.31008 
+
+  Coefficients: Estimate Std. Error t value Pr
+(Intercept)   1.2987     0.3908   3.323  0.00132 **
+F12           1.1204     0.5526   2.027  0.04579 *
+F22          -0.7929     0.5526  -1.435  0.15507
+F23          -1.6522     0.5325  -3.103  0.00261 **
+F24           1.4206     0.5526   2.571  0.01191 *
+F32           0.2779     0.5526   0.503  0.61637
+F12:F22      -1.5760     0.7815  -2.017  0.04694 *
+F12:F23      -0.9997     0.7531  -1.327  0.18797
+F12:F24      -0.2002     0.7815  -0.256  0.79846
+F12:F32      -0.5022     0.7815  -0.643  0.52224
+F22:F32      -0.3491     0.7815  -0.447  0.65627
+F23:F32      -2.2512     0.7674  -2.933  0.00432 **
+F24:F32      -0.5596     0.7674  -0.729  0.46791
+F12:F22:F32   0.9872     1.1052   0.893  0.37430
+F12:F23:F32   1.6078     1.0853   1.481  0.14224
+F12:F24:F32   1.8631     1.0853   1.717  0.08972 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Residual standard error: 0.9572 on 84 degrees of freedom
+Multiple R-squared: 0.8051, Adjusted R-squared: 0.7703
+F-statistic: 23.13 on 15 and 84 DF, p-value: &lt; 2.2e-16
+</code></pre></div></div>
+
+<p>Understanding raw model outcome is made easier by going through specific cases by setting the different variables to different levels.</p>
+
+<p>For instance say we have an observation where F1 == 1, F2 == 1 and F3 == 1, in this case we have:</p>
+
+<p>y_i = Intercept + F12 * 0 + F22 * 0 + F23 * 0 + F24 * 0 + F32 * 0 and so on …</p>
+
+<p>So in this case our model predicted a value of:</p>
+
+<p><code class="highlighter-rouge">
+coef(m)[1]</code></p>
+
+<p>(Intercept)
+1.298662</p>
+
+<p>Now if we have F1 == 2, F2 == 1 and F3 == 1 we have:</p>
+
+<p>y_i = Intercept + F12 * 1 + F22 * 0 + F23 * 0 + F24 * 0 + F32 * 0 and so on …</p>
+
+<p>Model prediction in this case is:</p>
+
+<p><code class="highlighter-rouge">
+coef(m)[1] + coef(m)[2]</code></p>
+
+<p>(Intercept)
+2.419048
+``</p>
+
+<p>Let’s get a bit more complicated, for cases where: F1 == 2, F2 == 3 and F3 == 2:</p>
+
+<p>y_i = Intercept + F12 * 1 + F22 * 0 + F23 * 1 + F24 * 0 + F32 * 1 + F12:F22 * 0 + F12:F23 * 1 + F12:F32 * 1 + F22:F32 * 0 + F23:F32 * 1 + F24:F32 * 0 + F12:F22:F32 * 0 + F12:F23:F32 * 1 + F12:F24:F32 * 0</p>
+
+<p>Model prediction in this case is:</p>
+
+<p><code class="highlighter-rouge">
+coef(m)[1] + coef(m)[2] + coef(m)[4] + coef(m)[6] + coef(m)[8] + coef(m)[10] + coef(m)[12] + coef(m)[16]</code></p>
+
+<p>(Intercept)
+-0.8451774</p>
+
+<p>The key message from all this tedious writing is that the interpretation of model coefficient involving interactions cannot be easily done when considering coefficient in isolation. One needs to add coefficients together to get predicted values in different cases and then one can compare how going from one level to the next affect the response variable.</p>
+
+<p>When plotting interactions you have to decide which variables you want to focus on, as depending on how you specify the plot certain comparison will be easier than others. Here I want to focus on the effect of F1 on my response:
+`
+#model prediction
+pred &lt;- expand.grid(F1=factor(1:2),F2=factor(1:4),F3=factor(1:2))
+pred$y &lt;- predict(m,pred)
+#plot
+ggplot(dat,aes(x=F2,y=y,fill=F1))+geom_boxplot(outlier.size = 0,color=NA)+
+facet_grid(~F3,labeller=”label_both”)+
+geom_linerange(data = pred[1:2,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[1,],aes(label=”F12”,hjust=0.4,vjust=4))+
+geom_linerange(data=pred[3:4,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2)+
+geom_text(data = pred[3,],aes(label=”F12+\nF12:F22”,hjust=0.35,vjust=2))+
+geom_linerange(data=pred[5:6,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=4)+
+geom_text(data = pred[5,],aes(label=”F12+\nF12:F23”,hjust=0.35,vjust=-0.5))+
+geom_linerange(data=pred[7:8,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2)+
+geom_text(data = pred[7,],aes(label=”F12+\nF12:F24”,hjust=0.35,vjust=2))+
+geom_linerange(data = pred[9:10,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[9,],aes(label=”F12”,hjust=0.4,vjust=-3))+
+geom_linerange(data = pred[11:12,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[11,],aes(label=”F12+F12:F22+\nF12:F32\n+F12:F22:F32”,hjust=0.4,vjust=0))+
+geom_linerange(data = pred[13:14,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[13,],aes(label=”F12+F12:F23+\nF12:F32\n+F12:F23:F32”,hjust=0.4,vjust=1.2))+
+geom_linerange(data = pred[15:16,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[15,],aes(label=”F12+F12:F24+\nF12:F32\n+F12:F24:F32”,hjust=0.7,vjust=1))+
+geom_point(data=pred)
+`</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#interaction" class="page__taxonomy-item" rel="tag">interaction</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-10-03T00:00:00+02:00">October 03, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Interpreting+three-way+interactions+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fthree-way-interactions-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fthree-way-interactions-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fthree-way-interactions-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fthree-way-interactions-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" class="pagination--pager" title="Introduction to point pattern analysis for ecologists
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" class="pagination--pager" title="Mind the gap: when the news article run ahead of the science
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  12 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/adding-group-level-predictors-in-glmm-using-lme4/" rel="permalink">Adding group-level predictors in GLMM using lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Sometime I happen to be wrong, this is one of these instance. The issue: a colleague measured individual plant growth and measured light irradiation received...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/three-way-interactions-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

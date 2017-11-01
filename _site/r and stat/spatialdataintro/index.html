@@ -1,0 +1,792 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Using Spatial Data in R; - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Nowadays more and more spatial data analysis are performed in Biology due to the ever expanding information freely available on the internet, as for example the GBIF web facility giving access to species records, and also to the questions linked to global change: what is a species niche? Why are there more species in the tropics and how will they react to climate change… All of these questions carry some spatial background and a class of software allow spatial analysis the Geographic Information Systems (GIS), some or for free: SAGA, GRASS QGIS, some have very expensive license: ArcGIS, MapInfo, and others have incorporated spatial data in their methods: R. This post is an introduction to the spatial classes in R and basic operation that can be done on them.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Using Spatial Data in R;">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/spatialdataintro/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/spatialdataintro/">
+
+
+
+  <meta property="og:description" content="Nowadays more and more spatial data analysis are performed in Biology due to the ever expanding information freely available on the internet, as for example the GBIF web facility giving access to species records, and also to the questions linked to global change: what is a species niche? Why are there more species in the tropics and how will they react to climate change… All of these questions carry some spatial background and a class of software allow spatial analysis the Geographic Information Systems (GIS), some or for free: SAGA, GRASS QGIS, some have very expensive license: ArcGIS, MapInfo, and others have incorporated spatial data in their methods: R. This post is an introduction to the spatial classes in R and basic operation that can be done on them.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2013-02-24T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Using Spatial Data in R;">
+    <meta itemprop="description" content="Nowadays more and more spatial data analysis are performed in Biology due to the ever expanding information freely available on the internet, as for example the GBIF web facility giving access to species records, and also to the questions linked to global change: what is a species niche? Why are there more species in the tropics and how will they react to climate change… All of these questions carry some spatial background and a class of software allow spatial analysis the Geographic Information Systems (GIS), some or for free: SAGA, GRASS QGIS, some have very expensive license: ArcGIS, MapInfo, and others have incorporated spatial data in their methods: R. This post is an introduction to the spatial classes in R and basic operation that can be done on them.">
+    <meta itemprop="datePublished" content="February 24, 2013">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Using Spatial Data in R;
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Nowadays more and more spatial data analysis are performed in Biology due to the ever expanding information freely available on the internet, as for example the GBIF web facility giving access to species records, and also to the questions linked to global change: what is a species niche? Why are there more species in the tropics and how will they react to climate change… All of these questions carry some spatial background and a class of software allow spatial analysis the Geographic Information Systems (GIS), some or for free: SAGA, GRASS QGIS, some have very expensive license: ArcGIS, MapInfo, and others have incorporated spatial data in their methods: R. This post is an introduction to the spatial classes in R and basic operation that can be done on them.</p>
+
+<h2 id="spatial-points-basics">Spatial Points Basics:</h2>
+
+<p>Let’s jump right into some code and comment afterwards on it;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code&gt;# load the library
+library(sp)
+# create a vector of Longitude coordinates
+Long &lt;- 10 + rnorm(n = 10, mean = 3, sd = 6)
+# create a vector of Latitude coordinates
+Lat &lt;- 40 + rnorm(n = 10, mean = 3, sd = 6)
+# bring them together in a data frame
+coords &lt;- as.data.frame(cbind(Long, Lat))
+points &lt;- coords
+
+# turn this data frame into a Spatial Point object
+coordinates(points) &lt;- ~Long + Lat
+summary(points)
+&lt;/code&gt;
+&lt;code&gt;## Object of class SpatialPoints
+## Coordinates:
+##         min   max
+## Long  2.982 21.16
+## Lat  32.995 50.21
+## Is projected: NA 
+## proj4string : [NA]
+## Number of points: 10
+&lt;/code&gt;
+&lt;code&gt;# another way to do it
+points &lt;- SpatialPoints(coords)
+
+# let's explore the few properties of Spatial Points object
+bbox(points)  #give the range of the coordinates
+&lt;/code&gt;
+&lt;code&gt;##         min   max
+## Long  2.982 21.16
+## Lat  32.995 50.21
+&lt;/code&gt;
+&lt;code&gt;proj4string(points)  #give the geographic projection !Big Topic!
+&lt;/code&gt;
+&lt;code&gt;## [1] NA
+&lt;/code&gt;
+&lt;code&gt;coordinates(points)  #give the Longitude/Latitude coordinates
+&lt;/code&gt;
+&lt;code&gt;##         Long   Lat
+##  [1,] 16.021 41.92
+##  [2,] 13.341 50.21
+##  [3,] 16.225 40.17
+##  [4,] 16.679 44.66
+##  [5,] 18.927 49.31
+##  [6,] 15.495 34.91
+##  [7,]  8.562 32.99
+##  [8,] 21.160 40.36
+##  [9,] 11.275 50.17
+## [10,]  2.982 47.54
+&lt;/code&gt;
+&lt;code&gt;
+# let's add some data
+spdf &lt;- SpatialPointsDataFrame(points, data.frame(Height = rpois(10, 5), Sex = c(rep("Male", 
+    5), rep("Female", 5))))
+summary(spdf)
+&lt;/code&gt;
+&lt;code&gt;## Object of class SpatialPointsDataFrame
+## Coordinates:
+##         min   max
+## Long  2.982 21.16
+## Lat  32.995 50.21
+## Is projected: NA 
+## proj4string : [NA]
+## Number of points: 10
+## Data attributes:
+##      Height         Sex   
+##  Min.   :1.00   Female:5  
+##  1st Qu.:2.25   Male  :5  
+##  Median :4.50             
+##  Mean   :3.90             
+##  3rd Qu.:5.00             
+##  Max.   :6.00
+&lt;/code&gt;
+&lt;code&gt;
+# by using the @data we can do normal data frame operation
+subset(spdf, spdf@data$Sex == "Male")
+&lt;/code&gt;
+&lt;code&gt;##          coordinates Height  Sex
+## 1 (16.0206, 41.9241)      1 Male
+## 2 (13.3412, 50.2071)      5 Male
+## 3 (16.2249, 40.1712)      4 Male
+## 4 (16.6789, 44.6597)      6 Male
+## 5 (18.9267, 49.3124)      2 Male
+&lt;/code&gt;
+&lt;code&gt;
+# some ploting using the data information
+#?spplot
+spplot(spdf, zcol = "Sex")
+&lt;/code&gt;
+&lt;code&gt;plot(spdf, col = spdf$Height, pch = as.numeric(factor(spdf$Sex, labels = c(1, 
+    2))))
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p>A Spatial points object is defined by three elements, a list of X and Y coordinates, in the package sp the X always corespond to the longitude and the Y to the latitude; a bounding box (bbox) which defines the range of the coordinates and a projection. Only the first element is recquired to build a Spatial Points object. The projection components is critical since many coordinates systems exists (LongLat/Mercatour/AlbertEquals/Moolweide) and when loading/comparing/writing spatial data in R we must always make sure to use the correct projection. See here for a complete list of the projection supported in R: <a href="http://www.remotesensing.org/geotiff/proj_list/">here</a></p>
+
+<h2 id="some-mapping">Some Mapping;</h2>
+
+<p>Loads of datasets exists on the web to download free spatial data, like <a href="http://gadm.org/">here</a> for global boundaries of administratives area or <a href="http://spatial-analyst.net/wiki/index.php?title=Global_datasets">here</a> for a wide range of maps.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code&gt;# download french administrative boundaries and load them into R
+download.file("http://www.filefactory.com/file/6lxmbggy8fc7/n/FRA_adm1_RData", 
+    destfile = "FrenchMap.RData")
+load("FrenchMap.RData")
+summary(gadm)
+&lt;/code&gt;
+&lt;code&gt;## Object of class SpatialPolygonsDataFrame
+## Coordinates:
+##      min   max
+## x -5.144  9.56
+## y 41.334 51.09
+## Is projected: FALSE 
+## proj4string :
+## [+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0]
+## Data attributes:
+##       PID            ID_0        ISO               NAME_0         
+##  Min.   :1213   Min.   :79   Length:22          Length:22         
+##  1st Qu.:1218   1st Qu.:79   Class :character   Class :character  
+##  Median :1224   Median :79   Mode  :character   Mode  :character  
+##  Mean   :1224   Mean   :79                                        
+##  3rd Qu.:1229   3rd Qu.:79                                        
+##  Max.   :1234   Max.   :79                                        
+##       ID_1         NAME_1           NL_NAME_1          VARNAME_1        
+##  Min.   :11.0   Length:22          Length:22          Length:22         
+##  1st Qu.:25.2   Class :character   Class :character   Class :character  
+##  Median :47.5   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :51.4                                                           
+##  3rd Qu.:73.8                                                           
+##  Max.   :94.0                                                           
+##     TYPE_1           ENGTYPE_1        
+##  Length:22          Length:22         
+##  Class :character   Class :character  
+##  Mode  :character   Mode  :character  
+##                                       
+##                                       
+## 
+&lt;/code&gt;
+&lt;code&gt;plot(gadm)
+&lt;/code&gt;
+&lt;code&gt;# control the axes label sizes
+plot(gadm, axes = TRUE, cex.axis = 0.8)
+# make a point at the coordinates of Paris (48.8567, 2.3508 from
+# wikipedia)
+paris &lt;- SpatialPoints(coords = matrix(c(2.3508, 48.8567), ncol = 2), proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs +towgs84=0,0,0"))
+plot(paris, add = TRUE, col = "red", shape = 1)
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p>Here ends this short introduction with a few links to very interesting tutos on the topic:</p>
+
+<p><a href="https://sites.google.com/site/rodriguezsanchezf/news/usingrasagis">frederico sanchez web page</a>
+<a href="http://geostat-course.org/">geostat summer course</a></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#spatial-data" class="page__taxonomy-item" rel="tag">Spatial Data</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2013-02-24T00:00:00+01:00">February 24, 2013</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Using+Spatial+Data+in+R%3B%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fspatialdataintro%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fspatialdataintro%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fspatialdataintro%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fspatialdataintro%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/the-day-i-stoped-using-for-loops-in-r/" class="pagination--pager" title="The day I stoped using for loops (in R);
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/taking-control-of-the-legend-in-raster-in-r/" class="pagination--pager" title="Taking control of the legend in raster (in R)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/spatialdataintro/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/spatialdataintro"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

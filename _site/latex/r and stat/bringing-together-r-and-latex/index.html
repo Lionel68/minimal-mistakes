@@ -1,0 +1,733 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Bringing together R and LaTex - biologyforfun</title>
+
+
+
+
+<meta name="description" content="So as some of you may have noticed I am particularly enthusiast about R. For some time now  I have also being using LaTex for my reports and presentation. This week I discover during the lab group meeting that we can actually bring the two together using Sweave, now I was extremely excited and after some time tuning some settings I would like to share with you a short introduction into Sweave. If you have Rstudio (if you do not have it you should consider using it) you just have to click on file-&gt; New-&gt; R sweave and here you go you can start having fun.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Bringing together R and LaTex">
+
+
+  <link rel="canonical" href="http://localhost:4000/latex/r%20and%20stat/bringing-together-r-and-latex/">
+  <meta property="og:url" content="http://localhost:4000/latex/r%20and%20stat/bringing-together-r-and-latex/">
+
+
+
+  <meta property="og:description" content="So as some of you may have noticed I am particularly enthusiast about R. For some time now  I have also being using LaTex for my reports and presentation. This week I discover during the lab group meeting that we can actually bring the two together using Sweave, now I was extremely excited and after some time tuning some settings I would like to share with you a short introduction into Sweave. If you have Rstudio (if you do not have it you should consider using it) you just have to click on file-&gt; New-&gt; R sweave and here you go you can start having fun.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-01-24T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Bringing together R and LaTex">
+    <meta itemprop="description" content="So as some of you may have noticed I am particularly enthusiast about R. For some time now  I have also being using LaTex for my reports and presentation. This week I discover during the lab group meeting that we can actually bring the two together using Sweave, now I was extremely excited and after some time tuning some settings I would like to share with you a short introduction into Sweave. If you have Rstudio (if you do not have it you should consider using it) you just have to click on file-&gt; New-&gt; R sweave and here you go you can start having fun.">
+    <meta itemprop="datePublished" content="January 24, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Bringing together R and LaTex
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>So as some of you may have noticed I am particularly enthusiast about R. For some time now  I have also being using LaTex for my reports and presentation. This week I discover during the lab group meeting that we can actually bring the two together using Sweave, now I was extremely excited and after some time tuning some settings I would like to share with you a short introduction into Sweave. If you have Rstudio (if you do not have it you should consider using it) you just have to click on file-&gt; New-&gt; R sweave and here you go you can start having fun.</p>
+
+<p>If you do not know anything about LaTex it may seem daunting at first be I can assure you that it is really worth the effort, this software offer you great control and readability over your professional documents. A good place to start learning about LaTex is here: <a href="https://en.wikibooks.org/wiki/LaTeX">https://en.wikibooks.org/wiki/LaTeX</a> .</p>
+
+<p>Below is some code that created this file: <a href="https://www.dropbox.com/s/kvyinyur15e6iol/sweave_tuto.pdf">https://www.dropbox.com/s/kvyinyur15e6iol/sweave_tuto.pdf</a></p>
+
+<p>Have fun:</p>
+
+<p>%To comment in LaTex you use this symbol %</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span> <span class="c">%this is defining the page layout</span>
+<span class="k">\usepackage</span><span class="p">{</span>graphics<span class="p">}</span> <span class="c">%this is use forplotting graphics</span>
+<span class="k">\usepackage</span><span class="na">[usenames,dvipsnames]</span><span class="p">{</span>color<span class="p">}</span> <span class="c">%this is used to define new colors</span>
+<span class="k">\usepackage</span><span class="p">{</span>framed<span class="p">}</span>  <span class="c">%This is to use the shaded environment</span>
+<span class="k">\usepackage</span><span class="p">{</span>hyperref<span class="p">}</span> <span class="c">%To use URL</span>
+
+
+
+<span class="nt">\begin{document}</span> <span class="c">%this start the proper document</span>
+<span class="k">\definecolor</span><span class="p">{</span>shadecolor<span class="p">}{</span>gray<span class="p">}{</span>0.90<span class="p">}</span> <span class="c">%this is defining the color of the background in the shaded environment</span>
+<span class="k">\SweaveOpts</span><span class="p">{</span>concordance=TRUE, keep.source=TRUE<span class="p">}</span> <span class="c">%to keep the R-code as it is</span>
+
+
+<span class="k">\title</span><span class="p">{</span>A short and gentle introduction into Sweave<span class="p">}</span> <span class="c">%the title</span>
+<span class="k">\author</span><span class="p">{</span>Lionel<span class="p">}</span> <span class="c">%me</span>
+
+<span class="k">\maketitle</span> <span class="c">%create the title</span>
+
+<span class="k">\tableofcontents</span> <span class="c">%add a table of contents</span>
+
+<span class="k">\section</span><span class="p">{</span>Doing R analysis<span class="p">}</span> <span class="c">%start a new section</span>
+
+&lt;&lt;echo=FALSE&gt;&gt;=
+options(continue=" ")
+options(width=60)
+@
+
+Sweave allows you to put R code into a LaTex file using chunks that are defined by two <span class="k">\textless</span>  followed by some option stuff and two <span class="k">\textgreater</span>  and an = then you can put the R code and at the end you have to put an arobas. Here is an example:
+
+&lt;&lt;example1, echo=TRUE&gt;&gt;=
+#some basic linear regression
+x&lt;-rnorm(100,0,1)
+y&lt;-2*x+1+rnorm(100,0,1)
+m1&lt;-lm(y~x)
+summary(m1)
+@
+
+You can also had some formating parameters:
+
+<span class="nt">\begin{shaded}</span>
+<span class="k">\scriptsize</span>
+&lt;&lt;example2&gt;&gt;=
+library(ggplot2)
+data(mtcars)
+xtabs(mpg~cyl,mtcars)
+@
+<span class="nt">\end{shaded}</span>
+
+Now if we want to plot figures there are two basic options:
+<span class="nt">\begin{enumerate}</span>
+<span class="k">\item</span> Directly plotting from the R code
+<span class="k">\item</span> Saving the pictures and using a LaTex command to control where to insert the plot
+<span class="nt">\end{enumerate}</span>
+
+Here is the first option:
+
+&lt;&lt;fig=TRUE&gt;&gt;=
+plot(y~x)
+@
+
+Using this option we can control the size parameters when we define the chunck using the height and width argument, the fig argument allows you to control if you want the plot to be made or not.
+But if we are deeply in love with the way LaTex handle graphics we can first compile the code, giving it a name using the label command and then by using include=FALSE we tell Sweave not to include the resulting figure.
+
+
+&lt;&lt;label=fig1, include=FALSE, fig=TRUE&gt;&gt;=
+plot(y~x)
+abline(m1,lty=2,col="red")
+@
+
+And now the figure is saved under: filename<span class="k">\-</span>figure<span class="k">\_</span>name, in our case this is sweave<span class="k">\_</span>tuto<span class="k">\-</span>fig1.pdf. Now we can call it using includegraphics and all the features going with it, like the captions or label settings
+
+
+<span class="nt">\begin{figure}</span>
+<span class="k">\includegraphics</span><span class="p">{</span>sweave<span class="p">_</span>tuto-fig1.pdf<span class="p">}</span>
+<span class="k">\caption</span><span class="p">{</span>Simple linear regression example<span class="p">}</span>
+<span class="nt">\end{figure}</span>
+
+Now the best place to look for answers for basics question on LaTex is <span class="k">\url</span><span class="p">{</span>&lt;https://en.wikibooks.org/wiki/LaTeX&gt;<span class="p">}</span> and a nice introduction into customizing sweave can be found <span class="k">\url</span><span class="p">{</span>&lt;https://www.stat.auckland.ac.nz/~stat782/downloads/Sweave-customisation.pdf&gt;<span class="p">}</span>
+
+<span class="nt">\begin{center}</span>
+<span class="k">\huge</span>
+<span class="p">{</span><span class="k">\color</span><span class="p">{</span>Apricot<span class="p">}</span> <span class="k">\textbf</span><span class="p">{</span>Have fun with LaTex<span class="p">}}</span>
+<span class="nt">\end{center}</span>
+
+<span class="nt">\end{document}</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#introduction" class="page__taxonomy-item" rel="tag">Introduction</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#sweave" class="page__taxonomy-item" rel="tag">Sweave</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#latex" class="page__taxonomy-item" rel="tag">LaTex</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-01-24T00:00:00+01:00">January 24, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Bringing+together+R+and+LaTex%20http%3A%2F%2Flocalhost%3A4000%2Flatex%2Fr%2520and%2520stat%2Fbringing-together-r-and-latex%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Flatex%2Fr%2520and%2520stat%2Fbringing-together-r-and-latex%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Flatex%2Fr%2520and%2520stat%2Fbringing-together-r-and-latex%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Flatex%2Fr%2520and%2520stat%2Fbringing-together-r-and-latex%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/simulating-dice-throws-in-r/" class="pagination--pager" title="Simulating dice throws in R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/installing-rjava-in-r3-0/" class="pagination--pager" title="Installing rJava in R&gt;=3.0
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/latex/r%20and%20stat/bringing-together-r-and-latex/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/latex/r%20and%20stat/bringing-together-r-and-latex"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

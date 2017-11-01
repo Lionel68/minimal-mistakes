@@ -1,0 +1,935 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Generalized Linear Mixed Models in Ecology and in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="I had a nice workshop two weeks ago in Tübingen (south-germany) concerning Generalized Linear Mixed Models (GLMM) in R. The course was given by two ecologist: Dr. Pius and Fränzi Korner-Nievergelt  that spend now half of their time doing statistical consulting (http://www.oikostat.ch/navigation_engl.htm). Nice reference concerning GLMMs are: the 2009 Bolker paper (paper),  the 2007 book by Gelman (book1) and the 2009 Zuur mixed effect book (book2)">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Generalized Linear Mixed Models in Ecology and in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/generalized-linear-mixed-models-in-ecology-and-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/generalized-linear-mixed-models-in-ecology-and-in-r/">
+
+
+
+  <meta property="og:description" content="I had a nice workshop two weeks ago in Tübingen (south-germany) concerning Generalized Linear Mixed Models (GLMM) in R. The course was given by two ecologist: Dr. Pius and Fränzi Korner-Nievergelt  that spend now half of their time doing statistical consulting (http://www.oikostat.ch/navigation_engl.htm). Nice reference concerning GLMMs are: the 2009 Bolker paper (paper),  the 2007 book by Gelman (book1) and the 2009 Zuur mixed effect book (book2)">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-03-12T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Generalized Linear Mixed Models in Ecology and in R">
+    <meta itemprop="description" content="I had a nice workshop two weeks ago in Tübingen (south-germany) concerning Generalized Linear Mixed Models (GLMM) in R. The course was given by two ecologist: Dr. Pius and Fränzi Korner-Nievergelt  that spend now half of their time doing statistical consulting (http://www.oikostat.ch/navigation_engl.htm). Nice reference concerning GLMMs are: the 2009 Bolker paper (paper),  the 2007 book by Gelman (book1) and the 2009 Zuur mixed effect book (book2)">
+    <meta itemprop="datePublished" content="March 12, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Generalized Linear Mixed Models in Ecology and in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>I had a nice workshop two weeks ago in Tübingen (south-germany) concerning Generalized Linear Mixed Models (GLMM) in R. The course was given by two ecologist: Dr. Pius and Fränzi Korner-Nievergelt  that spend now half of their time doing statistical consulting (<a href="http://www.oikostat.ch/navigation_engl.htm">http://www.oikostat.ch/navigation_engl.htm</a>). Nice reference concerning GLMMs are: the 2009 Bolker paper (<a href="http://www.scribd.com/doc/117716839/Bolker-Et-Al-2009-General-Mixed-Model">paper</a>),  the 2007 book by Gelman (<a href="http://www.stat.columbia.edu/~gelman/arm/">book1</a>) and the 2009 Zuur mixed effect book (<a href="https://www.springer.com/life+sciences/ecology/book/978-0-387-87457-9">book2</a>)</p>
+
+<p>The course was very nice starting from basic linear models to more complex modelling techniques like GLMM, the teachers are also among the growing (tiny) number of ecologists that are trying out and applying bayesian data analysis to their dataset for theoretical as well as practical reasons (some complex model structure can only be fitted within a Bayesian framework).</p>
+
+<p>I will most certainly need a few years to fully digest and apply what I learned and saw there, but I also had to make a small workshop for my working group to spread the knowledge gained. So this post is just to give around the R script I used to show how to fit GLMM, how to assess GLMM assumptions, when to choose between fixed and mixed effect models, how to do model selection in GLMM, and how to draw inference from GLMM.</p>
+
+<p>As a teaser here are two cool graphs that you can do with this code:</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/03/glmm_plot1.png"><img src="http://biologyforfun.files.wordpress.com/2014/03/glmm_plot1.png?w=300" alt="GLMM_plot1" /></a><a href="http://biologyforfun.files.wordpress.com/2014/03/glmm_plot3.png"><img src="http://biologyforfun.files.wordpress.com/2014/03/glmm_plot3.png?w=300" alt="GLMM_plot3" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#####################################################################
+# R script use for the GLMM mini-Workshop on 11th March in Freising #
+#       Author: Lionel Hertzog and Franzi Korner-Nievergelt         #
+#####################################################################
+
+
+#load the libraries
+library(lme4)
+library(nlme)
+library(arm)
+library(RCurl)#to directly download the rikz dataset
+
+########################
+# part 0 fitting GLMM #
+ #  #  #  #  #  #  # 
+
+#the example dataset we will use
+rikz_link&lt;-getURL("https://raw.githubusercontent.com/ranalytics/r-tutorials/master/Edition_2015/Data/RIKZ.txt")
+data&lt;-read.table(textConnection(rikz_link),head=TRUE,sep="\t",stringsAsFactors = FALSE)
+#first a random intercept model
+mod_lme1&lt;-lme(Richness~NAP,data=data,random=~1|Beach)
+mod_lmer1&lt;-lmer(Richness~NAP+(1|Beach),data=data)
+#then a random slope plus intercept model
+mod_lme2&lt;-lme(Richness~NAP,data=data,random=NAP|Beach)
+mod_lmer2&lt;-lmer(Richness~NAP+(NAP|Beach),data=data)
+#Poisson model
+mod_glmer1&lt;-glmer(Richness~NAP+(1|Beach),data=data,family="poisson")
+#nested and crossed random effect??
+
+##################################
+#   part 1 mixed vs fixed effect #
+  #   #   #   #   #   #   #   #
+#factor variable with intercept only effect
+#simulate data in a fixed effect way
+x&lt;-rnorm(120,0,1)
+f&lt;-gl(n=6,k=20)
+modmat&lt;-model.matrix(~x+f,data.frame(x=x,f=f))
+betas&lt;-c(1,2,0.3,-3,0.5,1.2,0.8)
+y&lt;-modmat%*%betas+rnorm(120,0,1)
+
+#the fixed effect model
+m_lm&lt;-lm(y~x+f)
+#the mixed effect model
+m_lme&lt;-lme(y~x,random=~1|f)
+
+#checking model assumptions in both case
+par(mfrow=c(2,2))
+plot(m_lm)
+
+plot(fitted(m_lme),resid(m_lme))
+qqnorm(resid(m_lme))
+qqnorm(ranef(m_lme)[,1])
+plot(x,resid(m_lme))
+
+#looking at the fitted parameters
+summary(m_lm)
+summary(m_lme)
+
+#plot the fit of the model
+par(mfrow=c(1,1))
+library(RColorBrewer)
+pal&lt;-brewer.pal(6,"Set1")
+plot(y~x,col=pal[f],pch=16,main="Linear Model")
+for(i in 1:length(levels(f))){
+  if(i==1){
+    lines(x,coef(m_lm)[1]+coef(m_lm)[2]*x,col=pal[i],lwd=1.5)
+  }
+  else{
+    lines(x,coef(m_lm)[1]+coef(m_lm)[2]*x+coef(m_lm)[i+1],col=pal[i],lwd=1.5)
+  }
+}
+
+plot(y~x,col=pal[f],pch=16,main="Linear Mixed Model")
+for(i in 1:length(levels(f))){
+ lines(x,fixef(m_lme)[1]+fixef(m_lme)[2]*x+ranef(m_lme)[i,1],col=pal[i],lwd=1.5) 
+}
+#no clear difference visible
+
+#now generqte a random slope/intercept model through the mixed effect technique
+rnd.eff&lt;-rnorm(5,0,2)
+slp.eff&lt;-rnorm(5,0,1)
+all.eff&lt;-c(1,2,rnd.eff,slp.eff)
+modmat&lt;-model.matrix(~x*f,data.frame(x=x,f=f))
+y&lt;-modmat%*%all.eff+rnorm(120,0,1)
+
+#build the two model
+m_lm2&lt;-lm(y~x*f)
+m_lme2&lt;-lme(y~x,random=~x|f)
+
+#checking model assumptions
+par(mfrow=c(2,2))
+plot(m_lm2)
+plot(fitted(m_lme2),resid(m_lme2))
+abline(h=0,lty=2,col="red")
+qqnorm(resid(m_lme2))
+qqnorm(ranef(m_lme2)[,1])
+qqnorm(ranef(m_lme2)[,2])
+
+#summary of the models
+summary(m_lm2)
+summary(m_lme2)
+
+#plot the model fitted values
+par(mfrow=c(1,2))
+plot(y~x,col=pal[f],pch=16,main="Linear Model")
+for(i in 1:length(levels(f))){
+  if(i==1){
+    lines(x,coef(m_lm2)[1]+coef(m_lm2)[2]*x,col=pal[i],lwd=1.5)
+  }
+  else{
+    lines(x,coef(m_lm2)[1]+(coef(m_lm2)[2]+coef(m_lm2)[i+6])*x+coef(m_lm2)[i+1],col=pal[i],lwd=1.5)
+  }
+}
+
+plot(y~x,col=pal[f],pch=16,main="Linear Mixed Model")
+for(i in 1:length(levels(f))){
+  lines(x,fixef(m_lme2)[1]+(fixef(m_lme2)[2]+ranef(m_lme2)[i,2])*x+ranef(m_lme2)[i,1],col=pal[i],lwd=1.5) 
+}
+
+#again no clear difference can be seen ...
+
+#conclusion
+#end of Practical 1
+
+#######################
+#   Practical 2      #
+  #   #   #   #   #  
+
+#checking model assumptions
+par(mfrow=c(2,2))
+plot(fitted(m_lme2),resid(m_lme2))
+abline(h=0,lty=2,col="red")
+qqnorm(resid(m_lme2))
+qqline(resid(m_lme2))
+qqnorm(ranef(m_lme2)[,1])
+qqline(ranef(m_lme2)[,1])
+qqnorm(ranef(m_lme2)[,2])
+qqline(ranef(m_lme2)[,2])
+scatter.smooth(fitted(m_lme2),sqrt(abs(resid(m_lme2))))
+
+#wrong data
+modmat[,2]&lt;-log(modmat[,2]+10)
+y&lt;-modmat%*%all.eff+runif(120,0,5)
+m_wrg&lt;-lme(y~x,random=~x|f)
+
+plot(fitted(m_wrg),resid(m_wrg))
+abline(h=0,lty=2,col="red")
+qqnorm(resid(m_wrg))
+qqline(resid(m_wrg))
+qqnorm(ranef(m_wrg)[,1])
+qqline(ranef(m_wrg)[,1])
+qqnorm(ranef(m_wrg)[,2])
+qqline(ranef(m_wrg)[,2])
+scatter.smooth(fitted(m_wrg),sqrt(abs(resid(m_wrg))))
+
+#plot fitted values vs resid, qqnorm the residuals and all random effects
+
+#end of practical 2
+
+###################
+#  Practical 3   #
+ #  #  #  #  #  #
+
+#Model selection
+#work with the RIKZ dataset from Zuur et al
+
+data&lt;-read.table("/home/lionel/Documents/PhD/GLMM_WS/data/rikz.txt",sep=" ",head=TRUE)
+
+#testing the random effect
+#a first model
+mod1&lt;-lme(Richness~NAP+Exposure,data=data,random=~1|Beach,method="REML")
+#a second model without the random term, gls is used because it also fit the model through REML
+mod2&lt;-gls(Richness~NAP+Exposure,data=data,method="REML")
+#likelihood ratio test, not very precise for low sample size
+anova(mod1,mod2)
+
+# parameteric bootstrap
+lrt.obs &lt;- anova(mod1, mod2)$L.Ratio[2] # save the observed likelihood ratio test statistic
+n.sim &lt;- 1000  # use 1000 for a real data analysis
+lrt.sim &lt;- numeric(n.sim)
+dattemp &lt;- data
+for(i in 1:n.sim){
+  dattemp$ysim &lt;- simulate(lm(Richness ~ NAP+Exposure, data=dattemp))$sim_1 # simulate new observations from the null-model
+  modnullsim &lt;- gls(ysim ~ NAP+Exposure, data=dattemp)   # fit the null-model
+  modaltsim &lt;-lme(ysim ~ NAP+Exposure, random=~1|Beach, data=dattemp)  # fit the alternative model
+  lrt.sim[i] &lt;- anova(modnullsim, modaltsim)$L.Ratio[2] # save the likelihood ratio test statistic
+}
+
+(sum(lrt.sim&gt;=lrt.obs)+1)/(n.sim+1)  # p-value
+
+#plot
+par(mfrow=c(1,1))
+hist(lrt.sim, xlim=c(0, max(c(lrt.sim, lrt.obs))), col="blue", xlab="likelihood ratio test statistic", ylab="density", cex.lab=1.5, cex.axis=1.2)
+abline(v=lrt.obs, col="orange", lwd=3)
+
+#model selection for the fixed effect part, to use the simulate function we need MER object
+mod1_ML&lt;-lme(Richness~NAP+Exposure,data,random=~1|Beach,method="ML")
+mod3&lt;-lme(Richness~NAP,data,random=~1|Beach,method="ML")
+mod1_lmer&lt;-lmer(Richness~NAP+Exposure+(1|Beach),data=data,REML=FALSE)
+mod3_lmer&lt;-lmer(Richness~NAP+(1|Beach),data=data,REML=FALSE)
+#compare with lme results
+summary(mod1_lmer)
+summary(mod1_ML)
+#anova
+anova(mod1_lmer,mod3_lmer)
+
+#again parametric boostrapping of the LRT
+lrt.obs&lt;-anova(mod1_lmer, mod3_lmer)$Chisq[2]
+n.sim &lt;- 1000  # use 1000 for a real data analysis
+lrt.sim &lt;- numeric(n.sim)
+dattemp &lt;- data
+for(i in 1:n.sim){
+  dattemp$ysim &lt;-  unlist(simulate(mod3_lmer)) # simulate new observations from the null-model
+  modnullsim &lt;- lmer(ysim ~ NAP+(1|Beach), data=dattemp,REML=FALSE)   # fit the null-model
+  modaltsim &lt;-lmer(ysim ~ NAP+Exposure+(1|Beach), data=dattemp,REML=FALSE)  # fit the alternative model
+  lrt.sim[i] &lt;- anova(modnullsim, modaltsim)$Chisq[2] # save the likelihood ratio test statistic
+}
+
+(sum(lrt.sim&gt;=lrt.obs)+1)/(n.sim+1)  # p-value
+
+#plot
+hist(lrt.sim, xlim=c(0, max(c(lrt.sim, lrt.obs))), col="blue", xlab="likelihood ratio test statistic", ylab="density", cex.lab=1.5, cex.axis=1.2)
+abline(v=lrt.obs, col="orange", lwd=3)
+
+#the next step would be to drop NAP first and then see if the likelihood ratio test is significant and if dropping Exposure first always
+#lead to higher LRT statistic
+#other methods, AIC..
+#R square computation for GLMM, see supplementary material from Nakagawa 2013 MEE
+VarF &lt;- var(as.vector(fixef(mod1_lmer) %*% t(mod1_lmer@pp$X)))
+# VarCorr() extracts variance components
+# attr(VarCorr(lmer.model),’sc’)^2 extracts the residual variance, VarCorr()$plot extract the variance of the plot effect
+VarF/(VarF + VarCorr(mod1_lmer)$Beach[1] + attr(VarCorr(mod1_lmer), "sc")^2 )
+
+#compute the conditionnal R-square
+(VarF + VarCorr(mod1_lmer)$Beach[1])/(VarF + VarCorr(mod1_lmer)$Beach[1] + (attr(VarCorr(mod1_lmer), "sc")^2))
+
+#end of practical 3
+
+
+######################
+#    Practical 4    #
+ #  #  #  #  #  #  #
+
+#drawing inference from a model
+#p-values can be retrieved from lme and glmer but not from lmer call
+summary(mod1)
+summary(mod1_lmer)
+
+mod1_glmer&lt;-glmer(Richness~NAP+Exposure+(1|Beach),data=data,family="poisson")
+summary(mod1_glmer)
+
+#using sim from the arm package
+n.sim&lt;-1000
+simu&lt;-sim(mod1_glmer,n.sims=n.sim)
+head(simu@fixef)
+#95% credible interval
+apply(simu@fixef,2,quantile,prob=c(0.025,0.5,0.975))
+#plotting the effect of NAP on the richness
+nsim &lt;- 1000
+bsim &lt;- sim(mod1_glmer, n.sim=nsim)
+newdat &lt;- data.frame(NAP=seq(-1.5, 2.5, length=100),Exposure=mean(data$Exposure))
+Xmat &lt;- model.matrix(~NAP+Exposure, data=newdat)
+predmat &lt;- matrix(ncol=nsim, nrow=nrow(newdat))
+predmat&lt;-apply(bsim@fixef,1,function(x) exp(Xmat%*%x))
+newdat$lower &lt;- apply(predmat, 1, quantile, prob=0.025)
+newdat$upper &lt;- apply(predmat, 1, quantile, prob=0.975)
+newdat$med&lt;-apply(predmat, 1, quantile, prob=0.5)
+
+plot(Richness~NAP, data=data, pch=16, las=1, cex.lab=1.4, cex.axis=1.2)
+lines(newdat$NAP,newdat$med,col="blue",lty=1,lwd=1.5)
+lines(newdat$NAP,newdat$upper,col="red",lty=2,lwd=1.5)
+lines(newdat$NAP,newdat$lower,col="red",lty=2,lwd=1.5)
+
+#to compare the coefficient between the different terms standardize the variable
+data$stdNAP&lt;-scale(data$NAP)
+data$stdExposure&lt;-scale(data$Exposure)
+mod2_glmer&lt;-glmer(Richness~stdNAP+stdExposure+(1|Beach),data=data,family="poisson")
+
+#simulate to draw the posterior distribution of the coefficients
+n.sim&lt;-1000
+simu&lt;-sim(mod2_glmer,n.sims=n.sim)
+head(simu@fixef)
+#95% credible interval
+coeff&lt;-t(apply(simu@fixef,2,quantile,prob=c(0.025,0.5,0.975)))
+#plot
+plot(1:3,coeff[,2],ylim=c(-0.8,2),xaxt="n",xlab="",ylab="Estimated values")
+axis(side=1,at=1:3,labels=attr(fixef(mod2_glmer),"names"))
+segments(x0=1:3,y0=coeff[,1],x1=1:3,y1=coeff[,3],lend=1)
+abline(h=0,lty=2,col="red")
+
+#end of practical 4
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glmm" class="page__taxonomy-item" rel="tag">GLMM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-03-12T00:00:00+01:00">March 12, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Generalized+Linear+Mixed+Models+in+Ecology+and+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgeneralized-linear-mixed-models-in-ecology-and-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgeneralized-linear-mixed-models-in-ecology-and-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgeneralized-linear-mixed-models-in-ecology-and-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fgeneralized-linear-mixed-models-in-ecology-and-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/computing-r-square-for-generalized-linear-mixed-models-in-r/" class="pagination--pager" title="Computing R square for Generalized Linear Mixed Models in R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/now-on-r-bloggers/" class="pagination--pager" title="Now on r-bloggers
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/generalized-linear-mixed-models-in-ecology-and-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/generalized-linear-mixed-models-in-ecology-and-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

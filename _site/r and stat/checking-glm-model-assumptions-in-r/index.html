@@ -1,0 +1,776 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Checking (G)LM model assumptions in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="(Generalized) Linear models make some strong assumptions concerning the data structure:">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Checking (G)LM model assumptions in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/checking-glm-model-assumptions-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/checking-glm-model-assumptions-in-r/">
+
+
+
+  <meta property="og:description" content="(Generalized) Linear models make some strong assumptions concerning the data structure:">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-04-16T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Checking (G)LM model assumptions in R">
+    <meta itemprop="description" content="(Generalized) Linear models make some strong assumptions concerning the data structure:">
+    <meta itemprop="datePublished" content="April 16, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Checking (G)LM model assumptions in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>(Generalized) Linear models make some strong assumptions concerning the data structure:</p>
+
+<ol>
+  <li>
+    <p>Independance of each data points</p>
+  </li>
+  <li>
+    <p>Correct distribution of the residuals</p>
+  </li>
+  <li>
+    <p>Correct specification of the variance structure</p>
+  </li>
+  <li>
+    <p>Linear relationship between the response and the linear predictor</p>
+  </li>
+</ol>
+
+<p>For simple lm 2-4) means that the residuals should be normally distributed, the variance should be homogenous across the fitted values of the model and for each predictors separately, and the y’s should be linearly related to the predictors. In R checking these assumptions from a lm and glm object is fairly easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="r"&gt;&lt;span class="comment"&gt;# testing model assumptions some simulated data&lt;/span&gt;
+&lt;span class="identifier"&gt;x&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;runif&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;100&lt;/span&gt;, &lt;span class="number"&gt;0&lt;/span&gt;, &lt;span class="number"&gt;10&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="number"&gt;1&lt;/span&gt; &lt;span class="operator"&gt;+&lt;/span&gt; &lt;span class="number"&gt;2&lt;/span&gt; &lt;span class="operator"&gt;*&lt;/span&gt; &lt;span class="identifier"&gt;x&lt;/span&gt; &lt;span class="operator"&gt;+&lt;/span&gt; &lt;span class="identifier"&gt;rnorm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;100&lt;/span&gt;, &lt;span class="number"&gt;0&lt;/span&gt;, &lt;span class="number"&gt;1&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;m&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;lm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;~&lt;/span&gt; &lt;span class="identifier"&gt;x&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;/code&gt;
+
+
+
+
+&lt;code class="r"&gt;&lt;span class="identifier"&gt;par&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;mfrow&lt;/span&gt; &lt;span class="operator"&gt;=&lt;/span&gt; &lt;span class="identifier"&gt;c&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;2&lt;/span&gt;, &lt;span class="number"&gt;2&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;plot&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/04/check_01.png"><img src="http://biologyforfun.files.wordpress.com/2014/04/check_01.png" alt="Check_01" /></a></p>
+
+<p>The top-left and top-right graphs are the most important one, the top-left graph check for the homogeneity of the variance and the linear relation, if you see no pattern in this graph (ie if this graph looks like stars in the sky), then your assumptions are met. The second graphs check for the normal distribution of the residuals, the points should fall on a line. The bottom-left graph is similar to the top-left one, the y-axis is changed, this time the residuals are square-root standardized (?rstandard) making it easier to see heterogeneity of the variance. The fourth one allow detecting points that have a too big impact on the regression coefficients and that should be removed. These graphs from simulated data are extremely nice, in applied statistics you will rarely see such nice graphs. Now many people new to linear modelling and used to strict p-values black and white decision are a bit lost not knowing when there model is fine and when it should be rejected. Below is an example of a model that is clearly wrong:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="r"&gt;&lt;span class="comment"&gt;# some wrong model&lt;/span&gt;
+&lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="number"&gt;1&lt;/span&gt; &lt;span class="operator"&gt;+&lt;/span&gt; &lt;span class="number"&gt;2&lt;/span&gt; &lt;span class="operator"&gt;*&lt;/span&gt; &lt;span class="identifier"&gt;x&lt;/span&gt; &lt;span class="operator"&gt;+&lt;/span&gt; &lt;span class="number"&gt;1&lt;/span&gt; &lt;span class="operator"&gt;*&lt;/span&gt; &lt;span class="identifier"&gt;x&lt;/span&gt;&lt;span class="operator"&gt;^&lt;/span&gt;&lt;span class="number"&gt;2&lt;/span&gt; &lt;span class="operator"&gt;-&lt;/span&gt; &lt;span class="number"&gt;0.5&lt;/span&gt; &lt;span class="operator"&gt;*&lt;/span&gt; &lt;span class="identifier"&gt;x&lt;/span&gt;&lt;span class="operator"&gt;^&lt;/span&gt;&lt;span class="number"&gt;3&lt;/span&gt;
+&lt;span class="identifier"&gt;m&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;lm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;~&lt;/span&gt; &lt;span class="identifier"&gt;x&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;/code&gt;
+
+
+
+
+&lt;code class="r"&gt;&lt;span class="identifier"&gt;par&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;mfrow&lt;/span&gt; &lt;span class="operator"&gt;=&lt;/span&gt; &lt;span class="identifier"&gt;c&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;2&lt;/span&gt;, &lt;span class="number"&gt;2&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;plot&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)
+&lt;/span&gt;&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/04/check_02.png"><img src="http://biologyforfun.files.wordpress.com/2014/04/check_02.png" alt="Check_02" /></a></p>
+
+<p>These two example are easy, life is not. Real-life models are sometimes hard to assess, the bottom-line is you should always check your model assumptions and be truthfull. Reporting and interpreting models that do not meet their assumptions is bad science and close to falsification of the results. Now let’s see a real life example where it is tricky to decide if the model meet the assumptions or not, the dataset is in the ggplot2 library just look at ?mpg for a description:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="r"&gt;&lt;span class="comment"&gt;# a real life dataset&lt;/span&gt;
+&lt;span class="keyword"&gt;library&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;ggplot2&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;head&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;mpg&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;/code&gt;
+
+
+
+
+&lt;code&gt;##   manufacturer model displ year cyl      trans drv cty hwy fl   class
+## 1         audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6         audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact
+&lt;/code&gt;
+
+
+
+
+&lt;code class="r"&gt;&lt;span class="identifier"&gt;m&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;lm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;cty&lt;/span&gt; &lt;span class="operator"&gt;~&lt;/span&gt; &lt;span class="identifier"&gt;displ&lt;/span&gt; &lt;span class="operator"&gt;+&lt;/span&gt; &lt;span class="identifier"&gt;factor&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;cyl&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;, &lt;span class="identifier"&gt;mpg&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;/code&gt;
+
+
+
+
+&lt;code class="r"&gt;&lt;span class="identifier"&gt;par&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;mfrow&lt;/span&gt; &lt;span class="operator"&gt;=&lt;/span&gt; &lt;span class="identifier"&gt;c&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;2&lt;/span&gt;, &lt;span class="number"&gt;2&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;plot&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)
+&lt;/span&gt;&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/04/check_03.png"><img src="http://biologyforfun.files.wordpress.com/2014/04/check_03.png" alt="Check_03" /></a></p>
+
+<p>The residuals vs fitted graphs looks rather ok to me, there is some higher variance for high fitted values but this does not look too bad to me, however the qqplot (checking the normality of the residuals) looks pretty awfull with residuals on the right consistently going further away from the theoretical line. A nice way to see if the patterns are different from those expected under the model conditions is to derive new response values from the fitted coefficient and the residual variance, you can then derive 8 new plots and randomly allocate the real plot to a position, if you are able to find the real plot and if its pattern are different from the other then the model do not meet its assumptions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="r"&gt;&lt;span class="comment"&gt;# randomizing to see if the patterns are different from expected&lt;/span&gt;
+&lt;span class="identifier"&gt;modmat&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;model.matrix&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="operator"&gt;~&lt;/span&gt;&lt;span class="identifier"&gt;displ&lt;/span&gt; &lt;span class="operator"&gt;+&lt;/span&gt; &lt;span class="identifier"&gt;factor&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;cyl&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;, &lt;span class="identifier"&gt;data&lt;/span&gt; &lt;span class="operator"&gt;=&lt;/span&gt; &lt;span class="identifier"&gt;mpg&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;mus&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;modmat&lt;/span&gt; &lt;span class="operator"&gt;%*%&lt;/span&gt; &lt;span class="identifier"&gt;coef&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="identifier"&gt;set.seed&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;1246&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="comment"&gt;# the position of the real plot in a 3x3 panel&lt;/span&gt;
+&lt;span class="identifier"&gt;s&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;sample&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;1&lt;/span&gt;&lt;span class="operator"&gt;:&lt;/span&gt;&lt;span class="number"&gt;9&lt;/span&gt;, &lt;span class="identifier"&gt;size&lt;/span&gt; &lt;span class="operator"&gt;=&lt;/span&gt; &lt;span class="number"&gt;1&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;/code&gt;
+
+
+
+
+&lt;code class="r"&gt;&lt;span class="identifier"&gt;par&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;mfrow&lt;/span&gt; &lt;span class="operator"&gt;=&lt;/span&gt; &lt;span class="identifier"&gt;c&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="number"&gt;3&lt;/span&gt;, &lt;span class="number"&gt;3&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+&lt;span class="keyword"&gt;for&lt;/span&gt; &lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;i&lt;/span&gt; &lt;span class="keyword"&gt;in&lt;/span&gt; &lt;span class="number"&gt;1&lt;/span&gt;&lt;span class="operator"&gt;:&lt;/span&gt;&lt;span class="number"&gt;9&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt; &lt;span class="paren"&gt;{&lt;/span&gt;
+    &lt;span class="keyword"&gt;if&lt;/span&gt; &lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;i&lt;/span&gt; &lt;span class="operator"&gt;==&lt;/span&gt; &lt;span class="identifier"&gt;s&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt; &lt;span class="paren"&gt;{&lt;/span&gt;
+        &lt;span class="comment"&gt;# the real plot&lt;/span&gt;
+        &lt;span class="identifier"&gt;qqnorm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;resid&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+        &lt;span class="identifier"&gt;qqline&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;resid&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+    &lt;span class="paren"&gt;}&lt;/span&gt; &lt;span class="keyword"&gt;else&lt;/span&gt; &lt;span class="paren"&gt;{&lt;/span&gt;
+        &lt;span class="comment"&gt;# draw new y values from the fitted values with the residuals standard&lt;/span&gt;
+        &lt;span class="comment"&gt;# deviation&lt;/span&gt;
+        &lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;rnorm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;dim&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;mpg&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;[&lt;/span&gt;&lt;span class="number"&gt;1&lt;/span&gt;&lt;span class="paren"&gt;]&lt;/span&gt;, &lt;span class="identifier"&gt;mus&lt;/span&gt;, &lt;span class="identifier"&gt;sd&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;resid&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+        &lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;&lt;-&lt;/span&gt; &lt;span class="identifier"&gt;y&lt;/span&gt; &lt;span class="operator"&gt;-&lt;/span&gt; &lt;span class="identifier"&gt;fitted&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;m&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+        &lt;span class="identifier"&gt;qqnorm&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;y&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+        &lt;span class="identifier"&gt;qqline&lt;/span&gt;&lt;span class="paren"&gt;(&lt;/span&gt;&lt;span class="identifier"&gt;y&lt;/span&gt;&lt;span class="paren"&gt;)&lt;/span&gt;
+    &lt;span class="paren"&gt;}&lt;/span&gt;&lt;/code&gt;
+</code></pre></div></div>
+
+<p>}</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2014/04/check_04.png"><img src="http://biologyforfun.files.wordpress.com/2014/04/check_04.png" alt="Check_04" /></a></p>
+
+<p>Are you able to find in which panel the real plot is? I can it is on the second row, third column. The other qqplot do not look that different from the real one, there are however a few points that are definitevely away from what we expect under the model assumptions. A next step would be to look at these points and understand where these discrepency might come from (measurement error, special case…) We can also derive such plots for checking the first graph.</p>
+
+<p>Resources on model checking:</p>
+
+<ul>
+  <li>
+    <p>A nice response on stackoverflow: <a href="http://stats.stackexchange.com/questions/32285/assumptions-of-generalised-linear-model">http://stats.stackexchange.com/questions/32285/assumptions-of-generalised-linear-model</a></p>
+  </li>
+  <li>
+    <p>Zuur books: <a href="http://highstat.com/books.htm">http://highstat.com/books.htm</a></p>
+  </li>
+  <li>
+    <p>R tutorial: <a href="http://rtutorialseries.blogspot.de/2009/12/r-tutorial-series-graphic-analysis-of.html">http://rtutorialseries.blogspot.de/2009/12/r-tutorial-series-graphic-analysis-of.html</a></p>
+  </li>
+  <li>
+    <p>Type “Model checking linear regression r” in youtube and you will find some nice videos</p>
+  </li>
+</ul>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glm" class="page__taxonomy-item" rel="tag">GLM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-04-16T00:00:00+02:00">April 16, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Checking+%28G%29LM+model+assumptions+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fchecking-glm-model-assumptions-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fchecking-glm-model-assumptions-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fchecking-glm-model-assumptions-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fchecking-glm-model-assumptions-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/interpreting-interaction-coefficient-in-r-part1-lm/" class="pagination--pager" title="Interpreting interaction coefficient in R (Part1 lm) UPDATED
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/informatic%20language/fonctions-recursives-avec-r/" class="pagination--pager" title="Fonctions récursives (avec R)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/checking-glm-model-assumptions-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/checking-glm-model-assumptions-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

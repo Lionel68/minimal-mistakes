@@ -1,0 +1,958 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Plotting regression curves with confidence intervals for LM, GLM and GLMM in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="[Updated 22nd January 2017, corrected mistakes for getting the fixed effect estimates of factor variables that need to be averaged out]">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Plotting regression curves with confidence intervals for LM, GLM and GLMM in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/plotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/plotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r/">
+
+
+
+  <meta property="og:description" content="[Updated 22nd January 2017, corrected mistakes for getting the fixed effect estimates of factor variables that need to be averaged out]">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-10-08T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Plotting regression curves with confidence intervals for LM, GLM and GLMM in R">
+    <meta itemprop="description" content="[Updated 22nd January 2017, corrected mistakes for getting the fixed effect estimates of factor variables that need to be averaged out]">
+    <meta itemprop="datePublished" content="October 08, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Plotting regression curves with confidence intervals for LM, GLM and GLMM in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>[Updated 22nd January 2017, corrected mistakes for getting the fixed effect estimates of factor variables that need to be averaged out]</p>
+
+<p>[Updated 14th July 2017, the function is now on github: https://github.com/Lionel68/Blog/tree/master/PlotFit any modifications to it will be posted there before updating the post. The function has 2 new functionalities: (i) taking into account offset variables that can be declared in the offset argument, (ii) allowing the user to choose between approximate (the default) and bootstrapped confidence intervals in mixed effect models, this can be controlled with boot_mer arguments.]</p>
+
+<p>Once models have been fitted and <a href="http://wp.me/p2SacB-42">checked</a> and <a href="http://wp.me/p2SacB-6V">re-checked</a> comes the time to <a href="http://wp.me/p2SacB-6j">interpret</a> <a href="http://wp.me/p2SacB-5X">them</a>. The easiest way to do so is to plot the response variable versus the explanatory variables (I call them predictors) adding to this plot the fitted regression curve together (if you are feeling fancy) with a <a href="https://en.wikipedia.org/wiki/Confidence_interval">confidence interval</a> around it. Now this approach is preferred over the <a href="http://wp.me/p2SacB-7A">partial residual one</a> because it allows the averaging out of any other potentially confounding predictors and so focus only on the effect of one focal predictor on the response. In my work I have been doing this hundreds of time and finally decided to put all this into a function to clean up my code a little bit. As always a cleaner version of this post is available <a href="http://rpubs.com/hughes/116374">here</a>.
+Let’s dive into some code (the function is at the end of the post just copy/paste into your R environment):</p>
+
+<p>[code language=”r”]
+#####LM example######
+#we measured plant biomass for 120 pots under 3 nutrient treatments and across a gradient of CO2
+#due to limited place in our greenhouse chambers we had to use 4 of them, so we established a blocking design
+data&lt;-data.frame(C=runif(120,-2,2),N=gl(n = 3,k = 40,labels = c(“Few”,”Medium”,”A_lot”)),Block=rep(rep(paste0(“B”,1:4),each=10),times=3))
+xtabs(~N+Block,data)</p>
+
+<h2 id="block">Block</h2>
+<h2 id="n--------b1-b2-b3-b4">N        B1 B2 B3 B4</h2>
+<h2 id="few----10-10-10-10">Few    10 10 10 10</h2>
+<h2 id="medium-10-10-10-10">Medium 10 10 10 10</h2>
+<h2 id="a_lot--10-10-10-10">A_lot  10 10 10 10</h2>
+
+<p>modmat&lt;-model.matrix(~Block+C<em>N,data)
+#the paramters of the models
+params&lt;-c(10,-0.4,2.3,-1.5,1,0.5,2.3,0.6,2.7)
+#simulate a response vector
+data$Biom&lt;-rnorm(120,modmat%</em>%params,1)
+#fit the model
+m&lt;-lm(Biom~Block+C*N,data)
+summary(m)</p>
+
+<h1>#</h1>
+<h2 id="call">Call:</h2>
+<h2 id="lmformula--biom--block--c--n-data--data">lm(formula = Biom ~ Block + C * N, data = data)</h2>
+<h1 id="-1">#</h1>
+<h2 id="residuals">Residuals:</h2>
+<h2 id="min-------1q---median-------3q------max">Min       1Q   Median       3Q      Max</h2>
+<h2 id="-211758--068801--001582--075057--255953">-2.11758 -0.68801 -0.01582  0.75057  2.55953</h2>
+<h1 id="-2">#</h1>
+<h2 id="coefficients">Coefficients:</h2>
+<h2 id="estimate-std-error-t-value-prt">Estimate Std. Error t value Pr(&gt;|t|)</h2>
+<h2 id="intercept--100768-----02370--42521---2e-16-">(Intercept)  10.0768     0.2370  42.521  &lt; 2e-16 ***</h2>
+<h2 id="blockb2-------03011-----02690---1119-0265364">BlockB2      -0.3011     0.2690  -1.119 0.265364</h2>
+<h2 id="blockb3-------23322-----02682---8695-354e-14-">BlockB3       2.3322     0.2682   8.695 3.54e-14 ***</h2>
+<h2 id="blockb4-------14505-----02688---5396-391e-07-">BlockB4      -1.4505     0.2688  -5.396 3.91e-07 ***</h2>
+<h2 id="c-------------07585-----01637---4633-989e-06-">C             0.7585     0.1637   4.633 9.89e-06 ***</h2>
+<h2 id="nmedium-------04842-----02371---2042-0043489-">NMedium       0.4842     0.2371   2.042 0.043489 *</h2>
+<h2 id="na_lot--------24011-----02335--10285---2e-16-">NA_lot        2.4011     0.2335  10.285  &lt; 2e-16 ***</h2>
+<h2 id="cnmedium-----07287-----02123---3432-0000844-">C:NMedium     0.7287     0.2123   3.432 0.000844 ***</h2>
+<h2 id="cna_lot------32536-----02246--14489---2e-16-">C:NA_lot      3.2536     0.2246  14.489  &lt; 2e-16 ***</h2>
+<h2 id="-3">—</h2>
+<h2 id="signif-codes--0--0001--001--005--01---1">Signif. codes:  0 ‘<em><strong>’ 0.001 ‘</strong>’ 0.01 ‘</em>’ 0.05 ‘.’ 0.1 ‘ ‘ 1</h2>
+<h1 id="-4">#</h1>
+<h2 id="residual-standard-error-1028-on-111-degrees-of-freedom">Residual standard error: 1.028 on 111 degrees of freedom</h2>
+<h2 id="multiple-r-squared--09201-adjusted-r-squared--09144">Multiple R-squared:  0.9201, Adjusted R-squared:  0.9144</h2>
+<h2 id="f-statistic-1598-on-8-and-111-df--p-value--22e-16">F-statistic: 159.8 on 8 and 111 DF,  p-value: &lt; 2.2e-16</h2>
+<p>[/code]</p>
+
+<p>Here we would normally continue and make some model checks. As output from the model we would like to plot the effect of CO2 on plant biomass for each level of N addition. Of course we want to average out the Block effect (otherwise we would have to plot one separate line for each Block). This is how it works:</p>
+
+<p>[code language=”r”]
+pred&lt;-plot_fit(m,focal_var = “C”,inter_var = “N”)
+head(pred)</p>
+
+<h2 id="c---n-------lc-----pred-------uc">C   N       LC     Pred       UC</h2>
+<h2 id="1--19984087-few-8004927-8706142-9407358">1 -1.9984087 Few 8.004927 8.706142 9.407358</h2>
+<h2 id="2--17895749-few-8213104-8864545-9515986">2 -1.7895749 Few 8.213104 8.864545 9.515986</h2>
+<h2 id="3--15807411-few-8417943-9022948-9627952">3 -1.5807411 Few 8.417943 9.022948 9.627952</h2>
+<h2 id="4--13719073-few-8618617-9181350-9744084">4 -1.3719073 Few 8.618617 9.181350 9.744084</h2>
+<h2 id="5--11630735-few-8814119-9339753-9865387">5 -1.1630735 Few 8.814119 9.339753 9.865387</h2>
+<h2 id="6--09542397-few-9003286-9498156-9993026">6 -0.9542397 Few 9.003286 9.498156 9.993026</h2>
+
+<p>#the function output a data frame with columns for the varying predictors
+#a column for the predicted values (Pred), one lower bound (LC) and an upper one (UC)
+#let’s plot this
+plot(Biom~C,data,col=c(“red”,”green”,”blue”)[data$N],pch=16,xlab=”CO2 concentration”,ylab=”Plant biomass”)
+lines(Pred~C,pred[1:20,],col=”red”,lwd=3)
+lines(LC~C,pred[1:20,],col=”red”,lwd=2,lty=2)
+lines(UC~C,pred[1:20,],col=”red”,lwd=2,lty=2)
+lines(Pred~C,pred[21:40,],col=”green”,lwd=3)
+lines(LC~C,pred[21:40,],col=”green”,lwd=2,lty=2)
+lines(UC~C,pred[21:40,],col=”green”,lwd=2,lty=2)
+lines(Pred~C,pred[41:60,],col=”blue”,lwd=3)
+lines(LC~C,pred[41:60,],col=”blue”,lwd=2,lty=2)
+lines(UC~C,pred[41:60,],col=”blue”,lwd=2,lty=2)
+legend(“topleft”,legend = c(“Few”,”Medium”,”A lot”),col=c(“red”,”green”,”blue”),pch=16,lwd=3,title = “N addition”,bty=”n”)
+[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/10/plotfit12.png"><img src="https://biologyforfun.files.wordpress.com/2015/10/plotfit12.png" alt="plotFit1" /></a></p>
+
+<p>The cool thing is that the function will also work for GLM, LMM and GLMM. For mixed effect models the confidence interval is computed from <a href="http://wp.me/p2SacB-7f">parametric bootstrapping</a>:</p>
+
+<p>[code language=”r”]
+######LMM example#######
+#now let’s say that we took 5 measurements per pots and we don’t want to aggregate them
+data&lt;-data.frame(Pots=rep(paste0(“P”,1:120),each=5),Block=rep(rep(paste0(“B”,1:4),each=5<em>10),times=3),N=gl(n = 3,k = 40</em>5,labels=c(“Few”,”Medium”,”A_lot”)),C=rep(runif(120,-2,2),each=5))
+#a random intercept term
+rnd_int&lt;-rnorm(120,0,0.4)
+modmat&lt;-model.matrix(~Block+C<em>N,data)
+lin_pred&lt;-modmat%</em>%params+rnd_int[factor(data$Pots)]
+data$Biom&lt;-rnorm(600,lin_pred,1)
+m&lt;-lmer(Biom~Block+C*N+(1|Pots),data)
+summary(m)</p>
+
+<h2 id="linear-mixed-model-fit-by-reml-lmermod">Linear mixed model fit by REML [‘lmerMod’]</h2>
+<h2 id="formula-biom--block--c--n--1--pots">Formula: Biom ~ Block + C * N + (1 | Pots)</h2>
+<h2 id="data-data">Data: data</h2>
+<h1 id="-5">#</h1>
+<h2 id="reml-criterion-at-convergence-17651">REML criterion at convergence: 1765.1</h2>
+<h1 id="-6">#</h1>
+<h2 id="scaled-residuals">Scaled residuals:</h2>
+<h2 id="min------1q--median------3q-----max">Min      1Q  Median      3Q     Max</h2>
+<h2 id="-26608--06446--00340--06077--32002">-2.6608 -0.6446 -0.0340  0.6077  3.2002</h2>
+<h1 id="-7">#</h1>
+<h2 id="random-effects">Random effects:</h2>
+<h2 id="groups---name--------variance-stddev">Groups   Name        Variance Std.Dev.</h2>
+<h2 id="pots-----intercept-01486---03855">Pots     (Intercept) 0.1486   0.3855</h2>
+<h2 id="residual-------------09639---09818">Residual             0.9639   0.9818</h2>
+<h2 id="number-of-obs-600-groups--pots-120">Number of obs: 600, groups:  Pots, 120</h2>
+<h1 id="-8">#</h1>
+<h2 id="fixed-effects">Fixed effects:</h2>
+<h2 id="estimate-std-error-t-value">Estimate Std. Error t value</h2>
+<h2 id="intercept--993917----013225---7515">(Intercept)  9.93917    0.13225   75.15</h2>
+<h2 id="blockb2------042019----015153----277">BlockB2     -0.42019    0.15153   -2.77</h2>
+<h2 id="blockb3------235993----015364---1536">BlockB3      2.35993    0.15364   15.36</h2>
+<h2 id="blockb4------136188----015111----901">BlockB4     -1.36188    0.15111   -9.01</h2>
+<h2 id="c------------097208----007099---1369">C            0.97208    0.07099   13.69</h2>
+<h2 id="nmedium------036236----013272----273">NMedium      0.36236    0.13272    2.73</h2>
+<h2 id="na_lot-------225624----013189---1711">NA_lot       2.25624    0.13189   17.11</h2>
+<h2 id="cnmedium----070157----011815----594">C:NMedium    0.70157    0.11815    5.94</h2>
+<h2 id="cna_lot-----278150----010764---2584">C:NA_lot     2.78150    0.10764   25.84</h2>
+<h1 id="-9">#</h1>
+<h2 id="correlation-of-fixed-effects">Correlation of Fixed Effects:</h2>
+<h2 id="intr-blckb2-blckb3-blckb4-c------nmedim-na_lot-cnmdm">(Intr) BlckB2 BlckB3 BlckB4 C      NMedim NA_lot C:NMdm</h2>
+<h2 id="blockb2----0572">BlockB2   -0.572</h2>
+<h2 id="blockb3----0575--0493">BlockB3   -0.575  0.493</h2>
+<h2 id="blockb4----0576--0495--0493">BlockB4   -0.576  0.495  0.493</h2>
+<h2 id="c----------0140--0012--0018--0045">C          0.140 -0.012 -0.018 -0.045</h2>
+<h2 id="nmedium----0511--0003--0027--0007--0118">NMedium   -0.511  0.003  0.027  0.007 -0.118</h2>
+<h2 id="na_lot-----0507--0008--0003--0003--0119--0502">NA_lot    -0.507  0.008  0.003  0.003 -0.119  0.502</h2>
+<h2 id="cnmedium--0134--0019--0161--0038--0601--0175--0071">C:NMedium -0.134  0.019  0.161  0.038 -0.601  0.175  0.071</h2>
+<h2 id="cna_lot---0107--0077--0020--0006--0657--0078--0129--0394">C:NA_lot  -0.107  0.077  0.020  0.006 -0.657  0.078  0.129  0.394</h2>
+
+<p>#again model check should come here
+#for LMM and GLMM we also need to pass as character (vector) the names of the random effect
+pred&lt;-plot_fit(m,focal_var = “C”,inter_var = “N”,RE = “Pots”)
+#let’s plot this
+plot(Biom~C,data,col=c(“red”,”green”,”blue”)[data$N],pch=16,xlab=”CO2 concentration”,ylab=”Plant biomass”)
+lines(Pred~C,pred[1:20,],col=”red”,lwd=3)
+lines(LC~C,pred[1:20,],col=”red”,lwd=2,lty=2)
+lines(UC~C,pred[1:20,],col=”red”,lwd=2,lty=2)
+lines(Pred~C,pred[21:40,],col=”green”,lwd=3)
+lines(LC~C,pred[21:40,],col=”green”,lwd=2,lty=2)
+lines(UC~C,pred[21:40,],col=”green”,lwd=2,lty=2)
+lines(Pred~C,pred[41:60,],col=”blue”,lwd=3)
+lines(LC~C,pred[41:60,],col=”blue”,lwd=2,lty=2)
+lines(UC~C,pred[41:60,],col=”blue”,lwd=2,lty=2)
+legend(“topleft”,legend = c(“Few”,”Medium”,”A lot”),col=c(“red”,”green”,”blue”),pch=16,lwd=3,title = “N addition”,bty=”n”)
+[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/10/plotfit22.png"><img src="https://biologyforfun.files.wordpress.com/2015/10/plotfit22.png" alt="plotFit2" /></a>
+Please note a few elements:</p>
+<ul>
+  <li>so far the function only return 95% confidence intervals</li>
+  <li>I have tested it on various types of models that I usually build but there are most certainly still some bugs hanging around so if the function return an error please let me know of the model you fitted and the error returned</li>
+  <li>the bootstrap computation can take some time for GLMM so be ready to wait a few minute if you have a big complex model</li>
+  <li>the function accept a vector of variable names for the inter_var argument, it should also work for the RE argument even if I did not tried it yet</li>
+</ul>
+
+<p>Happy plotting!</p>
+
+<p>Here is the code for the function:</p>
+
+<p>[code language=”r”]
+#function to generate predicted response with confidence intervals from a (G)LM(M)
+#works with the following model/class: lm, glm, glm.nb, merMod
+#this function average over potential covariates
+#it also allows for the specification of one or several interacting variables
+#these must be factor variables in the model
+#for (G)LMM the name of the random terms must be specfied in the RE argument
+#for (G)LMM the confidence interval can be either bootstrapped or coming from
+#a normal approximation using</p>
+
+<p>#list of arguments:
+#@m: a model object, either of class: lm, glm, glm.nb, merMod
+#@focal_var: a character, the name of the focal variable that will be on the x-axis
+#@inter_var: a character or a character vector, the names(s) of the interacting variables, must be declared as factor variables in the model, default is NULL
+#@RE: a charcater or a charcater vector, the name(s) of the random effect variables in the case of a merMod object, default is NULL
+#@offset: a character, the name of the offset variable, note that this effect will be averaged out like other continuous covariates, this is maybe not desirable
+#@n: an integer, the number of generated prediction points, default is 20
+#@n_core: an integer, the number of cores to use in parallel computing for the bootstrapped CI for merMod object, default is 4
+#@boot_mer: a logical, whether to use bootstrapped (TRUE) or a normal approximation (FALSE, the default) for the confidence interval in the case of a merMod model</p>
+
+<p>plot_fit&lt;-function(m,focal_var,inter_var=NULL,RE=NULL,offset=NULL,n=20,n_core=4,boot_mer=FALSE){
+  require(arm)<br />
+  dat&lt;-model.frame(m)
+  #turn all character variable to factor
+  dat&lt;-as.data.frame(lapply(dat,function(x){
+    if(is.character(x)){
+      as.factor(x)
+    }
+    else{x}
+  }))
+  #make a sequence from the focal variable
+  x1&lt;-list(seq(min(dat[,focal_var]),max(dat[,focal_var]),length=n))
+  #grab the names and unique values of the interacting variables
+  isInter&lt;-which(names(dat)%in%inter_var)
+  if(length(isInter)==1){
+    x2&lt;-list(unique(dat[,isInter]))
+    names(x2)&lt;-inter_var
+  }
+  if(length(isInter)&gt;1){
+    x2&lt;-lapply(dat[,isInter],unique)
+  }
+  if(length(isInter)==0){
+    x2&lt;-NULL
+  }
+  #all_var&lt;-x1
+  #add the focal variable to this list
+  all_var&lt;-c(x1,x2)
+  #expand.grid on it
+  names(all_var)[1]&lt;-focal_var
+  all_var&lt;-expand.grid(all_var)</p>
+
+<p>#remove varying variables and non-predictors and potentially offset variables
+  if(!is.null(offset)){
+    off_name &lt;- grep(“^offset”,names(dat),value=TRUE)#this is needed because of the weird offset formatting in the model.frame
+  }
+  dat_red&lt;-dat[,-c(1,which(names(dat)%in%c(focal_var,inter_var,RE,”X.weights.”,off_name))),drop=FALSE]
+  #if there are no variables left over that need averaging
+  if(dim(dat_red)[2]==0){
+    new_dat&lt;-all_var
+    name_f &lt;- NULL
+  }
+  else{
+    #otherwise add these extra variables, numeric variable will take their mean values
+    #and factor variables will take their first level before being averaged out lines 86-87
+    fixed&lt;-lapply(dat_red,function(x) if(is.numeric(x)) mean(x) else factor(levels(x)[1],levels = levels(x)))
+    #the number of rows in the new_dat frame
+    fixed&lt;-lapply(fixed,rep,dim(all_var)[1])
+    #create the new_dat frame starting with the varying focal variable and potential interactions
+    new_dat&lt;-cbind(all_var,as.data.frame(fixed)) 
+    #get the name of the variable to average over
+    name_f&lt;-names(dat_red)[sapply(dat_red,function(x) ifelse(is.factor(x),TRUE,FALSE))]
+  }<br />
+  #add an offset column set at 0 if needed
+  if(!is.null(offset)){
+    new_dat[,offset] &lt;- 0
+  }</p>
+
+<p>#get the predicted values
+  cl&lt;-class(m)[1]
+  if(cl==”lm”){
+    pred&lt;-predict(m,newdata = new_dat,se.fit=TRUE)
+  }</p>
+
+<p>if(cl==”glm” | cl==”negbin”){
+    #predicted values on the link scale
+    pred&lt;-predict(m,newdata=new_dat,type=”link”,se.fit=TRUE)
+  }
+  if(cl==”glmerMod” | cl==”lmerMod”){
+    pred&lt;-list(fit=predict(m,newdata=new_dat,type=”link”,re.form=~0))
+    #for bootstrapped CI
+    new_dat&lt;-cbind(new_dat,rep(0,dim(new_dat)[1]))
+    names(new_dat)[dim(new_dat)[2]]&lt;-as.character(formula(m)[[2]])
+    mm&lt;-model.matrix(formula(m,fixed.only=TRUE),new_dat)
+  }
+  #average over potential categorical variables<br />
+  avg_over &lt;- 0 #for cases where no averaging is to be done
+  if(length(name_f)&gt;0){
+    if(cl==”glmerMod” | cl==”lmerMod”){
+      coef_f&lt;-lapply(name_f,function(x) fixef(m)[grep(paste0(“^”,x),names(fixef(m)))])
+    }
+    else{
+      coef_f&lt;-lapply(name_f,function(x) coef(m)[grep(paste0(“^”,x),names(coef(m)))])
+    }  <br />
+    avg_over &lt;- sum(unlist(lapply(coef_f,function(x) mean(c(0,x))))) #averging out all factor effects
+    pred$fit&lt;-pred$fit + avg_over
+  }</p>
+
+<p>#to get the back-transform values get the inverse link function
+  linkinv&lt;-family(m)$linkinv</p>
+
+<p>#get the back transformed prediction together with the 95% CI for LM and GLM
+  if(cl==”glm” | cl==”lm” | cl==”negbin”){
+    pred$pred&lt;-linkinv(pred$fit)
+    pred$LC&lt;-linkinv(pred$fit-1.96<em>pred$se.fit)
+    pred$UC&lt;-linkinv(pred$fit+1.96</em>pred$se.fit)
+  }</p>
+
+<p>#for (G)LMM need to use either bootstrapped CI or use approximate
+  #standard error from the variance-covariance matrix
+  #see ?predict.merMod and http://glmm.wikidot.com/faq#predconf
+  #note that the bootstrapped option is recommended by the lme4 authors
+  if(cl==”glmerMod” | cl==”lmerMod”){
+    pred$pred&lt;-linkinv(pred$fit)
+    if(boot_mer){
+      predFun&lt;-function(.) mm%<em>%fixef(.)+avg_over
+      bb&lt;-bootMer(m,FUN=predFun,nsim=200,parallel=”multicore”,ncpus=n_core) #do this 200 times
+      bb$t&lt;-apply(bb$t,1,function(x) linkinv(x))
+      #as we did this 200 times the 95% CI will be bordered by the 5th and 195th value
+      bb_se&lt;-apply(bb$t,1,function(x) x[order(x)][c(5,195)])
+      pred$LC&lt;-bb_se[1,]
+      pred$UC&lt;-bb_se[2,] 
+    }
+    else{
+      se &lt;- sqrt(diag(mm %</em>% tcrossprod(vcov(m),mm)))
+      pred$LC &lt;- linkinv(pred$fit - 1.96 * se)
+      pred$UC &lt;- linkinv(pred$fit + 1.96 * se)
+    }
+  }</p>
+
+<p>#the output
+  out&lt;-as.data.frame(cbind(new_dat[,1:(length(inter_var)+1)],pred$LC,pred$pred,pred$UC))
+  names(out)&lt;-c(names(new_dat)[1:(length(inter_var)+1)],”LC”,”Pred”,”UC”)
+  return(out)
+}
+[/code]</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lme4" class="page__taxonomy-item" rel="tag">lme4</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-10-08T00:00:00+02:00">October 08, 2015</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Plotting+regression+curves+with+confidence+intervals+for+LM%2C+GLM+and+GLMM+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fplotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fplotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fplotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fplotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/ecology-at-the-interface-in-rome/" class="pagination--pager" title="Ecology at the Interface in Rome
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/discussion-on-biodiversity-trends-in-the-anthropocene/" class="pagination--pager" title="Discussion on Biodiversity trends in the Anthropocene
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/plotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/plotting-regression-curves-with-confidence-intervals-for-lm-glm-and-glmm-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

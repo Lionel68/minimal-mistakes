@@ -1,0 +1,741 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Adding standard errors for interaction terms - biologyforfun</title>
+
+
+
+
+<meta name="description" content="This is something that bugged me for some time, how do we add up standard errors? This is relevant when you fit a model with interaction terms and you are interested not only in the deviation between different categories in your data (like male, female juvenils) but also whether the effect of some covariates on the response differ from 0.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Adding standard errors for interaction terms">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms/">
+
+
+
+  <meta property="og:description" content="This is something that bugged me for some time, how do we add up standard errors? This is relevant when you fit a model with interaction terms and you are interested not only in the deviation between different categories in your data (like male, female juvenils) but also whether the effect of some covariates on the response differ from 0.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-05-17T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Adding standard errors for interaction terms">
+    <meta itemprop="description" content="This is something that bugged me for some time, how do we add up standard errors? This is relevant when you fit a model with interaction terms and you are interested not only in the deviation between different categories in your data (like male, female juvenils) but also whether the effect of some covariates on the response differ from 0.">
+    <meta itemprop="datePublished" content="May 17, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Adding standard errors for interaction terms
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>This is something that bugged me for some time, how do we add up standard errors? This is relevant when you fit a model with interaction terms and you are interested not only in the deviation between different categories in your data (like male, female juvenils) but also whether the effect of some covariates on the response differ from 0.</p>
+
+<p>Let’s look at a simple example, say you recorded the number of trees in 4 areas of your city: in the north, east, south and west. And you want to see if the average income in the different area of the town influence the number of trees. You are not only interested in knowing whether income effect of tree number differ between the areas but also if the income effect is significant within individual areas.</p>
+
+<p>Let’s simulate some data reflecting this particular example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#some simulated data
+dat &lt;- data.frame(income_std=runif(100,-2,2),
+  area=gl(n = 4,k=25,labels = c("North","East","South","West")))
+modmat &lt;- model.matrix(~income_std*area,dat)
+coeff &lt;- c(1,2,-0.5,1.2,0.6,-1.3,-0.2,2)
+dat$tree_nb &lt;- rnorm(100,mean = modmat%*%coeff,sd=1)
+
+#fit the model 
+(m &lt;- lm(tree_nb~income_std*area,dat))
+
+Call:
+lm(formula = tree_nb ~ income_std * area, data = dat)
+
+Coefficients:
+         (Intercept)            income_std              areaEast             areaSouth              areaWest   income_std:areaEast  
+              1.0441                2.2062               -0.3837                0.9858                0.7059               -1.9570  
+income_std:areaSouth   income_std:areaWest  
+             -0.5658                1.8735
+</code></pre></div></div>
+
+<p>To get the effect of income in the different areas, we just need to add the estimated coefficients, for example the slope of number of trees vs income in the west of the city is: 2.21 + 1.87 = 4.08. How do we get the standard error for this sum? <a href="https://en.wikipedia.org/wiki/Variance#Sum_of_correlated_variables">Wikipedia</a> is here to help, the variance of a sum is basically the sum of the variance plus two times the covariance, in an equation:</p>
+
+<p>$latex \sigma_{X+Y}^{2} = \sigma_{X}^{2} + \sigma_{Y}^{2} + 2 * Cov(X,Y)$</p>
+
+<p>If we want the standard error we just need to plug in the standard errors instead of the variance (the $latex \sigma$’s) and take the square root.</p>
+
+<p>Now the standard error are readily available in the <em>summary</em> of a fitted model, and for the covariance you can access them using the <em>vcov</em> function. I made a little function that does it for you (code at the end of the post), you basically provide the name of the factor variable (name_f argument) and the name of the covariate (name_x argument). If you leave name_x empty the function will return the intercept for each levels. Here is how you would apply it in the example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#compute the summed SE
+(sum_se &lt;- rbind(add_se(m,name_f = "area"),
+                add_se(m,name_f = "area",name_x = "income_std")))
+
+                          Coef        SE
+areaEast             0.6603816 0.1997875
+areaSouth            2.0298995 0.2008723
+areaWest             1.7499887 0.2051546
+income_std:areaEast  0.2491587 0.2051456
+income_std:areaSouth 1.6403689 0.1740335
+income_std:areaWest  4.0796633 0.1817601
+
+#a plot
+library(viridis)
+col_vec &lt;- viridis(4)
+plot(tree_nb~income_std,dat,pch=16,col=col_vec[dat$area])
+abline(a = coef(m)[1],b=coef(m)[2],col=col_vec[1],lwd=2)
+abline(a = sum_se[1,1],b=sum_se[4,1],col=col_vec[2],lwd=2)
+abline(a = sum_se[2,1],b=sum_se[5,1],col=col_vec[3],lwd=2)
+abline(a = sum_se[3,1],b=sum_se[6,1],col=col_vec[4],lwd=2)
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2017/05/add_se.png" alt="add_se" /></p>
+
+<p>Of course one could extend this to three-way or X-way interactions, you would just need to grab the relevant covariance values within the variance-covariance matrix returned by <em>vcov</em>.</p>
+
+<p>Happy summing.</p>
+
+<p>The code of the function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#function parameter
+#@model: a lm or glm fitted model
+#@name_f: a character string with the name of the categorical (factor) variable
+#@name_x: a character string with the name fo the interacting variable, by default the intercept
+add_se &lt;- function(model,name_f,name_x="Intercept"){
+  #grab the standard error of the coefficients
+  se_vec &lt;- summary(model)$coefficients[,2]
+  if(name_x=="Intercept"){
+    #the stabdard error of the intercept
+    se_x &lt;- se_vec[1]
+    #get the level-specific standard errors
+    se_f &lt;- se_vec[grep(name_f,names(se_vec))]
+    se_f &lt;- se_f[-grep(":",names(se_f))]
+    #get the covariance between the intercept and the level-specific parameters
+    vcov_f &lt;- vcov(model)[grep(name_f,rownames(vcov(model))),grep(name_x,colnames(vcov(model)))]
+    vcov_f &lt;- vcov_f[-grep(":",names(vcov_f))]
+    #the estimated average value at each level
+    coef_f &lt;- coef(model)[1]+coef(model)[names(vcov_f)]
+  }
+  else{
+    #similar code for the case of another variable than the intercept
+    se_x &lt;- se_vec[name_x]
+    se_f &lt;- se_vec[grep(name_f,names(se_vec))]
+    se_f &lt;- se_f[grep(":",names(se_f))]
+    vcov_f &lt;- vcov(model)[grep(name_f,rownames(vcov(model))),grep(name_x,colnames(vcov(model)))][,1]
+    vcov_f &lt;- vcov_f[grep(":",names(vcov_f))]
+    coef_f &lt;- coef(model)[name_x]+coef(model)[names(vcov_f)]
+  }
+  #compute the summed SE
+  se_f &lt;- sqrt(se_x**2+se_f**2+2*vcov_f)
+  #create the output dataframe
+  out &lt;- data.frame(Coef=coef_f,SE=se_f)
+  return(out)
+}
+</code></pre></div></div>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glm" class="page__taxonomy-item" rel="tag">GLM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-05-17T00:00:00+02:00">May 17, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Adding+standard+errors+for+interaction+terms%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fadding-standard-errors-for-interaction-terms%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fadding-standard-errors-for-interaction-terms%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fadding-standard-errors-for-interaction-terms%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fadding-standard-errors-for-interaction-terms%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/" class="pagination--pager" title="Simulating SEMs for piecewiseSEM: part 1 the basics
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/opinion%20posts/on-the-price-of-my-higher-education/" class="pagination--pager" title="On the price of (my) higher education
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/adding-standard-errors-for-interaction-terms"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

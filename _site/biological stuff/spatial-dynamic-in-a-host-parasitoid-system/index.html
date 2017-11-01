@@ -1,0 +1,857 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Spatial Dynamic in a Host-Parasitoid system - biologyforfun</title>
+
+
+
+
+<meta name="description" content="In this post I will explore the spatial dynamic that arise from a simple deterministic host-parasitoid model with migration in a homogeneous environment. If the previous sentence did not drive you away, congrats (!) you are most certainly in a terminal state towards biological nerditude.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Spatial Dynamic in a Host-Parasitoid system">
+
+
+  <link rel="canonical" href="http://localhost:4000/biological%20stuff/spatial-dynamic-in-a-host-parasitoid-system/">
+  <meta property="og:url" content="http://localhost:4000/biological%20stuff/spatial-dynamic-in-a-host-parasitoid-system/">
+
+
+
+  <meta property="og:description" content="In this post I will explore the spatial dynamic that arise from a simple deterministic host-parasitoid model with migration in a homogeneous environment. If the previous sentence did not drive you away, congrats (!) you are most certainly in a terminal state towards biological nerditude.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-12-18T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Spatial Dynamic in a Host-Parasitoid system">
+    <meta itemprop="description" content="In this post I will explore the spatial dynamic that arise from a simple deterministic host-parasitoid model with migration in a homogeneous environment. If the previous sentence did not drive you away, congrats (!) you are most certainly in a terminal state towards biological nerditude.">
+    <meta itemprop="datePublished" content="December 18, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Spatial Dynamic in a Host-Parasitoid system
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>In this post I will explore the spatial dynamic that arise from a simple deterministic host-parasitoid model with migration in a homogeneous environment. If the previous sentence did not drive you away, congrats (!) you are most certainly in a terminal state towards biological nerditude.</p>
+
+<p>The idea of this post emerged while reading Chp. 6 in Hanski and Gilkin<a href="http://www.sciencedirect.com/science/book/9780123234452"> Metapopulation book</a>. In this Chapter Nay and colleagues expand the classical one-species metapopulation models to models with interacting species. In one example they talk about their <a href="http://izt.ciens.ucv.ve/ecologia/Archivos/ECOLOGIA_DE%20_POBLACIONES_Hasta%202004/ECOL_POBLAC_Hasta%202004_(A-G)/Comins%20et%20al%201992.pdf">1992 paper</a> where they took a simple Host-Parasitoid system and applied this in a metapopulation context where local populations (a patch) are linked by migrations between adjacent patches. Their main results is that a system that is unstable in a single local population become stable at the metapopulation level (<a href="https://biologyforfun.wordpress.com/2016/06/11/exploring-spatial-patterns-and-coexistance/">does this sounds familiar?</a>). In other words, local host-parasitoid system that alone show extinction, present persistence of both species when local populations exchange migrants. Pretty cool stuff, of course along the way they also show some beautiful spatial patterns, but that is secondary (isn’t it?).</p>
+
+<p>Here is the model:</p>
+
+<p>$latex N_{i,t} = J_{i,t-1}  <em>  e^{-a</em>P_{i,t-1}}$</p>
+
+<p>$latex Q_{i,t} = c * (J_{i,t-1} - N_{i,t})$</p>
+
+<p>$latex J_{i,t} = \lambda * (N_{i,t} * (1 - \mu_{n}) + \mu_{n}  * \sum_{j=1}^{8} \frac{N_{j,t}}{8})$</p>
+
+<p>$latex P_{i,t} = Q_{i,t} * (1 - \mu_{q}) + \mu_{q}  * \sum_{j=1}^{8} \frac{Q_{j,t}}{8}$</p>
+
+<p>Where <em>N</em> is the abundance of the pre-dispersal hosts, <em>Q</em> is the abundance of pre-dispersal parasitoid , <em>J</em> is the abundance of post-dispersal hosts, <em>P</em> is the abundance of post-dispersal parasitoid. <em>i</em> is an index for the patches, <em>t</em> is the time, <em>j</em> is an index for the patches that are neighbouring patch <em>i</em> (we consider here only the direct neighbour). <em>a</em> is the searching efficiency of the parasitoid, <em>c</em> is the number of parasitoid per hosts, $latex \lambda$ is the host growth rate, and the $latex \mu$ are the migration rate for the host (n) and for the parasitoid (q).</p>
+
+<p>Got it? Now let’s code this into R:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Local dynamics following Nicholson-Bailey 
+#host-parasitoid function with one parameter: a
+#@J: matrix of juvenil abundance in the previous time step
+#@P: number of adult parasitoid in the previous time step
+#@a: the searching efficiency of the parasitoid
+#@c: the number of parasitoid per hosts
+local_dyn&lt;-function(J,P,a=0.1,c=1){
+  N &lt;- J*exp(-a*P)
+  Q &lt;- c*(J - N)
+  return(list(N=N,Q=Q))
+}
+
+
+
+
+#an helper function returning line numbers of all neighbouring cells
+find_neighbour&lt;-function(vec,dat=dat){
+  lnb&lt;-which(dat[,"x"]%in%(vec["x"]+
+c(-1,-1,-1,0,1,1,1,0)) &amp; dat[,"y"]%in%(vec["y"]+c(-1,0,1,1,1,0,-1,-1)))
+  #remove own line
+  lnb&lt;-lnb[which(lnb!=vec["lnb"])]
+  return(lnb)
+}
+
+
+
+
+#compute the next-generation parasitoid and hosts
+#with immigration and absorbing boundaries
+#@N: matrix of adult host in the current generation
+#@Q: matrix of emerging parasitoid in the current generation
+#@neigh: a list with the cell ID of neighbouring cells
+#@mu: immigration rates
+#@lbd: rate of increase of host population
+#@bound: type of boundaries, either absorbing where individuals
+#are lost from the systemat the boundaries or reflective where
+#individuals are not able to leave the system
+imm_dyn &lt;- function(N,Q,neigh,mu_n=0.5,mu_q=0.5,lbd=2,bound="absorbing"){
+  if(bound=="absorbing"){
+    J &lt;- lbd*(N*(1-mu_n) + mu_n*laply(neigh,function(x) sum(N[x]/8)))
+    P &lt;- Q*(1-mu_q) + mu_q*laply(neigh,function(x) sum(Q[x]/8))
+  }
+  else if(bound=="reflective"){
+    J &lt;- lbd*(N*(1-mu_n) + 
+mu_n*laply(neigh,function(x) sum(N[x]/dat$Nb[dat$lnb%in%x])))
+    P &lt;- Q*(1-mu_q) + 
+mu_q*laply(neigh,function(x) sum(Q[x]/dat$Nb[dat$lnb%in%x]))
+  }
+  else{
+    print("Boundary type provided is not implemented yet")
+    break
+  }
+  return(list(J=J,P=P))
+}
+</code></pre></div></div>
+
+<p>Here are three functions, the first one implement the local host-parasitoid dynamic, the second one is just an helper function to get the cell ID of neighbouring cells and the third one implement the migration between neighbouring cells. A critical point in spatially-explicit models is boundary behaviour. A boundary can either be absorbing: modelled entities are able to leave the simulated system, and when they do they are lost; circular: modelled entities are able to leave the system and when they do they re-enter the system at the opposite end (ie the system is a sphere); reflective: modelled entities cannot leave the system. Here I implement absorbing (hosts or parasitoids are leaving the metapopulation) and reflective (hosts are parasitoids are “afraid” to leave the metapopulation) boundaries.</p>
+
+<p>Simulation time:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#load the libraries
+library(plyr) #for data wraggling
+library(reshape2) #for melting
+library(ggplot2) #for nice graphs
+library(viridis) #for nice colors
+#set up seed
+set.seed(20161211)
+#set up number of generations and grid size
+generation&lt;-1:100
+n_x &lt;- n_y &lt;- 30
+#representation of the grid
+dat&lt;-expand.grid(x=1:n_x,y=1:n_y)
+dat$lnb&lt;-1:(n_x*n_y)
+#create a list where each element contain the cell ID 
+#of the neighbour of the focal cell
+neigh&lt;-apply(dat,1,function(x) find_neighbour(x,dat))
+#compute the number of neighbours for each cells to use 
+#in reflective boundaries
+dat$Nb&lt;-laply(neigh,length)
+
+
+
+
+#set the object keeping the dynamic and the initial condition
+Js &lt;- array(0,dim=c(30,30,101))
+Ps &lt;- array(0,dim = c(30,30,101))
+#host and parasitoid start at one cell
+Js[15,15,1] &lt;- rpois(n=1,lambda=5)
+Ps[15,15,1] &lt;- rpois(n=1,lambda = 2)
+
+
+
+
+#simulation
+for(i in generation){  
+  tmp &lt;- local_dyn(J = Js[,,i],P = Ps[,,i],a=1)
+  tmp2 &lt;- imm_dyn(N = tmp[["N"]],Q = tmp[["Q"]],
+    neigh = neigh,lbd=2,bound="absorbing")
+  Js[,,(i+1)] &lt;- tmp2[["J"]]
+  Ps[,,(i+1)] &lt;- tmp2[["P"]]
+  print(i)
+}
+
+
+
+
+#plot temporal dynamic for one patch
+plot(1:101,Js[20,15,],type="l",lwd=2,col="green",
+  xlab="Generations",ylab="Population density")
+lines(1:101,Ps[20,15,],lty=2,lwd=2,col="orange")
+legend("topleft",c("Host","Parasitoid"),lwd=2,
+  lty=c(1,2),col=c("green","orange"),bty="n")
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/meta_one.png" alt="meta_one" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#temporal dynamic accros one transect from the center outwards
+tra&lt;-Js[15:30,15,]
+tram&lt;-melt(tra,value.name = "Pop")
+names(tram)[1:2]&lt;-c("Cell","Gen")
+ggplot(tram,aes(x=Gen,y=Pop,color=factor(Cell),group=Cell))+geom_line()+
+  labs(x="Generation",y="Population density")
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/meta_transect.png" alt="meta_transect" /></p>
+
+<p>This is actually pretty interesting, we see the wave of colonisation from the original cell (N° 1) up to the edge of the simulated system (cell N° 16), the first wave is pretty well ordered from 1-16 but then at generation 25, cells in the middle peak a bit earlier as the one in the center, and this is then amplified for the next peaks at generation 40 and 50.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Phase space plot for average densities
+ph&lt;-data.frame(Gen=1:101,Host=log(apply(Js,3,mean)),
+  Parasitoid=log(apply(Ps,3,mean)))
+ggplot(ph,aes(x=Host,y=Parasitoid))+geom_path()+
+  geom_label(aes(label=Gen))
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/meta_phase1.png" alt="meta_phase1" /></p>
+
+<p>This graphs show the dynamics of  host-parasitoid average densities, it reveals among other things that we have cycles of varying amplitude.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#look at spatial dynamic for host and parasitoid
+#between generations 50 and 53
+exmpl&lt;-data.frame(Gen=rep(50:53,each=900),x=rep(rep(1:30,times=30),4),
+ y=rep(rep(1:30,each=30),4),Host=as.numeric(Js[,,50:53]),
+ Parasitoid=as.numeric(Ps[,,50:53]))
+exmplm&lt;-melt(exmpl,id.vars=c("x","y","Gen"),variable.name="Species",
+  value.name="Pop")
+ggplot(exmplm,aes(x,y,fill=Pop))+geom_raster(interpolate=TRUE)+
+  scale_fill_viridis(option="plasma",direction=-1)+
+  facet_grid(Gen~Species)+labs(x="",y="")+
+  theme(axis.text=element_text(size=0),axis.ticks.length=unit(0,"cm"))
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/meta_b1.png" alt="meta_b1" /></p>
+
+<p>Pretty nice! Now let’s do the same simulations but this time with reflective boundaries, ie host and parasitoid cannot leave the system:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#make the boundary reflective
+Js2 &lt;- array(0,dim=c(30,30,101))
+Ps2 &lt;- array(0,dim = c(30,30,101))
+#host and parasitoid start at one cell
+Js2[15,15,1] &lt;- rpois(n=1,lambda=5)
+Ps2[15,15,1] &lt;- rpois(n=1,lambda = 2)
+
+for(i in generation){  
+  tmp &lt;- local_dyn(J = Js2[,,i],P = Ps2[,,i],a=1)
+  tmp2 &lt;- imm_dyn(N = tmp[["N"]],Q = tmp[["Q"]],neigh = neigh,lbd=2,
+    mu_n=0.5,mu_q=0.5,bound="reflective")
+  Js2[,,(i+1)] &lt;- tmp2[["J"]]
+  Ps2[,,(i+1)] &lt;- tmp2[["P"]]
+  print(i)
+}
+
+#Phase space plot for average densities
+ph&lt;-data.frame(Gen=1:101,Host=log(apply(Js2,3,mean)),
+  Parasitoid=log(apply(Ps2,3,mean)))
+ggplot(ph,aes(x=Host,y=Parasitoid))+geom_path()+
+  geom_label(aes(label=Gen))
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/meta_phase.png" alt="meta_phase" /></p>
+
+<p>Again cycling of host-parasitoid densities with changing amplitude.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#spatial patterns
+exmpl&lt;-data.frame(Gen=rep(75:78,each=900),x=rep(rep(1:30,times=30),4),
+  y=rep(rep(1:30,each=30),4),Host=as.numeric(Js2[,,75:78]),
+  Parasitoid=as.numeric(Ps2[,,75:78]))
+exmplm&lt;-melt(exmpl,id.vars=c("x","y","Gen"),
+  variable.name="Species",value.name="Pop")
+ggplot(exmplm,aes(x,y,fill=Pop))+geom_raster(interpolate=TRUE)+
+  scale_fill_viridis(option="magma",direction=-1)+
+  facet_grid(Gen~Species)+labs(x="",y="")+
+  theme(axis.text=element_text(size=0),axis.ticks.length=unit(0,"cm"))
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/meta_b2.png" alt="meta_b2" /></p>
+
+<p>Using ImageMagick and its function <strong>convert</strong> one can easily turn this into an animated GIFs to observe the whole dynamic.</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/simu2.gif" alt="simu2" /></p>
+
+<p>Why bothering about all this? Developing such models reveal that depending on the size of the system (the number of patch), the metapopulation of hosts and parasitoid may persist or not. In other words if we reduce the size of natural habitat a host-parasitoid system that was persisting through time despite large variations might suddenly be driven to extinction.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ecology" class="page__taxonomy-item" rel="tag">ecology</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#nerdy" class="page__taxonomy-item" rel="tag">Nerdy</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#simulation" class="page__taxonomy-item" rel="tag">Simulation</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#biological-stuff" class="page__taxonomy-item" rel="tag">Biological Stuff</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-12-18T00:00:00+01:00">December 18, 2016</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Spatial+Dynamic+in+a+Host-Parasitoid+system%20http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fspatial-dynamic-in-a-host-parasitoid-system%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fspatial-dynamic-in-a-host-parasitoid-system%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fspatial-dynamic-in-a-host-parasitoid-system%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fspatial-dynamic-in-a-host-parasitoid-system%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/crossed-and-nested-hierarchical-models-with-stan-and-r/" class="pagination--pager" title="Crossed and Nested hierarchical models with STAN and R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/review-of-the-fun-from-2016/" class="pagination--pager" title="Review of the Fun from 2016
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/biological%20stuff/spatial-dynamic-in-a-host-parasitoid-system/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/biological%20stuff/spatial-dynamic-in-a-host-parasitoid-system"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

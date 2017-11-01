@@ -1,0 +1,832 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Correlation and Linear Regression in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Before going into complex model building, looking at data relation is a sensible step to understand how your different variable interact together. Correlation look at trends shared between two variables, and regression look at causal relation between a predictor (independent variable) and a response (dependent) variable.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Correlation and Linear Regression in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/correlation-and-linear-regression-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/correlation-and-linear-regression-in-r/">
+
+
+
+  <meta property="og:description" content="Before going into complex model building, looking at data relation is a sensible step to understand how your different variable interact together. Correlation look at trends shared between two variables, and regression look at causal relation between a predictor (independent variable) and a response (dependent) variable.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2012-12-07T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Correlation and Linear Regression in R">
+    <meta itemprop="description" content="Before going into complex model building, looking at data relation is a sensible step to understand how your different variable interact together. Correlation look at trends shared between two variables, and regression look at causal relation between a predictor (independent variable) and a response (dependent) variable.">
+    <meta itemprop="datePublished" content="December 07, 2012">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Correlation and Linear Regression in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Before going into complex model building, looking at data relation is a sensible step to understand how your different variable interact together. Correlation look at trends shared between two variables, and regression look at causal relation between a predictor (independent variable) and a response (dependent) variable.</p>
+
+<h2 id="correlation">Correlation:</h2>
+
+<p>As mentionned above correlation look at global movement shared between two variables, for example when one variable increase (invalues) and the other increase as well, then these two variables are said to be positively correlated, the other way round when a variable increase and the other decrease then these two variables are negatively correlated. In the case of no correlation no pattern will be seen between the two variable.</p>
+
+<p>Let’s look at some code before introducing correlation measure:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; x&lt;-sample(1:20,20)+rnorm(10,sd=2)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;y&lt;-x+rnorm(10,sd=3)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; z&lt;-(sample(1:20,20)/2)+rnorm(20,sd=5)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df&lt;-data.frame(x,y,z)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; plot(df[,1:3])&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.wordpress.com/2012/12/07/correlation-and-linear-regression-in-r/corrplot1/"><img src="http://biologyforfun.files.wordpress.com/2012/12/corrplot1.png?w=300" alt="CorrPlot1" /></a></p>
+
+<p>From the plot we get we see that when we plot the variable y with x, the points form some kind of line, when the value of x get bigger the value of y get somehow proportionnaly bigger too, we can suspect a positive correlation between x and y.</p>
+
+<p>The measure of this correlation is called the coefficient of correlation and can calculated in different ways, the most usual measure is the Pearson coefficient, it is the covariance of the two variable divided by the product of their variance, it is scaled between 1 (for a perfect positive correlation) to -1 (for a perfect negative correlation), 0 would be complete randomness. We can get the Pearson coefficient of correlation using the function ‘cor’:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; cor(df[,1:3],method="pearson")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;x          y          z&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;x  1.0000000  0.8736874 -0.2485967&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;y  0.8736874  1.0000000 -0.2376243&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;z -0.2485967 -0.2376243  1.0000000&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; cor(df[,1:3],method="spearman")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;x          y          z&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;x  1.0000000  0.8887218 -0.3323308&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;y  0.8887218  1.0000000 -0.2992481&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;z -0.3323308 -0.2992481  1.0000000&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>From these outputs our suspicion is confirmed x and y have a high positive correlation, but as always in statistics we can test if this coefficient is significant using parametric assumptions (Pearson, dividing the coefficient and its standard error, giving a value that follow a t-distribution) or when data violate parametric assumptions using Spearman rank coefficient.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; cor.test(df$x,df$y,method="pearson")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Pearson's product-moment correlation&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  df$x and df$y &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;t = 7.6194, df = 18, p-value = 4.872e-07&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true correlation is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;95 percent confidence interval:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;0.7029411 0.9492172 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;sample estimates:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;      &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cor &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;0.8736874 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; cor.test(df$x,df$y,method="spearman")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Spearman's rank correlation rho&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  df$x and df$y &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;S = 148, p-value &lt; 2.2e-16&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true rho is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;sample estimates:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;      &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;rho &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;0.8887218 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>An extension of the Pearson coefficient of correlation is when we square it we obtain the amount of variation in y explained by x (this is not true for the spearman rank based coefficient where squaring it has no statistical meanings). In our case we have around 75% of the variance in y that is explained by x.</p>
+
+<p>However such results do not allow any causal explanation of the effect of x on y, indeed x could act on y in various way that are not always direct, all we can say from the correlation is that these two variables are linked somehow, to really explain and measure causal effect of x on y we need to use regression method, which will come next.</p>
+
+<h2 id="linear-regression">Linear Regression:</h2>
+
+<p>Regression is different from correlation because it try to put variables into equation and thus explain causal relationship between them, for exmple the most simple linear equation is written : Y=aX+b, so for every variation of unit in X, Y value change by a+b. Because we are trying to explain natural processes by equations that represent only part of the whole picture we are actually building a model that’s why linear regression are also called linear modelling.</p>
+
+<p>In R we can build and test the significance of linear models.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; m1&lt;-lm(mpg~cyl,data=mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; summary(m1)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Call:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;lm(formula = mpg ~ cyl, data = mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residuals:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;    &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Min      1Q  Median      3Q     Max &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-4.9814 -2.1185  0.2217  1.0717  7.5186 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Coefficients:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;            &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Estimate Std. Error t value Pr(&gt;|t|)    &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;(Intercept)  37.8846     2.0738   18.27  &lt; 2e-16 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cyl          -2.8758     0.3224   -8.92 6.11e-10 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;---&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residual standard error: 3.206 on 30 degrees of freedom&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Multiple R-squared: 0.7262,     Adjusted R-squared: 0.7171 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;F-statistic: 79.56 on 1 and 30 DF,  p-value: 6.113e-10&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The basic function to build linear model (linear regression) in R is to use the ‘lm’ function, you provide to it a formula in the form of y~x and optionally a data argument.</p>
+
+<p>Using the ‘summary’ function we get all informations about our model: the formula called, the distribution of the residuals (the error of our models), the value of the coefficient and their significance plus an information on the overall model performance with the adjusted R-squared (0,71 in our case) that represent the amount of variation in y explained by x, so 71% of the variation in mpg can be explain by the variable cyl.</p>
+
+<p>Before shouting ‘Eureka’ we should first check that the models assumptions are met, indeed linear models make a few assumptions on your data, the first one is that your data are normally distributed, the second one is that the variance in y is homogenous over all x values (sometimes called homoscedaticity) and independence which means that a y value at a certain x value should not influence other y values.</p>
+
+<p>There is a marvellous built-in function to check all this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; par(mfrow=c(2,2))&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; plot(m1)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.wordpress.com/2012/12/07/correlation-and-linear-regression-in-r/lm1/"><img src="http://biologyforfun.files.wordpress.com/2012/12/lm1.png?w=300" alt="LM1" /></a></p>
+
+<p>The ‘par’ argument is just to put all graphs in one window, the plot function is the real one.</p>
+
+<p>The graphs on the first columns look at variance homogeneity among other things, normally you should see no pattern in the dots but just a random clouds of points. In this example this is clearly not the case since we see that the spreas of dots increase with higher values of cyl, our homogeneity assumptions is violated we can go back at the beginning and build new models this one cannot be interpreted… Sorry m1 you looked so great…</p>
+
+<p>For the record the graph on the top right check the normality assumptions, if your data are normally distributed the point should fall (more or less) in a straight line, in this case the data are normal.</p>
+
+<p>The final graph show how each y influence the model, each points is removed at a time and the new model is compared to the one with the point, if the point is very influential then it will have a high leverage value. Points with too high leverage value should be removed from the dataset to remove their outlying effect on the model.</p>
+
+<h2 id="transforming-the-data">Transforming the data;</h2>
+
+<p>There are a few basics mathematical transformations that can be applied to non normal or heterogenous data, usually it is a trial and error process;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; mtcars$Mmpg&lt;-log(mtcars$mpg)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; plot(Mmpg~cyl,mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>In our case this looks ok, but we can still remove the two outliers in ‘cyl’ categorie 8;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;n&lt;-rownames(mtcars)[mtcars$Mmpg!=min(mtcars$Mmpg[mtcars$cyl==8])]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;mtcars2&lt;-subset(mtcars,rownames(mtcars)%in%n)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The first line ask for row names in ‘mtcars’ (rownames(mtcars)), but only return the one where the value of the variable ‘mpg’ is not equal (!=) to the minimum value of the variable ‘Mmpg’ which fall in the categorie of 8 cylinders. Then the list ‘n’ contain all these rownames and the next step is to make a new data frame that only contain rows with rownames present in the list ‘n’.</p>
+
+<p>In this stage of transforming and removing outliers from the data you should use and abuse of plots to help you through the process.</p>
+
+<p>Now let’s look back at our bivariate linear regression model from this new dataset;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; model&lt;-lm(Mmpg~cyl,mtcars2)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; summary(model)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Call:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;lm(formula = Mmpg ~ cyl, data = mtcars2)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residuals:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;     &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Min       1Q   Median       3Q      Max &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-0.19859 -0.08576 -0.01887  0.05354  0.26143 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Coefficients:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;            &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Estimate Std. Error t value Pr(&gt;|t|)    &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;(Intercept)  3.77183    0.08328  45.292  &lt; 2e-16 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cyl         -0.12746    0.01319  -9.664 2.04e-10 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;---&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residual standard error: 0.1264 on 28 degrees of freedom&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Multiple R-squared: 0.7693,     Adjusted R-squared: 0.7611 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;F-statistic: 93.39 on 1 and 28 DF,  p-value: 2.036e-10 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; plot(model)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Again we have highly significant intercept and slope, the model explain 76% of the variance in log(mpg) and is overall significant. Now we biologist are trained to love and worship ANOVA table, in R there are several way to do it (as always an easy and straightforward way and another with more possibilities for tuning);</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; anova(model)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Analysis of Variance Table&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Response: Mmpg&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;          &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Df  Sum Sq Mean Sq F value    Pr(&gt;F)    &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cyl        1 1.49252 1.49252  93.393 2.036e-10 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residuals 28 0.44747 0.01598   &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; library(car)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#c5060b;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Le chargement a nécessité le package : MASS&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#c5060b;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Le chargement a nécessité le package : nnet&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; Anova(model)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Anova Table (Type II tests)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Response: Mmpg&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;           &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Sum Sq Df F value    Pr(&gt;F)    &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cyl       1.49252  1  93.393 2.036e-10 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residuals 0.44747 28&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The second function (‘Anova’) allow you to define which type of sum-of-square you want to calculate (<a href="https://mcfromnz.wordpress.com/2011/03/02/anova-type-iiiiii-ss-explained/">here</a> is a nice explanation of their different assumptions) and also to correct for variance heterogeneity;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; Anova(model,white.adjust=TRUE)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Analysis of Deviance Table (Type II tests)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Response: Mmpg&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;          &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Df      F    Pr(&gt;F)    &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cyl        1 69.328 4.649e-09 ***&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Residuals 28&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>You would have noticed that the p-value is a bit higher. This function is very usefull for unbalanced dataset (which is our case) but need to take care when formulating the model especially when there is more than one predictor variables since the type II sum of square assume that there is no interaction between the predictors.</p>
+
+<p>To sum up, correlation is a nice first step to data exploration before going into more serious analysis and to select variable that might be of interest (anyway it always produce sexy and easy to interprete graphs which will make your supervisor happy), then the next step is to model the variable relationship and the most basic models are bivariate linear regression that put the relation between the response variable and the predictor variable into equation and testing this using the <em>summary</em> and <em>anova</em> function. Since linear regression make several assumptions on the data before interpreting the results of the model you should use the function <em>plot</em> and look if the data are normally distributed, that the variance is homogenous (no pattern in the residuals~fitted values plot) and when necessary remove outliers.</p>
+
+<p>Next step will be using multiple predictors and looking at generalized linear models.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#basic" class="page__taxonomy-item" rel="tag">Basic</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2012-12-07T00:00:00+01:00">December 07, 2012</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Correlation+and+Linear+Regression+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcorrelation-and-linear-regression-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcorrelation-and-linear-regression-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcorrelation-and-linear-regression-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcorrelation-and-linear-regression-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/assigning-names-to-object-within-a-loop-in-r/" class="pagination--pager" title="Assigning Names to object within a Loop in R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/making-graphs-using-ggplot2-in-r/" class="pagination--pager" title="Making Graphs using ggplot2 in R:
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/correlation-and-linear-regression-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/correlation-and-linear-regression-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

@@ -1,0 +1,921 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>R at your fingertips - biologyforfun</title>
+
+
+
+
+<meta name="description" content="R is an open source statistical software, which mean that it is free and that you can access all the codes that you are using.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="R at your fingertips">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/r-at-your-fingertips/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/r-at-your-fingertips/">
+
+
+
+  <meta property="og:description" content="R is an open source statistical software, which mean that it is free and that you can access all the codes that you are using.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2012-11-13T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="R at your fingertips">
+    <meta itemprop="description" content="R is an open source statistical software, which mean that it is free and that you can access all the codes that you are using.">
+    <meta itemprop="datePublished" content="November 13, 2012">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">R at your fingertips
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  11 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>R is an open source statistical software, which mean that it is free and that you can access all the codes that you are using.</p>
+
+<p>You can also create your own functions and packages and the community will use and test them. Most of us (Biologist or non-Math scientific) do not need to go that far but R clearly out perform (to my opinion) any other statistical software. First of all you have the control of what you are doing, you are deciding how to customize your analysis to you data, this need a little bit more statistical knowledge but is far better than just getting a p-value out of an automated process which you do not understand what it is doing. Second since every one can contribute to it a wealth of additional packages have been created, each corresponding to particular needs.</p>
+
+<p>I hope I convince you to go into R let’s start:</p>
+
+<h2 id="basics">Basics;</h2>
+
+<p>I strongly recommend you to use Rstudio (<a href="http://www.rstudio.com/ide/">http://www.rstudio.com/ide/</a>)which is a very nice interface to work with,  get familiar with the different panels present on the windows I will focus on the output panel.</p>
+
+<p>Everything in R start with the prompt (&gt;) and you can do basic calculation (in blue is what is typed in the command and in black what R returns):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="font-family:Ubuntu Mono;color:#0000ff;"&gt;&gt; 4+3
+&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;7
+&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;color:#0000ff;"&gt;&gt;5*5
+&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;25&lt;/span&gt;
+</code></pre></div></div>
+
+<p>You can also store values into variable using “&lt;-” :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;a&lt;-4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;b&lt;-5.5&lt;/span&gt; ← Here is a very important point, the point is the character separating numbers and their decimals not the comma!!!
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;c&lt;-a+b&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;c&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;9.5&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Then you can create lists using “c” which means in R that several elements are put together and use some basic statistical functions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="font-family:Ubuntu Mono;color:#0000ff;"&gt;&lt;span style="font-size:small;"&gt;&gt;a&lt;-c(3,4,5)&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;mean(a)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;median(a)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;max(a)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;min(a)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>In R when you do not save the values into variables (using &lt;-) they are printed on the screen but are not saved if you want to use them later on you have to save them in a variable. Be very careful of what you are typing in if you forget or misplace a single characters R will not be happy, if there is an error message do not destroy your PC (not yet) but re-read your code to spot the mistake.</p>
+
+<h2 id="creating-and-playing-with-matrix">Creating and playing with Matrix;</h2>
+
+<p>A matrix is data organised into rows and columns with an equal numbers of elements in each rows and columns (you cannot have in one row 4 numbers and in the next one only 2)</p>
+
+<p>You can create a matrix using the function “matrix” (functions usually do what they tell by their names nothing fancy):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&gt;a&lt;-c(3,4,5)
+&gt;b&lt;-c(-2,6,1)
+&gt;matrix &lt;-matrix(c(a,b),nrow=3,ncol=2)
+&gt;matrix
+
+&lt;/span&gt;&lt;/span&gt;&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;	[,1] [,2]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1,]    3    -2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[2,]    4    6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[3,]    5    1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The c() is needed because why are giving more than one elements, nrow determine the number of row and ncol the number of columns. You can give names to the columns and to the rows using respectively colnames() and rownames() (without forgetting to use the c!!:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;rownames(matrix)&lt;-c(1,2,3)
+&lt;span style="color:#0000ff;"&gt;&gt;colnames(matrix)&lt;-c(“A”,”B”)&lt;/span&gt; ← the quotes here are compulsory when using characters otherwise R think that we are calling variables
+&lt;span style="color:#0000ff;"&gt;&gt;matrix
+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="color:#000000;"&gt;  &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;A B&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1 3 -2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2 4 6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3 5 1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>You can get every elements in the matrix using the indexing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;matrix[1,]&lt;/span&gt;  ← this returns the first row of the matrix, the comma is after the number&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;A B &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5 3
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;matrix[,1]&lt;/span&gt; ← this returns the first column of the matrix, the comma is before the number
+
+&lt;/span&gt;&lt;/span&gt;&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1 2 3 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3 4 5
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt;matrix[1,2]&lt;/span&gt; ← this returns a specific cell in the matrix: the first row, second column
+[1] -2&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>And you can apply functions on the matrix using the functions… apply():</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; col.means&lt;-apply(m, 2, mean)&lt;/span&gt; ← first give the object (here the matrix) to apply the 						function, then specify if it should be applied to rows (1) 					or colulns (2) and then the function to apply&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; col.means&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;A B &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4 1.67 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; row.sum&lt;-apply(m,1,sum)&lt;/span&gt;&lt;/span&gt;
+&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; row.sum&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1 2 3 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;8 7 9 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<h2 id="uploading-data-into-r">Uploading data into R;</h2>
+
+<p>Most of the time we are dealing with rather big dataset usually typed in an excelsheet and we don’t want to type in all 200 numbers into R. So we have to import data into R. Usually an excel spreadsheet looks like this:</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2012/11/table1.jpg"><img src="http://biologyforfun.files.wordpress.com/2012/11/table1.jpg?w=300" alt="" /></a></p>
+
+<p>There are several issues here that need to be corrected if you want R to accept your data:</p>
+
+<p>-No colours</p>
+
+<p>-No space in the column names</p>
+
+<p>-No comma separating numbers and decimals</p>
+
+<p>-No text (except in the first line)</p>
+
+<p>-Missing values should be marked by NA</p>
+
+<p>Here is the same spreadsheet with the modifications:</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2012/11/table2.jpg"><img src="http://biologyforfun.files.wordpress.com/2012/11/table2.jpg?w=300" alt="" /></a></p>
+
+<p>Now we need to save this in a special format: csv, which means comma separated values, when you click on the save under in your excel or other software change the extension name from .xls to .csv ,</p>
+
+<p>then to read a table you will use the read.table function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; table&lt;-read.table("/home/lionel/Documents/Test.csv",sep=",",head=TRUE)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; table&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;  &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Sample Site1 Site2 Site3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1      1  23.0    NA     7&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2      2    NA   3.0     8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3      3  34.0  56.0    NA&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4      4  45.9   7.0     1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5      5   5.0   6.7    56&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The first argument in this function is the path to the file between double quotes, then you specify which character is separating the values in our case this is the comma and then we tell R that the first line is headers.</p>
+
+<p>Now your table is in R as a DataFrame which we will explore below.</p>
+
+<h2 id="data-frame">Data Frame;</h2>
+
+<p>Data Frame are organised matrix with variable (the column), you can access a column using the same indexing as before or by using the ‘$’ sign:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; table$Sample&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 1 2 3 4 5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; table[,1]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 1 2 3 4 5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>You can also create new variables using this let’s create for example a variable containing values from a fourth site;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;table$Site4&lt;-c(34,5.34,7,21,21)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt;table&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;  &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Sample Site1 Site2 Site3 Site4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1      1  23.0    NA     7 34.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2      2    NA   3.0     8  5.34&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3      3  34.0  56.0    NA  7.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4      4  45.9   7.0     1 21.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5      5   5.0   6.7    56 21.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Now if you want to change a particular value, say that one NA has now a value;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; table[1,3]&lt;-4	&lt;/span&gt;&lt;span style="color:#000000;"&gt;← Change the cell value of the first line third column into 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; table&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;  &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Sample Site1 Site2 Site3 Site4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1      1  23.0   4.0     7 34.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2      2    NA   3.0     8  5.34&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3      3  34.0  56.0    NA  7.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4      4  45.9   7.0     1 21.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5      5   5.0   6.7    56 21.00&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>More useful things will be covered later on, ordering a data frame by a particular variable, changing the column order, going from wide to long format, applying functions on data frame, summarising…</p>
+
+<p>Now let’s turn to what follow a usual analysis: graphical observations of the data and statistical tests.</p>
+
+<h2 id="basic-graphics">Basic Graphics;</h2>
+
+<p>The first thing we usually want to see is the distribution of the data, this can be done using the function ‘hist’;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; hist(table[,4])&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2012/11/rplot.png"><img src="http://biologyforfun.files.wordpress.com/2012/11/rplot.png?w=300" alt="" /></a></p>
+
+<p>This is not very helpful because every values that are between 0 and 20 are into the same column, we want to have more precision, this can be done by using the argument ‘breaks’ into the hist function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; hist(table[,4],breaks=10)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2012/11/rplot01.png"><img src="http://biologyforfun.files.wordpress.com/2012/11/rplot01.png?w=300" alt="" /></a></p>
+
+<p>You can always play around a bit with this until you are satisfied, now the next thing we would like to do is to plot one variable against the other to look at correlation or in this situation how is the site value changing in the different samples, a function that do it very will is the ‘plot’ function;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&lt;span style="color:#0000ff;"&gt;&gt; plot(table$Sample,table$Site4) &lt;/span&gt;&lt;span style="color:#000000;"&gt;← The first variable is plotted as X and the second as Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2012/11/rplot02.png"><img src="http://biologyforfun.files.wordpress.com/2012/11/rplot02.png?w=300" alt="" /></a></p>
+
+<p>A complete post will develop and present other parameters and functions to do more advanced and nice graph (with title, X axis labels..), boxplot, density plot, plot with regression line…</p>
+
+<h2 id="basic-statistics">Basic Statistics:</h2>
+
+<p>We biologists are fans of p-values, so here are a few basic statistical tests that you can do with R, I will not explain the theory behind each test and hope that you know already the assumptions and what each of them conclude (in the example I will use below I will not respect that for the simplicity sake).</p>
+
+<p>In our example if we want to compare the means of two sites and look if they are significantly different we can use a t-test, I let you guess what the function is named in R;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; t.test(table[,1],table[,2])&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Welch Two Sample t-test&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  table[, 1] and table[, 2] &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;t = -2.7498, df = 3.04, p-value = 0.06972&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true difference in means is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;95 percent confidence interval:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-51.5179   3.5679 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;sample estimates:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;mean of x mean of y &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;    &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3.000    26.975 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The output give us the t-value, its degrees of freedom (df) and the p-value, it even give us the alternative hypothesis (H1), the 95% confidence interval of the alternative hypothesis mean, and the estimate of the mean of the two variable we are comparing. This is an independent t-test, we assume that the two variable are independent from one another, if the two variables are not independent we have to use a paired t-test;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; t.test(table$Sample,table$Site1,paired=TRUE)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Paired t-test&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  table[, 1] and table[, 2] &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;t = -2.6677, df = 3, p-value = 0.07584&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true difference in means is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;95 percent confidence interval:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-52.027719   4.577719 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;sample estimates:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;mean of the differences &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;                &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-23.725 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Now after looking at our data, we are almost certain that our data are not normally distributed (it would be very hard for such a small sample anyway), so we should/must use non-parametric tests instead, the Mann-Whitney for independent variables, and the Wilcoxon for paired variable, as for the ‘t.test’ function the ‘wilcox.test’ works for both;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; wilcox.test(table[,2],table[,4])&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Wilcoxon rank sum test&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  table[, 2] and table[, 4] &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;W = 10, p-value = 0.6857&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true location shift is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; wilcox.test(table$Site1,table$Site3,paired=TRUE)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Wilcoxon signed rank test&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  table[, 2] and table[, 4] &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;V = 3, p-value = 1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true location shift is not equal to 0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Now a last test for this post: the correlation, in R the function doing this is cor.test and work like this;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; cor.test(table$Sample,table$Site1,method="pearson")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Pearson's product-moment correlation&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  table$Sample and table$Site1 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;t = -0.2763, df = 2, p-value = 0.8082&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true correlation is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;95 percent confidence interval:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-0.9734430  0.9431481 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;sample estimates:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;       &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;cor &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-0.1917533 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; cor.test(table$Sample,table$Site1,method="spearman")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;        &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Spearman's rank correlation rho&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;data:  table$Sample and table$Site1 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;S = 12, p-value = 0.9167&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;alternative hypothesis: true rho is not equal to 0 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;sample estimates:&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;rho &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;-0.2 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The ‘method’ argument specify if you want to use the parametric Pearson correlation or the non-parametric Spearman. The output gives you the values of the test (t or S), the p-value associated to it, the alternative hypothesis (H1), in the Pearson method the 95% confidence interval of the estimated association measure (note in this case how wide it span) and the association measure (cor, rho) which is the coefficient of correlation.</p>
+
+<p>Next will come, regressions, ANOVAs, linear mixed model …</p>
+
+<p>Hope you enjoyed this first post, any questions and comments are welcomed.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#basic" class="page__taxonomy-item" rel="tag">Basic</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2012-11-13T00:00:00+01:00">November 13, 2012</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=R+at+your+fingertips%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fr-at-your-fingertips%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fr-at-your-fingertips%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fr-at-your-fingertips%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fr-at-your-fingertips%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="#" class="pagination--pager disabled">Previous</a>
+    
+    
+      <a href="http://localhost:4000/informatic%20language/perl-basics/" class="pagination--pager" title="Perl Basics
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/r-at-your-fingertips/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/r-at-your-fingertips"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

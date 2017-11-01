@@ -1,0 +1,792 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Interpreting regression coefficient in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="#">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Interpreting regression coefficient in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/interpreting-regression-coefficient-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/interpreting-regression-coefficient-in-r/">
+
+
+
+  <meta property="og:description" content="#">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-11-23T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Interpreting regression coefficient in R">
+    <meta itemprop="description" content="#">
+    <meta itemprop="datePublished" content="November 23, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Interpreting regression coefficient in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>#</p>
+
+<p>Linear models are a very simple statistical techniques and is often (if not always) a useful start for more complex analysis. It is however not so straightforward to understand what the regression coefficient means even in the most simple case when there are no interactions in the model. If we are not only fishing for stars (ie only interested if a coefficient is different for 0 or not) we can get much more information (to my mind) from these regression coefficient than from another widely used technique which is ANOVA. Comparing the respective benefit and drawbacks of both approaches is beyond the scope of this post. Here I would like to explain what each regression coefficient means in a linear model and how we can improve their interpretability following part of the discussion in <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00012.x/full">Schielzeth (2010) </a>Methods in Ecology and Evolution paper.</p>
+
+<p>Let’s make an hypothetical example that will follow us through the post, say that we collected 10 grams of soils at 100 sampling sites, where half of the site were fertilized with Nitrogen and the other half was kept as control. We also used recorded measure of mean spring temperature and annual precipitation from neighboring meteorological stations. We are interested to know how temperature and precipitation affect the biomass of soil micro-organisms, and to look at the effect of nitrogen addition. To keep things simple we do not expect any interaction here.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="sourceCode r"&gt;&lt;span class="co"&gt;# let's simulate the data the explanatory variables: temperature (x1),&lt;/span&gt;
+&lt;span class="co"&gt;# precipitation (x2) and the treatment (1=Control, 2= N addition)&lt;/span&gt;
+&lt;span class="kw"&gt;set.seed&lt;/span&gt;(&lt;span class="dv"&gt;1&lt;/span&gt;)
+x1 &lt;- &lt;span class="kw"&gt;rnorm&lt;/span&gt;(&lt;span class="dv"&gt;100&lt;/span&gt;, &lt;span class="dv"&gt;10&lt;/span&gt;, &lt;span class="dv"&gt;2&lt;/span&gt;)
+x2 &lt;- &lt;span class="kw"&gt;rnorm&lt;/span&gt;(&lt;span class="dv"&gt;100&lt;/span&gt;, &lt;span class="dv"&gt;100&lt;/span&gt;, &lt;span class="dv"&gt;10&lt;/span&gt;)
+x3 &lt;- &lt;span class="kw"&gt;gl&lt;/span&gt;(&lt;span class="dt"&gt;n =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;k =&lt;/span&gt; &lt;span class="dv"&gt;50&lt;/span&gt;)
+modmat &lt;- &lt;span class="kw"&gt;model.matrix&lt;/span&gt;(~x1 + x2 + x3, &lt;span class="dt"&gt;data =&lt;/span&gt; &lt;span class="kw"&gt;data.frame&lt;/span&gt;(x1, x2, x3))
+&lt;span class="co"&gt;# vector of fixed effect&lt;/span&gt;
+betas &lt;- &lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="dv"&gt;10&lt;/span&gt;, &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="fl"&gt;0.2&lt;/span&gt;, &lt;span class="dv"&gt;3&lt;/span&gt;)
+&lt;span class="co"&gt;# generate data&lt;/span&gt;
+y &lt;- &lt;span class="kw"&gt;rnorm&lt;/span&gt;(&lt;span class="dt"&gt;n =&lt;/span&gt; &lt;span class="dv"&gt;100&lt;/span&gt;, &lt;span class="dt"&gt;mean =&lt;/span&gt; modmat %*% betas, &lt;span class="dt"&gt;sd =&lt;/span&gt; &lt;span class="dv"&gt;1&lt;/span&gt;)
+&lt;span class="co"&gt;# first model&lt;/span&gt;
+m &lt;- &lt;span class="kw"&gt;lm&lt;/span&gt;(y ~ x1 + x2 + x3)
+&lt;span class="kw"&gt;summary&lt;/span&gt;(m)&lt;/code&gt;
+
+
+
+
+&lt;code&gt;## 
+## Call:
+## lm(formula = y ~ x1 + x2 + x3)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.8805 -0.4948  0.0359  0.7103  2.6669 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  10.4757     1.2522    8.37  4.8e-13 ***
+## x1            2.0102     0.0586   34.33  &lt; 2e-16 ***
+## x2            0.1938     0.0111   17.52  &lt; 2e-16 ***
+## x32           3.1359     0.2109   14.87  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.05 on 96 degrees of freedom
+## Multiple R-squared:  0.949,  Adjusted R-squared:  0.947 
+## F-statistic:  596 on 3 and 96 DF,  p-value: &lt;2e-16&lt;/code&gt;
+</code></pre></div></div>
+
+<p>Let’s go through each coefficient: the intercept is the fitted biomass value when temperature and precipitation are both equal to 0 for the Control units. In this context it is relatively meaningless since a site with a precipitation of 0mm is unlikely to occur, we cannot therefore draw further interpretation from this coefficient. Then x1 means that if we hold x2 (precipitation) constant an increase in 1° of temperature lead to an increase of 2mg of soil biomass, this is irrespective of whether we are in the control or nutrient added unit. Similarly x2 means that if we hold x1 (temperature) constant a 1mm increase in precipitation lead to an increase of 0.19mg of soil biomass. Finally x32 is the difference between the control and the nutrient added group when all the other variables are held constant, so if we are at a temperature of 10° and a precipitation of 100mm, adding nutrient to the soil lead to changes from 10+2x_10+0.19x_100= 49mg to 52mg of soil biomass. Now let’s make a figure of the effect of temperature on soil biomass</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;plot&lt;/span&gt;(y ~ x1, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="kw"&gt;rep&lt;/span&gt;(&lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"red"&lt;/span&gt;, &lt;span class="st"&gt;"blue"&lt;/span&gt;), &lt;span class="dt"&gt;each =&lt;/span&gt; &lt;span class="dv"&gt;50&lt;/span&gt;), &lt;span class="dt"&gt;pch =&lt;/span&gt; &lt;span class="dv"&gt;16&lt;/span&gt;, &lt;span class="dt"&gt;xlab =&lt;/span&gt; &lt;span class="st"&gt;"Temperature [°C]"&lt;/span&gt;, 
+    &lt;span class="dt"&gt;ylab =&lt;/span&gt; &lt;span class="st"&gt;"Soil biomass [mg]"&lt;/span&gt;)
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;1&lt;/span&gt;], &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;2&lt;/span&gt;], &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="st"&gt;"red"&lt;/span&gt;)&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/11/coeff1.png"><img src="https://biologyforfun.files.wordpress.com/2014/11/coeff1.png" alt="Coeff1" /></a></p>
+
+<p>What happened there? It seems as if our model is completely underestimating the y values … Well what we have been drawing is the estimated effect of temperature on soil biomass for the control group and for a precipitation of 0mm, this is not so interesting, instead we might be more interested to look at the effect for average precipitation values:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;plot&lt;/span&gt;(y ~ x1, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="kw"&gt;rep&lt;/span&gt;(&lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"red"&lt;/span&gt;, &lt;span class="st"&gt;"blue"&lt;/span&gt;), &lt;span class="dt"&gt;each =&lt;/span&gt; &lt;span class="dv"&gt;50&lt;/span&gt;), &lt;span class="dt"&gt;pch =&lt;/span&gt; &lt;span class="dv"&gt;16&lt;/span&gt;, &lt;span class="dt"&gt;xlab =&lt;/span&gt; &lt;span class="st"&gt;"Temperature [°C]"&lt;/span&gt;, 
+    &lt;span class="dt"&gt;ylab =&lt;/span&gt; &lt;span class="st"&gt;"Soil biomass [mg]"&lt;/span&gt;)
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;1&lt;/span&gt;] + &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;3&lt;/span&gt;] * &lt;span class="kw"&gt;mean&lt;/span&gt;(x2), &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;2&lt;/span&gt;], &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, 
+    &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="st"&gt;"red"&lt;/span&gt;)
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;1&lt;/span&gt;] + &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;4&lt;/span&gt;] + &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;3&lt;/span&gt;] * &lt;span class="kw"&gt;mean&lt;/span&gt;(x2), &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;2&lt;/span&gt;], 
+    &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="st"&gt;"blue"&lt;/span&gt;)
+&lt;span class="co"&gt;# averaging effect of the factor variable&lt;/span&gt;
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;1&lt;/span&gt;] + &lt;span class="kw"&gt;mean&lt;/span&gt;(&lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="dv"&gt;0&lt;/span&gt;, &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;4&lt;/span&gt;])) + &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;3&lt;/span&gt;] * &lt;span class="kw"&gt;mean&lt;/span&gt;(x2), &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m)[&lt;span class="dv"&gt;2&lt;/span&gt;], 
+    &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;1&lt;/span&gt;, &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;)
+&lt;span class="kw"&gt;legend&lt;/span&gt;(&lt;span class="st"&gt;"topleft"&lt;/span&gt;, &lt;span class="dt"&gt;legend =&lt;/span&gt; &lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"Control"&lt;/span&gt;, &lt;span class="st"&gt;"N addition"&lt;/span&gt;), &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"red"&lt;/span&gt;, &lt;span class="st"&gt;"blue"&lt;/span&gt;), 
+    &lt;span class="dt"&gt;pch =&lt;/span&gt; &lt;span class="dv"&gt;16&lt;/span&gt;)&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/11/coeff2.png"><img src="https://biologyforfun.files.wordpress.com/2014/11/coeff2.png" alt="Coeff2" /></a></p>
+
+<p>Now this look better, the black line is the effect of temperature on soil biomass averaging out the effect of the treatment, it might be of interest if we are only interested in looking at temperature effects.</p>
+
+<p>In this model the intercept did not make much sense, a way to remedy this is to center the explanatory variables, ie removing the mean value from the variables.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="sourceCode r"&gt;&lt;span class="co"&gt;# now center the continuous variable to change interpretation of the&lt;/span&gt;
+&lt;span class="co"&gt;# intercept&lt;/span&gt;
+data_center &lt;- &lt;span class="kw"&gt;data.frame&lt;/span&gt;(&lt;span class="dt"&gt;x1 =&lt;/span&gt; x1 - &lt;span class="kw"&gt;mean&lt;/span&gt;(x1), &lt;span class="dt"&gt;x2 =&lt;/span&gt; x2 - &lt;span class="kw"&gt;mean&lt;/span&gt;(x2), &lt;span class="dt"&gt;x3 =&lt;/span&gt; x3)
+modmat &lt;- &lt;span class="kw"&gt;model.matrix&lt;/span&gt;(~x1 + x2 + x3, &lt;span class="dt"&gt;data =&lt;/span&gt; &lt;span class="kw"&gt;data.frame&lt;/span&gt;(&lt;span class="dt"&gt;x1 =&lt;/span&gt; x1, &lt;span class="dt"&gt;x2 =&lt;/span&gt; x2, &lt;span class="dt"&gt;x3 =&lt;/span&gt; x3))
+data_center$y_center &lt;- &lt;span class="kw"&gt;rnorm&lt;/span&gt;(&lt;span class="dt"&gt;n =&lt;/span&gt; &lt;span class="dv"&gt;100&lt;/span&gt;, &lt;span class="dt"&gt;mean =&lt;/span&gt; modmat %*% betas, &lt;span class="dt"&gt;sd =&lt;/span&gt; &lt;span class="dv"&gt;1&lt;/span&gt;)
+
+&lt;span class="co"&gt;# second model&lt;/span&gt;
+m_center &lt;- &lt;span class="kw"&gt;lm&lt;/span&gt;(y_center ~ x1 + x2 + x3, data_center)
+&lt;span class="kw"&gt;summary&lt;/span&gt;(m_center)&lt;/code&gt;
+
+
+
+
+&lt;code&gt;## 
+## Call:
+## lm(formula = y_center ~ x1 + x2 + x3, data = data_center)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.4700 -0.5525 -0.0287  0.6701  1.7920 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  50.4627     0.1423   354.6   &lt;2e-16 ***
+## x1            1.9724     0.0561    35.2   &lt;2e-16 ***
+## x2            0.1946     0.0106    18.4   &lt;2e-16 ***
+## x32           2.8976     0.2020    14.3   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1 on 96 degrees of freedom
+## Multiple R-squared:  0.951,  Adjusted R-squared:  0.949 
+## F-statistic:  620 on 3 and 96 DF,  p-value: &lt;2e-16&lt;/code&gt;
+</code></pre></div></div>
+
+<p>Now through this centering we know that under average temperature and precipitation conditions the soil biomass in the control plot is equal to 50.46mg, in the nitrogen enriched plot we have 53mg of soil biomass. The slopes are not changing we are just shifting where the intercept lie making it directly interpretable. Let’s do a plot</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;plot&lt;/span&gt;(y_center ~ x2, data_center, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="kw"&gt;rep&lt;/span&gt;(&lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"red"&lt;/span&gt;, &lt;span class="st"&gt;"blue"&lt;/span&gt;), &lt;span class="dt"&gt;each =&lt;/span&gt; &lt;span class="dv"&gt;50&lt;/span&gt;), &lt;span class="dt"&gt;pch =&lt;/span&gt; &lt;span class="dv"&gt;16&lt;/span&gt;, 
+    &lt;span class="dt"&gt;xlab =&lt;/span&gt; &lt;span class="st"&gt;"Precipitation [mm]"&lt;/span&gt;, &lt;span class="dt"&gt;ylab =&lt;/span&gt; &lt;span class="st"&gt;"Biomass [mg]"&lt;/span&gt;)
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;1&lt;/span&gt;], &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;3&lt;/span&gt;], &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="st"&gt;"red"&lt;/span&gt;)
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;1&lt;/span&gt;] + &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;4&lt;/span&gt;], &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;3&lt;/span&gt;], &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, 
+    &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;, &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="st"&gt;"blue"&lt;/span&gt;)
+&lt;span class="co"&gt;# averaging effect of the factor variable&lt;/span&gt;
+&lt;span class="kw"&gt;abline&lt;/span&gt;(&lt;span class="dt"&gt;a =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;1&lt;/span&gt;] + &lt;span class="kw"&gt;mean&lt;/span&gt;(&lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="dv"&gt;0&lt;/span&gt;, &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;4&lt;/span&gt;])), &lt;span class="dt"&gt;b =&lt;/span&gt; &lt;span class="kw"&gt;coef&lt;/span&gt;(m_center)[&lt;span class="dv"&gt;3&lt;/span&gt;], 
+    &lt;span class="dt"&gt;lty =&lt;/span&gt; &lt;span class="dv"&gt;1&lt;/span&gt;, &lt;span class="dt"&gt;lwd =&lt;/span&gt; &lt;span class="dv"&gt;2&lt;/span&gt;)
+&lt;span class="kw"&gt;legend&lt;/span&gt;(&lt;span class="st"&gt;"bottomright"&lt;/span&gt;, &lt;span class="dt"&gt;legend =&lt;/span&gt; &lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"Control"&lt;/span&gt;, &lt;span class="st"&gt;"N addition"&lt;/span&gt;), &lt;span class="dt"&gt;col =&lt;/span&gt; &lt;span class="kw"&gt;c&lt;/span&gt;(&lt;span class="st"&gt;"red"&lt;/span&gt;, &lt;span class="st"&gt;"blue"&lt;/span&gt;), 
+    &lt;span class="dt"&gt;pch =&lt;/span&gt; &lt;span class="dv"&gt;16&lt;/span&gt;)&lt;/code&gt;
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/11/coeff3.png"><img src="https://biologyforfun.files.wordpress.com/2014/11/coeff3.png" alt="Coeff3" /></a></p>
+
+<p>We might also be interested in knowing which from the temperature or the precipitation as the biggest impact on the soil biomass, from the raw slopes we cannot get this information as variables with low standard deviation will tend to have bigger regression coefficient and variables with high standard deviation will have low regression coefficient. One solution is to derive standardized slopes that are in unit of standard deviation and therefore directly comparable in terms of their strength between continuous variables:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;code class="sourceCode r"&gt;&lt;span class="co"&gt;# now if we want to find out which of the two continuous variables as the&lt;/span&gt;
+&lt;span class="co"&gt;# most importance on y we can compute the standardized slopes from the&lt;/span&gt;
+&lt;span class="co"&gt;# unstandardized ones:&lt;/span&gt;
+std_slope &lt;- function(model, variable) {
+    &lt;span class="kw"&gt;return&lt;/span&gt;(&lt;span class="kw"&gt;coef&lt;/span&gt;(model)[variable] * (&lt;span class="kw"&gt;sd&lt;/span&gt;(model$model[[variable]])/&lt;span class="kw"&gt;sd&lt;/span&gt;(model$model[[&lt;span class="dv"&gt;1&lt;/span&gt;]])))
+}
+
+&lt;span class="kw"&gt;std_slope&lt;/span&gt;(m, &lt;span class="st"&gt;"x1"&lt;/span&gt;)&lt;/code&gt;
+
+
+
+
+&lt;code&gt;##     x1 
+## 0.7912&lt;/code&gt;
+
+
+
+
+&lt;code class="sourceCode r"&gt;&lt;span class="kw"&gt;std_slope&lt;/span&gt;(m, &lt;span class="st"&gt;"x2"&lt;/span&gt;)&lt;/code&gt;
+
+
+
+
+&lt;code&gt;##     x2 
+## 0.4067&lt;/code&gt;
+</code></pre></div></div>
+
+<p>From this we can conclude that temperature as a bigger impact on soil biomass than precipitation. If we wanted to compare the continuous variables with the binary variable we could standardize our variables by dividing by two times their standard deviation following Gelman (2008) Statistics in medecine.</p>
+
+<p>Here we saw in a simple linear context how to derive quite a lot of information from our estimated regression coefficient, this understanding can then be apply to more complex models like GLM or GLMM. These models are offering us much more information than just the binary significant/non-significant categorization. Happy coding.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-11-23T00:00:00+01:00">November 23, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Interpreting+regression+coefficient+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Finterpreting-regression-coefficient-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Finterpreting-regression-coefficient-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Finterpreting-regression-coefficient-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Finterpreting-regression-coefficient-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/talk-at-the-meeting-of-the-entomological-society-of-thuringia/" class="pagination--pager" title="Talk at the meeting of the entomological society of Thuringia
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/summary-and-thoughts-of-the-bessfe-meeting/" class="pagination--pager" title="Summary and thoughts of the BES/SFE meeting
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/interpreting-regression-coefficient-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/interpreting-regression-coefficient-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

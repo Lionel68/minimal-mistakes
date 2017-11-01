@@ -1,0 +1,685 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Simulating SEMs for piecewiseSEM: part 1 the basics - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Structural Equation Models are being used more and more frequently by ecologists due to the appeal of linking variables together in complex web of interactions. There are currently two main libraries in R to fit such models: lavaan and piecewiseSEM. The aim of this post is not to discuss the advantages and drawbacks of these two libraries, the interested reader can have a look at this post.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Simulating SEMs for piecewiseSEM: part 1 the basics">
+
+
+  <link rel="canonical" href="http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/">
+  <meta property="og:url" content="http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/">
+
+
+
+  <meta property="og:description" content="Structural Equation Models are being used more and more frequently by ecologists due to the appeal of linking variables together in complex web of interactions. There are currently two main libraries in R to fit such models: lavaan and piecewiseSEM. The aim of this post is not to discuss the advantages and drawbacks of these two libraries, the interested reader can have a look at this post.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-05-08T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Simulating SEMs for piecewiseSEM: part 1 the basics">
+    <meta itemprop="description" content="Structural Equation Models are being used more and more frequently by ecologists due to the appeal of linking variables together in complex web of interactions. There are currently two main libraries in R to fit such models: lavaan and piecewiseSEM. The aim of this post is not to discuss the advantages and drawbacks of these two libraries, the interested reader can have a look at this post.">
+    <meta itemprop="datePublished" content="May 08, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Simulating SEMs for piecewiseSEM: part 1 the basics
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Structural Equation Models are being used more and more frequently by ecologists due to the appeal of linking variables together in complex web of interactions. There are currently two main libraries in R to fit such models: <a href="http://lavaan.ugent.be/">lavaan</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12512/full">piecewiseSEM</a>. The aim of this post is not to discuss the advantages and drawbacks of these two libraries, the interested reader can have a look at <a href="https://jonlefcheck.net/2014/07/06/piecewise-structural-equation-modeling-in-ecological-research/">this</a> post.</p>
+
+<p>Rather the aim of this post is to simulate relations among a set of variables, to generate some data with random relations and to fit the relation to the data using piecewiseSEM. All the code can be found <a href="https://github.com/Lionel68/Blog/tree/master/SimSEM">here</a>.</p>
+
+<p>I just want to disclaim here that I am skeptical of the piecewiseSEM approach. Because one accept the model when the (linear) relations <strong>not</strong> fitted by the models are <strong>not</strong> important (in jargon: all variables are conditionally independent). I  like to compare the approach of piecewiseSEM to <a href="http://www.visual-arts-cork.com/prehistoric/hand-stencils-rock-art.htm">hand stencils</a> : we are interested to make a model for the hand. But we do not actually test the model to see if it fits the image of the hand itself but rather the pigment halo surrounding it. Maybe this is ok and actually better in some cases than lavaan but until I am convinced otherwise I will keep my skepticism.</p>
+
+<h2 id="rationale">Rationale</h2>
+
+<p>One key insight is to see SEMs as a specific class of <a href="https://en.wikipedia.org/wiki/Graph_theory">graphs</a>. We have nodes (the variables) and we have edges (the relations/regressions). piecewiseSEM requires that the graphs be acyclic, which means that if we start at one node there is no way to come back to this node. If we see the graph (the SEM model) as a matrix of _variables x variables _and each entry can either be 0 meaning no relation and 1 meaning relation, an acyclic graph will have ones only in the lower triangle. (a bit more complex than this but for now this’ll do). Of course the diagonal will only contain 0s, we do not want to model the effect of variable X1 on variable X1.</p>
+
+<p>Now we can generate a matrix and be sure that it will be acyclic so that we can fit the model with piecewiseSEM. But how many 1s should we put in the matrix? There I use another concept from graph theory which is the <a href="https://en.wikipedia.org/wiki/Ecological_network">connectance</a> computed as the number of edges divided by the number of nodes squared. If we want to build a SEM with a specific connectance we can get the number of links to model.</p>
+
+<p>Armed with this we can build matrix representing the hypothesized relations (function <em>relation</em> in the code), turn this into a list of models (function <em>formula_list</em> and <em>model_list</em> in the code) and fit a piecewiseSEM. As an example here are four SEMs with varying number of variables and connectance created by the code:</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2017/05/fig1.png" alt="Fig1" /></p>
+
+<h2 id="results">Results</h2>
+
+<p>In a first step I generated data with no relations, one could of course in a later step try generating the data with the exact relation or slightly different relations. I then fitted piecewiseSEM with variation in the sample size (from 20 to 100) and in the number of variables (from 5 to 10) while keeping the connectance fixed at 0.3. This connectance value means that we fit 7 paths for 5 variables and 30 paths for 10 variables. This was replicated many times for each combination of sample size and number of variables (100 times) and I tracked if the model was estimated to be consistent with the data or not (if the Fisher C p-value was higher than 0.05), how many paths were significant and what was the average value of significant paths.</p>
+
+<p>Here are the results for the proportion of times a model was estimated consistent:</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2017/05/fig2.png" alt="Fig2" /></p>
+
+<p>This is super surprising around 95% of the models were said to be consistent with the data even if they just fitted noise. I re-checked the original publication on piecewiseSEM to see if I incorrectly inverted the threshold but no, that was not the case … I will try and see if lavaan is as wrong in this case.</p>
+
+<p>Now let’s look at the proportion of paths estimated to be significant:</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2017/05/fig3.png" alt="Fig3" /></p>
+
+<p>This is better, around 5% of the paths are estimated to be significant, which is what is expected. In other words even your dataset is only noise (no relation between the variables), in 5% of the cases you will assume a relation that does not exist. That is the curse of using significance thresholds. The issue with SEMs is that we are fitting so many relations that it is certain that you will end up with some significant relations, don’t know if one can adjust p-values in SEM for multiple testing issues …</p>
+
+<p>Finally I look at the average value of the significant paths:</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2017/05/fig4.png" alt="Fig4" /></p>
+
+<p>Not much to say here, the values are usually on average around 0 which is to be expected since we just had noise.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>piecewiseSEM seems to accept many models that are just noise and because one fits many models one will certainly end up with some significant relations that could always be explained post-hoc. Of course this was just a small exercise and this should be expanded and compared to lavaan or other algorithms.</p>
+
+<p>Wishing you Happy but Careful modeling.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#sems" class="page__taxonomy-item" rel="tag">SEMs</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#simulation" class="page__taxonomy-item" rel="tag">Simulation</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#biological-stuff" class="page__taxonomy-item" rel="tag">Biological Stuff</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-05-08T00:00:00+02:00">May 08, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Simulating+SEMs+for+piecewiseSEM%3A+part+1+the+basics%20http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fsimulating-sems-for-piecewisesem-part-1-the-basics%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fsimulating-sems-for-piecewisesem-part-1-the-basics%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fsimulating-sems-for-piecewisesem-part-1-the-basics%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fr%2520and%2520stat%2Fsimulating-sems-for-piecewisesem-part-1-the-basics%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing/" class="pagination--pager" title="How not to control for multiple testing
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms/" class="pagination--pager" title="Adding standard errors for interaction terms
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

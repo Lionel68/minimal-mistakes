@@ -1,0 +1,776 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Manipulating data frame in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Here you will learn about transforming, merging, ordering a data frame, changing the column order, removing a variable, subsetting and indexing">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Manipulating data frame in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/manipulating-data-frame-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/manipulating-data-frame-in-r/">
+
+
+
+  <meta property="og:description" content="Here you will learn about transforming, merging, ordering a data frame, changing the column order, removing a variable, subsetting and indexing">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2012-11-21T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Manipulating data frame in R">
+    <meta itemprop="description" content="Here you will learn about transforming, merging, ordering a data frame, changing the column order, removing a variable, subsetting and indexing">
+    <meta itemprop="datePublished" content="November 21, 2012">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Manipulating data frame in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  9 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Here you will learn about transforming, merging, ordering a data frame, changing the column order, removing a variable, subsetting and indexing</p>
+
+<h2 id="transforming">Transforming;</h2>
+
+<p>This means put the rows as columns and the columns as the rows, this is done very easily in one line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; data(mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; mtcars&lt;-t(mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<h2 id="merging-two-data-frame">Merging two Data Frame;</h2>
+
+<p>Often it happen that you have informations scattered across several dataset and sometimes you might want to bring them together in the same dataset, as example let’s take again our mtcars data frame and say that we have colour informations for each model in a different data frame, we want to merge the two data frame in one by associating to each model its correct colour. Here is the code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; data(mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df&lt;-as.data.frame(c(rep("red",5),rep("grey",10),rep("white",10),rep("black",5),rep("chrome",2)))&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; colnames(df)&lt;-"Color"&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df$Model&lt;-rownames(mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; mtcars$Model&lt;-rownames(mtcars)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_merged&lt;-merge(mtcars,df)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; head(df_merged)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;             &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Model  mpg cyl disp  hp drat    wt  qsec vs am gear carb Color&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1        AMC Javelin 15.2   8  304 150 3.15 3.435 17.30  0  0    3    2 white&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2 Cadillac Fleetwood 10.4   8  472 205 2.93 5.250 17.98  0  0    3    4  grey&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3         Camaro Z28 13.3   8  350 245 3.73 3.840 15.41  0  0    3    4 white&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4  Chrysler Imperial 14.7   8  440 230 3.23 5.345 17.42  0  0    3    4 white&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5         Datsun 710 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1   red&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;6   Dodge Challenger 15.5   8  318 150 2.76 3.520 16.87  0  0    3    2 white&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Here is a new function ‘merge’ that take as arguments two data frames and associate row that share a common value at a common column, so R look at the column names of the two data frame and when two of them are equivalent it merges the data frame by this column. Now let’s play a bit around with this function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; colnames(df)[2]&lt;-"Models"&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df[33,]&lt;-c("grey","Citroën")&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_merged&lt;-merge(mtcars,df,by.x="Model",by.y="Models",all.x=TRUE,all.y=TRUE)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_merged[df_merged$Model=="Citroën",]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;    &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Model mpg cyl disp hp drat wt qsec vs am gear carb Color&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5 Citroën  NA  NA   NA NA   NA NA   NA NA NA   NA   NA  grey&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>What I did there was to change the name of the common column, and to add a line to the second data frame, this time we need to specify to R which column to merge by, ‘by.x’ give the name of the column of the first data frame and ‘by.y’ give the name of the column of the second data frame. Since we have more line in the second data frame we need to specify ‘all.y’ as TRUE so that all row that didn’t fit to the first data frame will be added and filled with NA were values are missing (for every column of the first data frame. In this example ‘all.x’ is not necessary but we still use it for example purposes. I will explain later the awful looking last line when I will speak about indexing.</p>
+
+<p>So to sum up ‘merge’ put together two data frame by a common column, certain precautions mus be taken, if there is more than one match between rows (for example if we had two times ‘Citroën’ in one data frame) then multiple row will be created, inflating the size of your data frame, so usualy this function is used one there is only one match between rows.</p>
+
+<h2 id="sorting-a-data-frame">Sorting a data frame;</h2>
+
+<p>Another common operation done on data frame is ordering, so classify the rows in a certain order (from biggest to lowest..), let’s use again our merged mtcars data frame and sort it in ascending order (lowest first) on the number of gears;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_order&lt;-df_merged[do.call(order,list(df_merged$gear)),]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_merged$gear&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1]  3  3  3  3 NA  4  3  3  5  4  4  5  4  3  3  3  5  5  4  4  4  4  4  4  3  3  3  3  5  4  3  3  4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_order$gear&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1]  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  4  4  4  4  4  4  4  4  4  4  4  4  5  5 5  5  5 NA&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>The formula looks quite awful, let’s put it down into pieces, first we say which data frame we want to order (df_merged) then we use a similar function to ‘apply’ but in a data frame context (do.call), we specify which function to apply (order), and then the list of arguments to use when applying the function (here the variable ‘gear’ of the data frame ‘df_merged’ so in R language this gives us ‘df_merged$gear’), finally the most important thing the last comma it say that the called function should be applied on every row. If we want to sort in a decreasing order here is an equivalent command (note the adding of the minus sign),</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_order&lt;-df_merged[do.call(order,list(-df_merged$gear)),]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Now a very handy extension of this would be if we wanted to sort the column by a ascending order of their column name (first A last Z)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_order&lt;-df_merged[,do.call(order,list(colnames(df_merged)))]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; colnames(df_merged)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] "Model" "mpg"   "cyl"   "disp"  "hp"    "drat"  "wt"    "qsec"  "vs"    "am"    "gear"  "carb"  "Color"&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; colnames(df_order)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] "am"    "carb"  "Color" "cyl"   "disp"  "drat"  "gear"  "hp"    "Model" "mpg"   "qsec" "vs"    "wt"&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Here we put the comma as the first argument which R interpret as columns, then we gave as argument the list of the column names.</p>
+
+<h2 id="changing-the-column-order">Changing the column order,</h2>
+
+<p>We already saw just before how to order the column, but if we want to be finer for example only wanting to put the last column at the second place we need to use a different strategy;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_merged&lt;-df_merged[,c(1,13,2:12)]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; head(df_merged)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;               &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Model Color  mpg cyl disp  hp drat    wt  qsec vs am gear carb&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1        AMC Javelin white 15.2   8  304 150 3.15 3.435 17.30  0  0    3    2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2 Cadillac Fleetwood  grey 10.4   8  472 205 2.93 5.250 17.98  0  0    3    4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3         Camaro Z28 white 13.3   8  350 245 3.73 3.840 15.41  0  0    3    4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4  Chrysler Imperial white 14.7   8  440 230 3.23 5.345 17.42  0  0    3    4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5            Citroën  grey   NA  NA   NA  NA   NA    NA    NA NA NA   NA   NA&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;6         Datsun 710   red 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>What R did was to take the first column in the df_merged data frame and put it in the same place, then it took the 13eth column and put it in the second place and all remaining columns were rearranged. The ‘c’ is necessary (as always!) because we are giving a list of more than one elements (this always true in R whenever you want to give more than one element outside a function context you have to use ‘c’).</p>
+
+<h2 id="deleting-a-variable">Deleting a variable;</h2>
+
+<p>There are numerous way to delete a variable from a data frame here is just one that I selected because you don’t need to know about the position of the variable in the data frame just the name of it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; df_merged$Color&lt;-NULL&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; head(df_merged)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;               &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;Model  mpg cyl disp  hp drat    wt  qsec vs am gear carb&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;1        AMC Javelin 15.2   8  304 150 3.15 3.435 17.30  0  0    3    2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;2 Cadillac Fleetwood 10.4   8  472 205 2.93 5.250 17.98  0  0    3    4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;3         Camaro Z28 13.3   8  350 245 3.73 3.840 15.41  0  0    3    4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;4  Chrysler Imperial 14.7   8  440 230 3.23 5.345 17.42  0  0    3    4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;5         Datsun 710 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;6   Dodge Challenger 15.5   8  318 150 2.76 3.520 16.87  0  0    3    2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Very easy we set the variable ‘color’ to NULL so all its content is erased.</p>
+
+<h2 id="subseting-and-indexing">Subseting and indexing;</h2>
+
+<p>This is a very powerful tool it allows you to take subset of the data frame, there are two ways to do it the first one by using the squared bracket and the index that R automatically use (remember when we use them to select specific columns in a matrix) or to use the function ‘subset’, from our data frame we want to select only the cars with 4 or more gears;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new&lt;-df_merged[df_merged$gear&gt;=4,]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new2&lt;-subset(df_merged,gear&gt;=4)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new$gear&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 4 5 4 4 5 4 5 5 4 4 4 4 4 4 5 4 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new2$gear&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 4 5 4 4 5 4 5 5 4 4 4 4 4 4 5 4 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>In both ways there is a logical expression (here ‘&gt;=’) the only major difference is that in the first one we have to add a comma at the end to work on every rows when the function ‘subset’ does this automatically. This subseting is very often used so I will show a few more example of what we can do:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; n&lt;-8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new&lt;-df_merged[df_merged$cyl%in%n,]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new$cyl&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 8 8 8 8 8 8 8 8 8 8 8 8 8 8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Here the ‘%in%’ mean the intersection between df_merged$cyl and n, this intersection is very useful when you have a list of names and you want to extract informations related to them in a data frame.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new&lt;-subset(subset(df_merged,gear==4),cyl!=8)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new$cyl&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 4 4 4 4 6 6 4 4 6 6 4 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#0000ff;"&gt;&lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;&gt; new$gear&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color:#000000;"&gt; &lt;span style="font-family:Ubuntu Mono;"&gt;&lt;span style="font-size:small;"&gt;[1] 4 4 4 4 4 4 4 4 4 4 4 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre></div></div>
+
+<p>Now here is a nested subsetting in this case we are only keeping the rows (car models) that have 4 gears and not 8 cylinders (the ‘!=’ operator mean not equal to).</p>
+
+<p>You can play around indefinitely with these tools, this allow you to really master your data.</p>
+
+<p>In a next tuto on data frame you will learn more complex operation on data frame like going from wide to long format, splitting and applying functions on data frame…</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#basic" class="page__taxonomy-item" rel="tag">Basic</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2012-11-21T00:00:00+01:00">November 21, 2012</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Manipulating+data+frame+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmanipulating-data-frame-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmanipulating-data-frame-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmanipulating-data-frame-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmanipulating-data-frame-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/un%20and%20the%20environment/the-united-nations-and-the-safeguarding-of-the-environment-basic/" class="pagination--pager" title="The United Nations and the safeguarding of the environment (Basic)
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/threat-to-biodiversity-about-butterfly-polar-bears-and-brad-pitt/" class="pagination--pager" title="Threat to biodiversity (about butterfly, polar bears and Brad Pitt);
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/manipulating-data-frame-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/manipulating-data-frame-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

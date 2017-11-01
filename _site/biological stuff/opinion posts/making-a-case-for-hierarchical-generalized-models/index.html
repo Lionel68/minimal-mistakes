@@ -1,0 +1,670 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Making a case for hierarchical generalized models - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Science is also about convincing others, be it your supervisors or your collaborators, that what you intend to do is relevant to get the answers sought. This “what” can be anything from designing an experiment, to collecting samples or formatting the data. This post was inspired by a recent discussion with one of my supervisor who argued against using hierarchical regression models with a beta distribution to analyse our data. The intent of this post is for me to get some concrete arguments for this approach but it may also help others faced by collaborators or reviewers asking for justification of using seemingly complex methods. I will first provide a bit of background on the data and the different alternatives that we have to analyse them, then I will make a case for hierarchical models in general also outlining when they may be inappropriate and in a last will talk about the advantages of using non-normal regressions vs data transformation.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Making a case for hierarchical generalized models">
+
+
+  <link rel="canonical" href="http://localhost:4000/biological%20stuff/opinion%20posts/making-a-case-for-hierarchical-generalized-models/">
+  <meta property="og:url" content="http://localhost:4000/biological%20stuff/opinion%20posts/making-a-case-for-hierarchical-generalized-models/">
+
+
+
+  <meta property="og:description" content="Science is also about convincing others, be it your supervisors or your collaborators, that what you intend to do is relevant to get the answers sought. This “what” can be anything from designing an experiment, to collecting samples or formatting the data. This post was inspired by a recent discussion with one of my supervisor who argued against using hierarchical regression models with a beta distribution to analyse our data. The intent of this post is for me to get some concrete arguments for this approach but it may also help others faced by collaborators or reviewers asking for justification of using seemingly complex methods. I will first provide a bit of background on the data and the different alternatives that we have to analyse them, then I will make a case for hierarchical models in general also outlining when they may be inappropriate and in a last will talk about the advantages of using non-normal regressions vs data transformation.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-02-19T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Making a case for hierarchical generalized models">
+    <meta itemprop="description" content="Science is also about convincing others, be it your supervisors or your collaborators, that what you intend to do is relevant to get the answers sought. This “what” can be anything from designing an experiment, to collecting samples or formatting the data. This post was inspired by a recent discussion with one of my supervisor who argued against using hierarchical regression models with a beta distribution to analyse our data. The intent of this post is for me to get some concrete arguments for this approach but it may also help others faced by collaborators or reviewers asking for justification of using seemingly complex methods. I will first provide a bit of background on the data and the different alternatives that we have to analyse them, then I will make a case for hierarchical models in general also outlining when they may be inappropriate and in a last will talk about the advantages of using non-normal regressions vs data transformation.">
+    <meta itemprop="datePublished" content="February 19, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Making a case for hierarchical generalized models
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Science is also about convincing others, be it your supervisors or your collaborators, that what you intend to do is relevant to get the answers sought. This “what” can be anything from designing an experiment, to collecting samples or formatting the data. This post was inspired by a recent discussion with one of my supervisor who argued against using hierarchical regression models with a beta distribution to analyse our data. The intent of this post is for me to get some concrete arguments for this approach but it may also help others faced by collaborators or reviewers asking for justification of using seemingly <a href="https://dynamicecology.wordpress.com/2012/09/11/statistical-machismo/">complex methods</a>. I will first provide a bit of background on the data and the different alternatives that we have to analyse them, then I will make a case for hierarchical models in general also outlining when they may be inappropriate and in a last will talk about the advantages of using non-normal regressions vs data transformation.</p>
+
+<h2 id="background">Background</h2>
+
+<p>In this project we want to link leaf herbivory rates (<strong>proportion</strong> of damaged leaf area) to leaf elemental concentrations (Carbon, Nitrogen and Phosphorus), sotchiometric ratios and plant diversity. In summer 2014, I looked at tens of thousands of leaves from 20 different plant species to estimate herbivory rates and two other colleagues (Jordan Guiz and Nina Hacker) measured C, N and P concentration on the same leaves. This is a pretty nice dataset to work with. We have data on 20 different plant species and we expect difference in responses between the species, two main options are open: (i) fit one regression model per plant species (the classical approach in my current working environment) or (ii) fit hierarchical models with regression parameters varying between the species. In addition, as the hebrivory rates are proportions bounded between 0 and 1, again two options are possible: (i) transform the herbivory values and use normal regression models or (ii) use beta regression models.</p>
+
+<h2 id="why-fit-hierarchical-models">Why fit hierarchical models?</h2>
+
+<p>I must first clarify some terminology, hierarchical models are equivalent to mixed-effect model, I do not use this last term as the division between <a href="http://andrewgelman.com/2005/01/25/why_i_dont_use/">fixed and random effects is rather confusing</a>. I prefer to use: varying-intercept or constant slopes, this makes it clearer what parameters varies between grouping levels (ie species) or not.</p>
+
+<p>The first benefit of using hierarchical models is the possibility to model parameters varying between groups of data (like an interaction) without having to estimate separate values per group. For instance if I was to fit one regression per plant species to my dataset and say that I have 5 parameters per model, I would have to estimate 100 parameters, which seems pretty large. On the other hand hierarchical models assume that all species-level parameters come from a specific distribution and one would just need to estimate the parameter of this distribution to get all species-level values. In practice we usually assume that the regression parameters are normally distributed across the groups and so we need to estimate two parameters per varying coefficients: the mean and the standard deviation. For instance, if we think that the effect of nitrogen concentration on herbivory rates varies between the plant species we would estimate the average nitrogen effect across all plant species plus the variation in this effect. In other words the first benefit of hierarchical models is to model the variation of the effects to certain grouping variables without dramatically inflating the number of parameters to estimate when there are large number of groups.</p>
+
+<p>Another benefit arise when for some groups we have only limited sample sizes, in my dataset we have species with 50 observations but other species have only 20. Hierarchical models use partial pooling to drive extreme parameter estimates in groups with low sample size towards the overall mean. More specifically, say that if I modelled the effect of nitrogen on herbivory for a plant species with only few observations and observed an effect of 10, while the average nitrogen effect across all plant species is 1. It is likely that this large effect is due to a few extreme observations. Fitting a hierarchical model will shrink this estimate towards 1 using partial pooling, <a href="http://www.stat.columbia.edu/~gelman/arm/">see section 12.2 in Gelman and Hill book</a>. Hierarchical models use informations available across all groups to estimate parameters that varies between the groups, while in separate regression models only “local”, group-level information, that may be extreme depending on sample size, is used. Interestingly this was the main criticism of my supervisor against using hierarchical models, his point being that actual species-level might be distorted by partial pooling. Being largely influenced by Gelman and Hill book on this topic I never saw this as a disadvantage. As outlined above partial pooling drives estimates from groups with few observations towards the overall means as we have little information from these groups. In the limit case where we have an infinite number of observations per groups, the partial pooling estimate will just be the group-level means (ie no pooling). I would argue that partial pooling is a desirable property to avoid extreme estimates to pop-up that would just be representing a combination of measurement error and noise but no proper signal whatsoever.</p>
+
+<p>More conceptually, hierarchical models are a natural way to account for structure and dependency in the data. Ecological data often comes in groups be it experimentally created groups like blocks, benches or climate chambers or biologically meaningful groups like species, individuals or communities. Hierarchical models when properly set account for this in parsimonious ways, have a look at Bolker et al <a href="http://www.cell.com/trends/ecology-evolution/abstract/S0169-5347(09)00019-6?_returnURL=http%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0169534709000196%3Fshowall%3Dtrue&amp;cc=y=">paper on GLMM for ecology and evolution</a>.</p>
+
+<p>I would argue that my dataset would be best analyse with hierarchical models because we have a rather large number of groups (20 species) with regression parameters potentially varying between them. In this context it is interesting to get both the average effect size but also how variable is this effect between the species. Such information might also be derived, albeit in a more cumbersome way, from fitting separate regression models, for instance I do not know if one can get quantitative estimation of variation in regression parameters between separate models.</p>
+
+<h2 id="to-transform-or-not-to-transform">To transform or not to transform?</h2>
+
+<p>This is a pretty old debate, in ecology two papers were pretty influential this <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00021.x/full">one</a> dealing with count data, and this <a href="http://onlinelibrary.wiley.com/doi/10.1890/10-0340.1/full">one</a> with proportions. My current philosophy is that if the data collected fall in a pretty clear case like counting stuff or performing a set of 0/1 experiment, then using generalized linear models with appropriate distribution, maybe some overdispersion parameters, and standard link function is the way to go. If the data distribution looks weird but the data could fall within a normal distribution (ie plant height, or biomass) then one can try different standard transformation and look at model residuals to check if everything is ok.</p>
+
+<p>Transforming is not just about getting normally distributed residuals, actually linear models are pretty resistant to departure from normality, what is more important is to have an equal variance of the error (to get, among other thing, correct estimation of standard error) but also linearity and additivity of the effects. For instance say that your true model is of the form: y = exp(beta1<em>x1)exp(beta2</em>x2)exp(r), with r ~ N(0,sigma), then log-transforming the relation gives: log(y) = beta1<em>x1 + beta2</em>x2 + r. The first relation was neither additive nor linear while after log-transforming a linear model would be appropriate. We never now the true model that generated our empirical data, so the best way to get a grasp at how correct our transformations and models are we need to <a href="https://biologyforfun.wordpress.com/2014/04/16/checking-glm-model-assumptions-in-r/">plot</a>, <a href="https://biologyforfun.wordpress.com/2015/03/25/a-function-to-help-graphical-model-checks-of-lm-and-anova/">plot</a> and re-plot. Plot the response against the predictor, plot the residuals against the fitted values, plot the residuals against predictors not included in the models …</p>
+
+<p>So in the case at hand where I have proportion data, one option would be to use a beta regression. The beta distribution is pretty flexible and can fit a variety of shapes (See graph below inspired from Fig. 4.15 in <a href="https://ms.mcmaster.ca/~bolker/emdbook/">Ben Bolker emdbook</a>).</p>
+
+<p>[caption id=”attachment_2052” align=”alignnone” width=”400”]<img src="https://biologyforfun.files.wordpress.com/2017/02/beta_dis.png" alt="beta_dis" /> Probability density of beta distributions with different parameters (a and b) values.[/caption]</p>
+
+<p>The issue is that zeroes are not allowed for beta regression as the likelihood shoots up to infinity for 0 or 1 values. Adding a small constant to all values solve this issue but seems unnatural. The other option would be to logit-transform the proportion data, after adding a small constant to again avoid the zeroes issue.</p>
+
+<p>I would argue for using a beta regression as I am always feeling a bit uneasy to directly transform my response variables. I prefer to find an appropriate distribution and let it takes care of linking my response variables with potential constraints (ie non-negative values) to my predictors. It seems to be more natural and leave the data on their original scale without forcing them to take on specific shapes. Of course one should still check that model assumptions are respected by doing the usual checks. Early exploration in this case show that a beta regression fits pretty well to the data. But I might have to actually show plots for logit-transform data to convince my supervisor to continue using beta regression. More generally, in ecology we almost always assume linearity and additivity of effects when using statistical models, most ecologists always assume that transforming is only for having normally distributed response data.</p>
+
+<p>At the end of the day my experience of the last years has been that I would need anyway to fit a wide variety of models some making sense, others being pretty hard to interpret. The art of science come then into play when trying to develop a coherent story from these multiple results.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ecology" class="page__taxonomy-item" rel="tag">ecology</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#biological-stuff" class="page__taxonomy-item" rel="tag">Biological Stuff</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#opinion-posts" class="page__taxonomy-item" rel="tag">Opinion Posts</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-02-19T00:00:00+01:00">February 19, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Making+a+case+for+hierarchical+generalized+models%20http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fmaking-a-case-for-hierarchical-generalized-models%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fmaking-a-case-for-hierarchical-generalized-models%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fmaking-a-case-for-hierarchical-generalized-models%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fmaking-a-case-for-hierarchical-generalized-models%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/opinion%20posts/tendances-des-elections-presidentielles-francaises-des-50-dernieres-annees/" class="pagination--pager" title="Tendances des élections présidentielles francaises des 50 dernières années
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/interpreting-random-effects-in-linear-mixed-effect-models/" class="pagination--pager" title="Interpreting random effects in linear mixed-effect models
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/biological%20stuff/opinion%20posts/making-a-case-for-hierarchical-generalized-models/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/biological%20stuff/opinion%20posts/making-a-case-for-hierarchical-generalized-models"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

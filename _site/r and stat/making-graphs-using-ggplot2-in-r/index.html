@@ -1,0 +1,759 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Making Graphs using ggplot2 in R: - biologyforfun</title>
+
+
+
+
+<meta name="description" content="The base package in R allow nice graphs to be drawn but more advanced packages allow better control and still nicer graphs to be created. Two packages are mainly used lattice and ggplot2, I will here present to you the basics of ggplot2 and the way it works.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Making Graphs using ggplot2 in R:">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/making-graphs-using-ggplot2-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/making-graphs-using-ggplot2-in-r/">
+
+
+
+  <meta property="og:description" content="The base package in R allow nice graphs to be drawn but more advanced packages allow better control and still nicer graphs to be created. Two packages are mainly used lattice and ggplot2, I will here present to you the basics of ggplot2 and the way it works.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2013-01-24T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Making Graphs using ggplot2 in R:">
+    <meta itemprop="description" content="The base package in R allow nice graphs to be drawn but more advanced packages allow better control and still nicer graphs to be created. Two packages are mainly used lattice and ggplot2, I will here present to you the basics of ggplot2 and the way it works.">
+    <meta itemprop="datePublished" content="January 24, 2013">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Making Graphs using ggplot2 in R:
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>The base package in R allow nice graphs to be drawn but more advanced packages allow better control and still nicer graphs to be created. Two packages are mainly used lattice and ggplot2, I will here present to you the basics of ggplot2 and the way it works.</p>
+
+<p>The best way to understand the ggplot way of functionning is in this:</p>
+
+<p>“ggplot2 is designed to work in a layered fashion, starting with a layer showing the raw data then adding layers of annotation and statistical summaries. [..]” H.Wickham, ggplot2, Use R</p>
+
+<p>More on the different components of the grammar of graphics</p>
+
+<p>The most sensitive way to work with ggplot is to creat a basic object and then add layer and complexity to it as we go:</p>
+
+<p>#load ggplot2</p>
+
+<p>install.packages(“ggplot2”)</p>
+
+<p>library(ggplot2)</p>
+
+<p>#load the data of fuel comsumption of cars</p>
+
+<p>data(mtcars)</p>
+
+<p>head(mtcars)</p>
+
+<p>#plotting mpg (miles per gallon) and wt (weight)</p>
+
+<p>q&lt;-ggplot(data=mtcars,aes(x=mpg,y=wt)) #store the basics informations into an object “q”</p>
+
+<p>#then add layers, basic scatterplot</p>
+
+<p>q+geom_point()</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplot1.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplot1.png?w=300" alt="GGplot1" /></a></p>
+
+<p>The per default layout of the ggplot automatically set the backgroung to grey and add x and y axis labels, the axis title are the same as the variable names used.</p>
+
+<p>Everything can be changed and customize in this graph, let’s start with the axis and main title.</p>
+
+<p>#change x and y axis title and main title using the layer labs</p>
+
+<p>q+geom_point()+labs(title=”Scatterplot of weight and miles per gallon”,x=”Miles per Gallon”,y=”Car weight (tonnes)”)</p>
+
+<p>#if we long title we can set the break line using “\n”</p>
+
+<p>q+geom_point()+labs(title=”Scatterplot of weight\n and miles per gallon”,x=”Miles per Gallon”,y=”Car weight (tonnes)”)</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplot2.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplot2.png?w=300" alt="GGplot2" /></a></p>
+
+<p>Now if we wanted to see the effect of another variables and vary the size, shape, color of this variable here is what to do:</p>
+
+<p>#if the variable is continuous</p>
+
+<p>q+geom_point(aes(color=qsec))</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplotcon1.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplotcon1.png?w=300" alt="GGplotCon1" /></a></p>
+
+<p>#colors are default ones, we can set them using the “scale_colour_gradient” command and also set the legend title</p>
+
+<p>q+geom_point(aes(color=qsec))</p>
+
+<p>+scale_colour_gradient(low=”blue”,high=”red”,name=QSEC)</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplotcon2.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplotcon2.png?w=300" alt="GGplotCon2" /></a></p>
+
+<p>#in R we can access all available colors using “colors()”, then we can call them using their numbers</p>
+
+<p>q+geom_point(aes(color=qsec))+scale_colour_gradient(low=colors()[260],high=colors()[562])</p>
+
+<p> </p>
+
+<p>#if the variable is categorical</p>
+
+<p>q+geom_point(aes(color=factor(gear)))</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplotcategorical1.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplotcategorical1.png?w=300" alt="GGplotCategorical1" /></a></p>
+
+<p>#setting the colors and the legend title</p>
+
+<p>q+geom_point(aes(color=factor(gear)))+</p>
+
+<p>scale_color_manual(values=c(“red”,”blue”,”green”),name=”Gear”)</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplotcategorical2.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplotcategorical2.png?w=300" alt="GGplotCategorical2" /></a></p>
+
+<p>#then when there are less than 6 categories we can use “shape” to differentiate between the different class of the gear variable</p>
+
+<p>q+geom_point(aes(shape=factor(gear)))</p>
+
+<p>Now I will present a few other possibilities in ggplot like making boxplots, histogramms, barplot, adding regression line, all the stuff that we do very often:</p>
+
+<p>#Simple boxplots of the distribution of values of Horse Power depending on the number of cylinders</p>
+
+<p>ggplot(mtcars,aes(x=factor(cyl),y=hp))+geom_boxplot()+labs(x=”Cylinders”)</p>
+
+<p><a href="http://biologyforfun.files.wordpress.com/2013/01/ggplotboxplots.png"><img src="http://biologyforfun.files.wordpress.com/2013/01/ggplotboxplots.png?w=300" alt="GGplotBoxplots" /></a></p>
+
+<p>#Histogramm of the weight variable, binwidth sets the break values, fill the colour filling the bars and colour the outlying colour</p>
+
+<p>ggplot(mtcars,aes(x=wt))+geom_histogram(binwidth=.1,fill=”white”,colour=”black”)</p>
+
+<p>#Barplot with two different format</p>
+
+<p>ggplot(mtcars,aes(x=factor(cyl),fill=gear))+geom_bar(position=”dodge”)</p>
+
+<p>ggplot(mtcars,aes(x=factor(cyl),fill=gear))+geom_bar(position=”stack”)</p>
+
+<p>#Adding a regression line to the graph</p>
+
+<p>ggplot(mtcars,aes(x=mpg,y=wt))+geom_point(aes(col=factor(gear)))+stat_smooth(method=”lm”)</p>
+
+<p>#plot one regression line per group of gear</p>
+
+<p>ggplot(mtcars,aes(x=mpg,y=wt))+geom_point(aes(col=factor(gear)))+stat_smooth(method=”lm”,aes(group=gear))</p>
+
+<p>#separate each group in a different window</p>
+
+<p>ggplot(mtcars,aes(x=mpg,y=wt,col=factor(gear)))+geom_point()+stat_smooth(method=”lm”,aes(group=gear))+facet_grid(.~gear)</p>
+
+<p>It is of course possible to play around with all these functions for example in the facet.grid if we put the variable first then the tile and the point, the different windows will be horizontal instead of vertical.</p>
+
+<p>A last point concerning this introduction to ggplot2 is the “%+%” function which allows you to update the content of a previously saved graph:</p>
+
+<p>#using the update function</p>
+
+<p>p&lt;-ggplot(mtcars,aes(x=mpg,y=wt,col=factor(gear)))+geom_point()+stat_smooth(method=”lm”,aes(group=gear))+facet_grid(.~gear)</p>
+
+<p>p %+% geom_point(shape=2)
+I hope this short tutorial gave you the feeling that ggplot can really help you making nice graphs using R. Next will come more advanced stuff like setting theme elements or using ggplot in maps.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ggplot" class="page__taxonomy-item" rel="tag">ggplot</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2013-01-24T00:00:00+01:00">January 24, 2013</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Making+Graphs+using+ggplot2+in+R%3A%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmaking-graphs-using-ggplot2-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmaking-graphs-using-ggplot2-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmaking-graphs-using-ggplot2-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fmaking-graphs-using-ggplot2-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/correlation-and-linear-regression-in-r/" class="pagination--pager" title="Correlation and Linear Regression in R
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/un%20and%20the%20environment/ipbes-is-on-its-way/" class="pagination--pager" title="IPBES is on its way
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/making-graphs-using-ggplot2-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/making-graphs-using-ggplot2-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

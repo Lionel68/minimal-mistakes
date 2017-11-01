@@ -1,0 +1,717 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>A function to help graphical model checks of lm and ANOVA - biologyforfun</title>
+
+
+
+
+<meta name="description" content="As always a more colourful version of this post is available on rpubs.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="A function to help graphical model checks of lm and ANOVA">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/a-function-to-help-graphical-model-checks-of-lm-and-anova/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/a-function-to-help-graphical-model-checks-of-lm-and-anova/">
+
+
+
+  <meta property="og:description" content="As always a more colourful version of this post is available on rpubs.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-03-25T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="A function to help graphical model checks of lm and ANOVA">
+    <meta itemprop="description" content="As always a more colourful version of this post is available on rpubs.">
+    <meta itemprop="datePublished" content="March 25, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">A function to help graphical model checks of lm and ANOVA
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>As always a more colourful version of this post is available on <a href="http://rpubs.com/hughes/68723">rpubs</a>.</p>
+
+<p>Even if LM are very simple models at the basis of many more complex ones, LM still have some assumptions that if not met would render any interpretation from the models plainly wrong. In my field of research most people were taught about checking ANOVA assumptions using tests like Levene &amp; co. This is however not the best way to check if my model meet its assumptions as p-values depend on the sample size, with small sample size we will almost never reject the null hypothesis while with big sample even small deviation will lead to significant p-values (<a href="http://stats.stackexchange.com/questions/2824/checking-anova-assumptions">discussion</a>). As ANOVA and linear models are two different ways to look at the same model (<a href="http://www.theanalysisfactor.com/why-anova-and-linear-regression-are-the-same-analysis/">explanation</a>) we can check ANOVA assumptions using graphical check from a linear model. In R this is easily done using <em>plot(model)</em>, but people often ask me what amount of deviation makes me reject a model. One easy way to see if the model checking graphs are off the charts is to simulate data from the model, fit the model to these newly simulated data and compare the graphical checks from the simulated data with the real data. If you cannot differentiate between the simulated and the real data then your model is fine, if you can then try again!</p>
+
+<p>EDIT: You can also make the conclusion form your visual inspection more rigorous following the protocols outlined in <a href="http://rsta.royalsocietypublishing.org/content/367/1906/4361">this</a> article. (Thanks for Tim comment)</p>
+
+<p>Below is a little function that implement this idea:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lm.test&lt;-function(m){
+  require(plyr)
+  #the model frame
+  dat&lt;-model.frame(m)
+  #the model matrix
+  f&lt;-formula(m)
+  modmat&lt;-model.matrix(f,dat)
+  #the standard deviation of the residuals
+  sd.resid&lt;-sd(resid(m))
+  #sample size
+  n&lt;-dim(dat)[1]
+  #get the right-hand side of the formula  
+  #rhs&lt;-all.vars(update(f, 0~.))
+  #simulate 8 response vectors from model
+  ys&lt;-lapply(1:8,function(x) rnorm(n,modmat%*%coef(m),sd.resid))
+  #refit the models
+  ms&lt;-llply(ys,function(y) lm(y~modmat[,-1]))
+  #put the residuals and fitted values in a list
+  df&lt;-llply(ms,function(x) data.frame(Fitted=fitted(x),Resid=resid(x)))
+  #select a random number from 2 to 8
+  rnd&lt;-sample(2:8,1)
+  #put the original data into the list
+  df&lt;-c(df[1:(rnd-1)],list(data.frame(Fitted=fitted(m),Resid=resid(m))),df[rnd:8])
+
+  #plot 
+  par(mfrow=c(3,3))
+  l_ply(df,function(x){
+    plot(Resid~Fitted,x,xlab="Fitted",ylab="Residuals")
+    abline(h=0,lwd=2,lty=2)
+  })
+
+  l_ply(df,function(x){
+    qqnorm(x$Resid)
+    qqline(x$Resid)
+  })
+
+  out&lt;-list(Position=rnd)
+  return(out)
+}
+</code></pre></div></div>
+
+<p>This function print the two basic plots: one looking at the spread of the residuals around the fitted values, the other one look at the normality of the residuals. The function return the position of the real model in the 3x3 window, counting from left to right and from top to bottom (ie position 1 is upper left graph).</p>
+
+<p>Let’s try the function:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#a simulated data frame of independent variables
+dat&lt;-data.frame(Temp=runif(100,0,20),Treatment=gl(n = 5,k = 20))
+contrasts(dat$Treatment)&lt;-"contr.sum"
+#the model matrix
+modmat&lt;-model.matrix(~Temp*Treatment,data=dat)
+#the coefficient
+coeff&lt;-rnorm(10,0,4)
+#simulate response data
+dat$Biomass&lt;-rnorm(100,modmat%*%coeff,1)
+#the model
+m&lt;-lm(Biomass~Temp*Treatment,dat)
+#model check
+chk&lt;-lm.test(m)
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/03/lm-test1.png"><img src="https://biologyforfun.files.wordpress.com/2015/03/lm-test1.png" alt="lm.test1" /></a></p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/03/lm-test2.png"><img src="https://biologyforfun.files.wordpress.com/2015/03/lm-test2.png" alt="lm.test2" /></a></p>
+
+<p>Can you find which one is the real one? I could not, here is the answer:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chk
+$Position
+[1] 4
+</code></pre></div></div>
+
+<p>Happy and safe modelling!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lm" class="page__taxonomy-item" rel="tag">LM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#model-check" class="page__taxonomy-item" rel="tag">model check</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-03-25T00:00:00+01:00">March 25, 2015</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=A+function+to+help+graphical+model+checks+of+lm+and+ANOVA%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fa-function-to-help-graphical-model-checks-of-lm-and-anova%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fa-function-to-help-graphical-model-checks-of-lm-and-anova%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fa-function-to-help-graphical-model-checks-of-lm-and-anova%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fa-function-to-help-graphical-model-checks-of-lm-and-anova%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/generating-anova-like-table-from-glmm-using-parametric-bootstrap/" class="pagination--pager" title="Generating ANOVA-like table from GLMM using parametric bootstrap
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/exploration-of-functional-diversity-indices-using-shiny/" class="pagination--pager" title="Exploration of Functional Diversity indices using Shiny
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/a-function-to-help-graphical-model-checks-of-lm-and-anova/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/a-function-to-help-graphical-model-checks-of-lm-and-anova"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

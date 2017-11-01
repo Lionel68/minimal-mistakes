@@ -1,0 +1,864 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Crossed and Nested hierarchical models with STAN and R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="Below I will expand on previous posts on bayesian regression modelling using STAN (see previous instalments here, here, and here). Topic of the day is modelling crossed and nested design in hierarchical models using STAN in R.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Crossed and Nested hierarchical models with STAN and R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/crossed-and-nested-hierarchical-models-with-stan-and-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/crossed-and-nested-hierarchical-models-with-stan-and-r/">
+
+
+
+  <meta property="og:description" content="Below I will expand on previous posts on bayesian regression modelling using STAN (see previous instalments here, here, and here). Topic of the day is modelling crossed and nested design in hierarchical models using STAN in R.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-12-08T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Crossed and Nested hierarchical models with STAN and R">
+    <meta itemprop="description" content="Below I will expand on previous posts on bayesian regression modelling using STAN (see previous instalments here, here, and here). Topic of the day is modelling crossed and nested design in hierarchical models using STAN in R.">
+    <meta itemprop="datePublished" content="December 08, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Crossed and Nested hierarchical models with STAN and R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  6 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Below I will expand on previous posts on bayesian regression modelling using STAN (see previous instalments <a href="http://datascienceplus.com/bayesian-regression-with-stan-part-1-normal-regression/">here</a>, <a href="http://datascienceplus.com/bayesian-regression-with-stan-beyond-normality/">here</a>, and <a href="http://wp.me/p2SacB-j8">here</a>). Topic of the day is modelling crossed and nested design in hierarchical models using STAN in R.</p>
+
+<p>Crossed design appear when we have more than one grouping variable and when data are recorded for each combination of the grouping variables. For example say that we measured the growth of a fungi on different Petri dishes and that you took several samples from each dishes. In this example we have two grouping variables: the Petri dish and the sample. Since we have observations for each combination of the two grouping variables we are in a crossed design. We can model this using a hierarchical model with an intercept representing the average growth, a parameter representing the deviation from this average for each Petri dish and an additional parameter representing the deviation from the average for each sample. Below is the corresponding model in STAN code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">/*</span><span class="n">A</span> <span class="n">simple</span> <span class="n">example</span> <span class="k">of</span> <span class="n">an</span> <span class="n">crossed</span> <span class="n">hierarchical</span> <span class="k">model</span>
+<span class="p">*</span><span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">Penicillin</span> <span class="n">data</span> <span class="k">from</span> <span class="n">the</span> <span class="n">lme4</span> <span class="k">package</span>
+<span class="p">*/</span>
+
+<span class="n">data</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">N</span><span class="p">;//</span><span class="n">number</span> <span class="k">of</span> <span class="n">observations</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">n_sample</span><span class="p">;//</span><span class="n">number</span> <span class="k">of</span> <span class="n">samples</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">n_plate</span><span class="p">;//</span><span class="n">number</span> <span class="k">of</span> <span class="n">plates</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">,</span><span class="n">upper</span><span class="p">=</span><span class="n">n_sample</span><span class="p">&gt;</span> <span class="n">sample_id</span><span class="p">[</span><span class="n">N</span><span class="p">];//</span><span class="n">vector</span> <span class="k">of</span> <span class="n">sample</span> <span class="n">indeces</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">,</span><span class="n">upper</span><span class="p">=</span><span class="n">n_plate</span><span class="p">&gt;</span> <span class="n">plate_id</span><span class="p">[</span><span class="n">N</span><span class="p">];//</span><span class="n">vector</span> <span class="k">of</span> <span class="n">plate</span> <span class="n">indeces</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">parameters</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">n_sample</span><span class="p">]</span> <span class="n">gamma</span><span class="p">;//</span><span class="n">vector</span> <span class="k">of</span> <span class="n">sample</span> <span class="n">deviation</span> <span class="k">from</span> <span class="n">the</span> <span class="n">average</span> 
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">n_plate</span><span class="p">]</span> <span class="n">delta</span><span class="p">;//</span><span class="n">vector</span> <span class="k">of</span> <span class="n">plate</span> <span class="n">deviation</span> <span class="k">from</span> <span class="n">the</span> <span class="n">average</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">mu</span><span class="p">;//</span><span class="n">average</span> <span class="n">diameter</span> <span class="n">value</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">sigma_gamma</span><span class="p">;//</span><span class="n">standard</span> <span class="n">deviation</span> <span class="k">of</span> <span class="n">the</span> <span class="n">gamma</span> <span class="n">coeffs</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">sigma_delta</span><span class="p">;//</span><span class="n">standard</span> <span class="n">deviation</span> <span class="k">of</span> <span class="n">the</span> <span class="n">delta</span> <span class="n">coeffs</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">sigma_y</span><span class="p">;//</span><span class="n">standard</span> <span class="n">deviation</span> <span class="k">of</span> <span class="n">the</span> <span class="n">observations</span>
+<span class="p">}</span>
+<span class="n">transformed</span> <span class="k">parameters</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">y_hat</span><span class="p">;</span>
+
+<span class="err"> </span> <span class="n">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span>
+<span class="err">   </span> <span class="n">y_hat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mu</span> <span class="p">+</span> <span class="n">gamma</span><span class="p">[</span><span class="n">sample_id</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="p">+</span> <span class="n">delta</span><span class="p">[</span><span class="n">plate_id</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+<span class="p">}</span>
+<span class="k">model</span> <span class="p">{</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">prior</span> <span class="n">on</span> <span class="n">the</span> <span class="n">scale</span> <span class="n">coefficient</span>
+<span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span><span class="p">,</span> <span class="n">see</span> <span class="n">section</span> <span class="m">6.9</span> <span class="k">in</span> <span class="n">STAN</span> <span class="n">user</span> <span class="n">guide</span>
+<span class="err"> </span> <span class="n">sigma_gamma</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2.5</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">sigma_delta</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2.5</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">sigma_y</span> <span class="p">~</span> <span class="n">gamma</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">0.1</span><span class="p">);</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">get</span> <span class="n">sample</span> <span class="k">and</span> <span class="n">plate</span> <span class="n">level</span> <span class="n">deviation</span>
+<span class="err"> </span> <span class="n">gamma</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">sigma_gamma</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">delta</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">sigma_delta</span><span class="p">);</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">likelihood</span>
+<span class="err"> </span> <span class="n">y</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">generated</span> <span class="n">quantities</span> <span class="p">{</span>
+<span class="p">//</span><span class="n">sample</span> <span class="n">predicted</span> <span class="n">values</span> <span class="k">from</span> <span class="n">the</span> <span class="k">model</span> <span class="n">for</span> <span class="n">posterior</span> <span class="n">predictive</span> <span class="n">checks</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">y_rep</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span>
+<span class="err">   </span> <span class="n">y_rep</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">=</span> <span class="n">normal_rng</span><span class="p">(</span><span class="n">y_hat</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="n">sigma_y</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Pasting and saving this code into a .stan file we now turn to R using the Penicillin dataset from the lme4 package as (real-life) example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(lme4)
+library(rstan)
+library(shinystan)#for great model viz
+library(ggplot2)#for great viz in general
+data(Penicillin)
+#look if we have sample for each combination
+xtabs(~plate+sample,Penicillin)
+#create the plate and sample index
+plate_id&lt;-as.numeric(Penicillin$plate)
+sample_id&lt;-as.numeric(Penicillin$sample)
+#the model matrix (just an intercept in this case)
+X&lt;-matrix(rep(1,dim(Penicillin)[1]),ncol=1)
+
+#fit the model
+m_peni&lt;-stan(file = "crossed_penicillin.stan",
+data=list(N=dim(Penicillin)[1],n_sample=length(unique(sample_id)),
+n_plate=length(unique(plate_id)),sample_id=sample_id,
+plate_id=plate_id,y=Penicillin$diameter))
+
+#launch_shinystan(m_peni)
+</code></pre></div></div>
+
+<p>The model seem to fit pretty nicely, all chains converged for all parameters (Rhat around 1), we have decent posterior distribution (top panel in the figure below) and also good correlation between observed and fitted data (bottom panel figure below).</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/check.png" alt="check" /></p>
+
+<p>In a next step we can look at the deviation form the average diameter for each sample and each plate (Petri dish):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#make caterpillar plot
+mcmc_peni&lt;-extract(m_peni)
+sample_eff&lt;-apply(mcmc_peni$gamma,2,quantile,probs=c(0.025,0.5,0.975))
+df_sample&lt;-data.frame(ID=unique(Penicillin$sample),Group="Sample",
+LI=sample_eff[1,],Median=sample_eff[2,],HI=sample_eff[3,])
+plate_eff&lt;-apply(mcmc_peni$delta,2,quantile,probs=c(0.025,0.5,0.975))
+df_plate&lt;-data.frame(ID=unique(Penicillin$plate),Group="Plate",
+LI=plate_eff[1,],Median=plate_eff[2,],HI=plate_eff[3,])
+df_all&lt;-rbind(df_sample,df_plate)
+ggplot(df_all,aes(x=ID,y=Median))+geom_point()+
+ geom_linerange(aes(ymin=LI,ymax=HI))+facet_wrap(~Group,scales="free")+
+ geom_hline(aes(yintercept=0),color="blue",linetype="dashed")+
+ labs(y="Regression parameters")
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/cater_peni.png" alt="cater_peni" /></p>
+
+<p>We can compare this figure to Figure 2.2 in <a href="http://lme4.r-forge.r-project.org/book/Ch2.pdf">here</a> where the same model was fitted to the data using lmer.</p>
+
+<p>I now turn to nested design. Nested design occur when there is more than one grouping variable and when there is a hierarchy in these variables with categories from lower variables only being present at one level from higher variables. For examples if we measured student scores within classes within schools we would have a nested hierarchical design. In the following I will use the Arabidopsis dataset from the lme4 package. Arabidopsis plants from different regions (Netherlands, Spain and Sweden) and from different populations within these regions (nested design) were collected and the researchers looked at the effect of herbivory and nutrient addition on the number of fruits produced per plants. Below is the corresponding STAN code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">/*</span><span class="n">Nested</span> <span class="n">regression</span> <span class="n">example</span>
+<span class="p">*</span><span class="n">Three</span><span class="p">-</span><span class="n">levels</span> <span class="k">with</span> <span class="n">varying</span><span class="p">-</span><span class="n">intercept</span>
+<span class="p">*</span><span class="n">based</span> <span class="n">on</span><span class="p">:</span> <span class="n">https</span><span class="p">://</span><span class="n">rpubs</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">kaz_yos</span><span class="p">/</span><span class="n">stan</span><span class="p">-</span><span class="n">multi</span><span class="p">-</span><span class="m">2</span>
+<span class="p">*</span><span class="k">and</span> <span class="n">applied</span> <span class="k">to</span> <span class="n">the</span> <span class="n">Arabidopsis</span> <span class="n">data</span> <span class="k">from</span> <span class="n">lme4</span>
+<span class="p">*/</span>
+
+<span class="n">data</span> <span class="p">{</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">&gt;</span> <span class="n">N</span><span class="p">;</span> <span class="p">//</span><span class="n">number</span> <span class="k">of</span> <span class="n">observations</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">&gt;</span> <span class="n">P</span><span class="p">;</span> <span class="p">//</span><span class="n">number</span> <span class="k">of</span> <span class="n">populations</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">&gt;</span> <span class="n">R</span><span class="p">;</span> <span class="p">//</span><span class="n">number</span> <span class="k">of</span> <span class="n">regions</span>
+<span class="p">//</span><span class="n">population</span> <span class="n">ID</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">,</span><span class="n">upper</span><span class="p">=</span><span class="n">P</span><span class="p">&gt;</span> <span class="n">PopID</span><span class="p">[</span><span class="n">N</span><span class="p">];</span> 
+ <span class="p">//</span><span class="n">index</span> <span class="k">of</span> <span class="n">population</span> <span class="n">appertenance</span> <span class="k">to</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">region</span>
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">1</span><span class="p">,</span><span class="n">upper</span><span class="p">=</span><span class="n">R</span><span class="p">&gt;</span> <span class="n">PopWithinReg</span><span class="p">[</span><span class="n">P</span><span class="p">];</span> 
+
+<span class="err"> </span> <span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">Fruit</span><span class="p">[</span><span class="n">N</span><span class="p">];</span> <span class="p">//</span><span class="n">the</span> <span class="n">response</span> <span class="n">variable</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">AMD</span><span class="p">[</span><span class="n">N</span><span class="p">];</span> <span class="p">//</span><span class="n">predictor</span> <span class="n">variable</span><span class="p">,</span> <span class="n">whether</span> <span class="n">the</span> <span class="n">apical</span> <span class="n">meristem</span> <span class="n">was</span> <span class="n">unclipped</span> <span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="k">or</span> <span class="n">clipped</span> <span class="p">(</span><span class="m">1</span><span class="p">)</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">nutrient</span><span class="p">[</span><span class="n">N</span><span class="p">];</span> <span class="p">//</span><span class="n">predictor</span> <span class="n">variable</span><span class="p">,</span> <span class="n">whether</span> <span class="n">nutrient</span> <span class="n">level</span> <span class="n">were</span> <span class="n">control</span> <span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="k">or</span> <span class="n">higher</span> <span class="p">(</span><span class="m">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">parameters</span> <span class="p">{</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">regression</span> <span class="n">slopes</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">beta_0</span><span class="p">;</span> <span class="p">//</span><span class="n">intercept</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">beta_1</span><span class="p">;</span> <span class="p">//</span><span class="n">effect</span> <span class="k">of</span> <span class="n">clipping</span> <span class="n">apical</span> <span class="n">meristem</span> <span class="n">on</span> <span class="n">number</span> <span class="k">of</span> <span class="n">fruits</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">beta_2</span><span class="p">;</span> <span class="p">//</span><span class="n">effect</span> <span class="k">of</span> <span class="n">increaing</span> <span class="n">nutrient</span> <span class="n">level</span> <span class="n">on</span> <span class="n">number</span> <span class="k">of</span> <span class="n">fruits</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">the</span> <span class="n">deviation</span> <span class="k">from</span> <span class="n">the</span> <span class="n">intercept</span> <span class="n">at</span> <span class="n">the</span> <span class="n">different</span> <span class="n">levels</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">dev_pop</span><span class="p">[</span><span class="n">P</span><span class="p">];</span> <span class="p">//</span><span class="n">deviation</span> <span class="n">between</span> <span class="n">the</span> <span class="n">populations</span> <span class="n">within</span> <span class="n">a</span> <span class="n">region</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">dev_reg</span><span class="p">[</span><span class="n">R</span><span class="p">];</span> <span class="p">//</span><span class="n">deviation</span> <span class="n">between</span> <span class="n">the</span> <span class="n">regions</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">the</span> <span class="n">standard</span> <span class="n">deviation</span> <span class="n">for</span> <span class="n">the</span> <span class="n">deviations</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">sigma_pop</span><span class="p">;</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">sigma_reg</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">transformed</span> <span class="k">parameters</span> <span class="p">{</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">varying</span> <span class="n">intercepts</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">beta_0pop</span><span class="p">[</span><span class="n">P</span><span class="p">];</span>
+<span class="err"> </span> <span class="k">real</span> <span class="n">beta_0reg</span><span class="p">[</span><span class="n">R</span><span class="p">];</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">the</span> <span class="n">linear</span> <span class="n">predictor</span> <span class="n">for</span> <span class="n">the</span> <span class="n">observations</span>
+<span class="err"> </span> <span class="k">real</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">lambda</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">compute</span> <span class="n">the</span> <span class="n">varying</span> <span class="n">intercept</span> <span class="n">at</span> <span class="n">the</span> <span class="n">region</span> <span class="n">level</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">r</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">R</span><span class="p">){</span>
+<span class="err">   </span> <span class="n">beta_0reg</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="p">=</span> <span class="n">beta_0</span> <span class="p">+</span> <span class="n">dev_reg</span><span class="p">[</span><span class="n">r</span><span class="p">];}</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">compute</span> <span class="n">varying</span> <span class="n">intercept</span> <span class="n">at</span> <span class="n">the</span> <span class="n">population</span> <span class="n">within</span> <span class="n">region</span> <span class="n">level</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">p</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">P</span><span class="p">){</span>
+<span class="err">    </span> <span class="n">beta_0pop</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="p">=</span> <span class="n">beta_0reg</span><span class="p">[</span><span class="n">PopWithinReg</span><span class="p">[</span><span class="n">p</span><span class="p">]]</span> <span class="p">+</span> <span class="n">dev_pop</span><span class="p">[</span><span class="n">p</span><span class="p">];}</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">the</span> <span class="n">linear</span> <span class="n">predictor</span>
+<span class="err"> </span> <span class="n">for</span><span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">N</span><span class="p">){</span>
+<span class="err">    </span> <span class="n">lambda</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">=</span> <span class="n">beta_0pop</span><span class="p">[</span><span class="n">PopID</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span> <span class="p">+</span> <span class="n">beta_1</span> <span class="p">*</span> <span class="n">AMD</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">+</span> <span class="n">beta_2</span> <span class="p">*</span> <span class="n">nutrient</span><span class="p">[</span><span class="n">n</span><span class="p">];}</span>
+<span class="p">}</span>
+
+<span class="k">model</span> <span class="p">{</span>
+<span class="err"> </span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">priors</span> <span class="n">on</span> <span class="n">the</span> <span class="n">slopes</span>
+<span class="err"> </span> <span class="n">beta_0</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">beta_1</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">beta_2</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5</span><span class="p">);</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">weakly</span> <span class="n">informative</span> <span class="n">prior</span> <span class="n">on</span> <span class="n">the</span> <span class="n">standard</span> <span class="n">deviation</span>
+<span class="err"> </span> <span class="n">sigma_pop</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2.5</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">sigma_reg</span> <span class="p">~</span> <span class="n">cauchy</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2.5</span><span class="p">);</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">distribution</span> <span class="k">of</span> <span class="n">the</span> <span class="n">varying</span> <span class="n">intercept</span>
+<span class="err"> </span> <span class="n">dev_pop</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">sigma_pop</span><span class="p">);</span>
+<span class="err"> </span> <span class="n">dev_reg</span> <span class="p">~</span> <span class="n">normal</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">sigma_reg</span><span class="p">);</span>
+
+<span class="err"> </span> <span class="p">//</span><span class="n">likelihood</span>
+<span class="err"> </span> <span class="n">Fruit</span> <span class="p">~</span> <span class="n">poisson_log</span><span class="p">(</span><span class="n">lambda</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">generated</span> <span class="n">quantities</span> <span class="p">{</span>
+<span class="p">//</span><span class="n">sample</span> <span class="n">predicted</span> <span class="n">values</span> <span class="k">from</span> <span class="n">the</span> <span class="k">model</span> <span class="n">for</span> <span class="n">posterior</span> <span class="n">predictive</span> <span class="n">checks</span>
+<span class="err"> </span><span class="n">int</span><span class="p">&lt;</span><span class="n">lower</span><span class="p">=</span><span class="m">0</span><span class="p">&gt;</span> <span class="n">fruit_rep</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="err"> </span><span class="n">for</span><span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="m">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span>
+<span class="err">  </span> <span class="n">fruit_rep</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">=</span> <span class="n">poisson_log_rng</span><span class="p">(</span><span class="n">lambda</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I decided to use a Poisson distribution as the response is a count variable. The only “tricky” part is the index linking a particular population to its specific region (PopWithinReg). In this model we assume that variations between populations within regions is only affecting the average number of fruits but is not affecting the plant responses to the simulated herbivory (AMD) and to increased in nutrient levels. In other words populations within region is an intercept-only “random effect”. We turn back to R:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> data("Arabidopsis")
+#generate the IDs
+pop.id &lt;- as.numeric(Arabidopsis$popu)
+pop_to_reg &lt;- as.numeric(factor(substr(levels(Arabidopsis$popu),3,4)))
+#create the predictor variables
+amd &lt;- ifelse(Arabidopsis$amd=="unclipped",0,1)
+nutrient &lt;- ifelse(Arabidopsis$nutrient==1,0,1)
+
+m_arab &lt;- stan("nested_3lvl.stan",data=list(N=625,P=9,R=3,PopID=pop.id,
+PopWithinReg=pop_to_reg,Fruit=Arabidopsis$total.fruits,
+AMD=amd,nutrient=nutrient))
+#check model
+#launch_shinystan(m_arab)
+</code></pre></div></div>
+
+<p>Rstan is warning us that we had some divergent iterations, we could correct this using non-centered re-parametrization (See <a href="http://wp.me/p2SacB-j8">this</a> post and the <a href="http://mc-stan.org/documentation/">STAN user guide</a>). More worrisome is the discrepancy between the posterior predictive data and the observed ones:</p>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/check_nest.png" alt="check_nest" /></p>
+
+<p>We can explore these errors for each populations within regions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mcmc_arab &lt;- extract(m_arab)
+#plot obs vs fitted data across groups
+fit_arab &lt;- mcmc_arab$fruit_rep
+#average across MCMC samples
+Arabidopsis$Fit &lt;- apply(fit_arab,2,mean)
+#plot obs vs fit
+ggplot(Arabidopsis,aes(x=total.fruits,y=Fit,color=amd,shape=factor(nutrient)+
+geom_point()+facet_wrap(~popu,scales="free")+
+geom_abline(aes(intercept=0,slope=1))
+</code></pre></div></div>
+
+<p><img src="https://biologyforfun.files.wordpress.com/2016/12/nested_hier.png" alt="nested_hier" /></p>
+
+<p>The model predict basically four values, one for each combination of the two treatment variables. The original data are way more dispersed than the fitted ones, one could try to use negative binomial distribution while making the treatment effect also vary between the populations between the regions …</p>
+
+<p>That’s it for this post, a great source of regression models for further examples in the <a href="https://github.com/stan-dev/example-models/wiki">STAN-wiki</a>.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#bayesian" class="page__taxonomy-item" rel="tag">Bayesian</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#stan" class="page__taxonomy-item" rel="tag">STAN</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-12-08T00:00:00+01:00">December 08, 2016</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Crossed+and+Nested+hierarchical+models+with+STAN+and+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcrossed-and-nested-hierarchical-models-with-stan-and-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcrossed-and-nested-hierarchical-models-with-stan-and-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcrossed-and-nested-hierarchical-models-with-stan-and-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcrossed-and-nested-hierarchical-models-with-stan-and-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/informatic%20language/r%20and%20stat/hierarchical-models-with-rstan-part-1/" class="pagination--pager" title="Hierarchical models with RStan (Part 1)
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/spatial-dynamic-in-a-host-parasitoid-system/" class="pagination--pager" title="Spatial Dynamic in a Host-Parasitoid system
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/crossed-and-nested-hierarchical-models-with-stan-and-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/crossed-and-nested-hierarchical-models-with-stan-and-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

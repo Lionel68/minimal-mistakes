@@ -1,0 +1,703 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Cause, mechanism and prediction in ecology - biologyforfun</title>
+
+
+
+
+<meta name="description" content="This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussions (IK computation ecology). So it is time to actually sit down, think this through and organize my thoughts. What better way to achieve this than to write a post?">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Cause, mechanism and prediction in ecology">
+
+
+  <link rel="canonical" href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/">
+  <meta property="og:url" content="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/">
+
+
+
+  <meta property="og:description" content="This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussions (IK computation ecology). So it is time to actually sit down, think this through and organize my thoughts. What better way to achieve this than to write a post?">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-07-10T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Cause, mechanism and prediction in ecology">
+    <meta itemprop="description" content="This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussions (IK computation ecology). So it is time to actually sit down, think this through and organize my thoughts. What better way to achieve this than to write a post?">
+    <meta itemprop="datePublished" content="July 10, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Cause, mechanism and prediction in ecology
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>This is a theme that bugged me for the past few months, through reading (<a href="http://www.cambridge.org/be/academic/subjects/life-sciences/ecology-and-conservation/critique-ecology?format=PB&amp;isbn=9780521395885#xY81DjjF3wmcduGW.97">Peters’ critique for ecology</a>, <a href="http://www.cambridge.org/gb/academic/subjects/life-sciences/ecology-and-conservation/cause-and-correlation-biology-users-guide-path-analysis-structural-equations-and-causal-inference-r-2nd-edition?format=PB#EjvYwaiKvmuy31uo.97">Shipley’s path analysis book</a>), meetings and discussions (<a href="https://akcomputationalecology.wordpress.com/2017/07/03/report-from-the-first-ik-computational-ecology-meeting/">IK computation ecology</a>). So it is time to actually sit down, think this through and organize my thoughts. What better way to achieve this than to write a post?</p>
+
+<h2 id="what-are-causes">What are causes?</h2>
+
+<p>Rather than providing a lengthy definition (which is pretty arduous given that even philosopher do not seem to agree on this), I will follow Shipley’s approach to define causal relations using the properties associated to them. So a causal relation implies:</p>
+
+<ul>
+  <li>
+    <p>transitivity: if light cause photosynthesis and photosynthesis cause biomass production then light cause biomass production.</p>
+  </li>
+  <li>
+    <p>markov condition: following the example above, if you block photosynthesis from operating and varying, light will not cause biomass production anymore</p>
+  </li>
+  <li>
+    <p>irreflexibility: biomass production cannot cause biomass production</p>
+  </li>
+  <li>
+    <p>asymmetry: if light cause photosynthesis, photosynthesis cannot cause light.</p>
+  </li>
+</ul>
+
+<h2 id="what-are-mechanisms">What are mechanisms?</h2>
+
+<p>Ecologists often justify their research as a quest to unravel the mechanistic relationship between variable X and Y, whether this emphasis is warranted will be discussed later on, for now let’s try to understand what we mean usually by “mechanism”.</p>
+
+<p>The clearest definition I could come up with is: a mechanism is a set of causal relations that produce from some starting condition(s) one or more effects. Basically every time you try to answer “How?” questions you are going for mechanisms. A mechanistic understanding would be achieved by proving that some data are more likely to emerge following mechanism M than following some other mechanism N. Other definitions abund in the literature for instance in <a href="http://onlinelibrary.wiley.com/doi/10.1111/ecog.02480/abstract">Cabral et al (2016)</a>: “Mechanism - A causal explanation linking two ecological variables” or <a href="https://www.researchgate.net/publication/201997244_Ecological_experiments_scale_phenomenology_mechanism_and_the_illusion_of_generality">Dunham and Beaupre 1998</a>: “an appropriate level of reductionism that provides a causal explanation of the functional relationship among a set of variables”. So a research agenda aiming at improving mechanistic understanding will have to deal with causes and how to identify them. On a side note, it is intersting to realize that mechanisms are often developed as narratives (Cabral and Dunham definition use the term “explanation”), this can become an issue if terms are vaguely defined so that multiple causal chains can be built from a single mechanism.</p>
+
+<p>An important point to make here is the potential pitfall of infinite regress when exploring mechanisms. Infinite regress is basically aiming at decomposing a mechanism into a large (infinite) number of causal relations. Taking again the example from above of light causing biomass production: light -&gt; photosynthesis -&gt; biomass production, one can decompose this mechanism further: light -&gt; excitation of photosystem I and II -&gt; ATP production -&gt; calvin cycle -&gt; biomass production and so on. As Shipley nicely puts it: “the trick is always to choose a level of causal complexity that is sufficiently detailed that it meets the goals of the study while remaining applicable in practice”, learning this trick may take a whole career time in ecology.</p>
+
+<h2 id="why-should-we-care-about-mechanisms">Why should we care about mechanisms?</h2>
+
+<p>Understanding the mechanism (set of causal links) between two variables is assumed to be one step towards generalization and the discovery of the laws of ecology. Many (virtual) ink has been used on whether such generality or laws exist in ecology, I won’t go into this here, the interested reader can head to <a href="http://www.jstor.org/stable/3546712?seq=1#page_scan_tab_contents">the paper</a> that started it all (at least for community ecology), and <a href="http://www.sciencedirect.com/science/article/pii/S0169534706000334">some response</a> and <a href="https://dynamicecology.wordpress.com/2015/06/17/the-five-roads-to-generality-in-ecology/">ways</a> to reach generality. The point is, one of the often stated aim of ecology as a science is to unravel general laws and theories to help us better understand the object under scrutiny (see the preface of MacArthur’s book <a href="http://press.princeton.edu/titles/1502.html">Geographical ecology</a>). So if you followed my argumentation, to achieve this broad goal one need to unravel the mechanisms at play and so one will have to work with causality.</p>
+
+<p>Another reason, a bit more applied and coming from the modelling side, is the belief that models based on mechanisms will be better at extrapolating than mechanism-free models. For example if you want to know if a species of tree will be able to grow in a certain area under climatic change with new conditions, models including some physiological or growth mechanisms are assumed to provide better predictions than models based on relations with no explicit mechanistic underlying (see <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1461-0248.2008.01277.x/full">this</a> paper).</p>
+
+<h2 id="how-do-we-identify-cause-and-mechanism-in-empirical-data">How do we identify cause and mechanism in empirical data?</h2>
+
+<p>Here I will emphasize three approaches that are used in ecology to derive mechanistic understanding: (i) experiments, (ii) structural equation models and (iii) mechanistic models.</p>
+
+<p>The classical route is to use a reductionist approach and to fragment complex chains of causality into simple components and do manipulative experiments on them. For example say that you want to know if plant growth is caused by light through photosynthesis, and you know that photosynthesis use CO2 and release O2. A simple experiment would be to monitor plant growth under light condition with or without provision of CO2. From your hypothesized mechanism you expect that plant will not grow, despite the light, without CO2 provision. Finding experimental results fitting to particular mechanisms is only the beginning of the road, as one will have to see how it fits back in more complex chains, how it depends on factors that were controlled in the experiment (what about nutrient or water availability in the toy example above), how it depends on species identity (are some plant species not using photosynthesis to grow?) and so on. Again lots of ink has been used to advocate the use of reductionist approach in ecology as appropriate tests of mechanisms and theories, but also on the need to combine detailed and controlled experimental results with broad scale observational data (see the <a href="https://www.jstor.org/stable/i283128">forum section</a> in this Oikos 1988 volume).</p>
+
+<p>Another, more recent way (in ecology), to explore causal relations is through the use of structural equation models (SEMs). SEMs are a general statistical framework that derive from hypothetical causal networks sets of equations that are fitted to data. Comparing amongst different models allow the researcher to provide evidence towards specific mechanisms and theories. It is still a bit obscure to me how one goes from a set of equations and some variance-covariance to causal understanding but apparently <a href="http://bayes.cs.ucla.edu/BOOK-2K/jw.html">it works</a>.</p>
+
+<p>A final way that I can see is to fit mechanistic models (some call them process-based models) to data. What exactly qualifies as a mechanistic model is a hard <a href="https://theartofmodelling.wordpress.com/2012/02/19/mechanistic-models-what-is-the-value-of-understanding/">if not irrelevant question</a>, the point is that such models are usually parametrize having in mind specific causal relations and are more tightly linked to specific theory than other models. Some example involve: distribution models based on physiological constraints, dynamic vegetation models based on plant growth and respiration. <a href="https://dynamicecology.wordpress.com/2016/01/25/trying-to-understand-ecological-data-without-mechanistic-models-is-a-waste-of-time/">Some</a> have argued that one cannot achieve understanding (causal relations) without the use of mechanistic models: , <a href="https://www.zoology.ubc.ca/~krebs/ecological_rants/hypothesis-testing-using-field-data-and-experiments-is-definitely-not-a-waste-of-time/">some</a> have argued otherwise.</p>
+
+<p>The point that one could make is that of a shift of techniques as the understanding on a particular question (“how is light influencing biomass production”) is evolving. Experiments backed up with some theory/prediction/expectation are useful pioneers. Structural equation models are a cool way to translate these causal links unraveled by experiments into more complex settings using for instance observational data. Mechanistic models come at a later stage putting down the relations into (dynamic/nonlinear) equations with specific links to the developing theories. The trick is to be able to realize what are the missing information and what would be the most appropriate technique to do so in one’s field of research, doing this is tricky as we usually specialize on one set of tools whereas the continuing shift of relevant techniques require some intense cooperation among people. In this regard I particularly like the section “We should clearly identify what kind of science we are doing” in the <a href="http://onlinelibrary.wiley.com/doi/10.1111/oik.03726/full">Houlahan paper</a> published recently.</p>
+
+<h2 id="how-much-emphasis-should-we-put-on-improving-our-mechanistic-understanding">How much emphasis should we put on improving our mechanistic understanding?</h2>
+
+<p>As mentioned above one should be wary of infinite regress, trying to explain relationship using more and more detailed informations. At some point one has to realize that for the question at hand enough information about the causes are available, for instance if I want to explore how changes in cloud cover under climate change will affect plant biomass production, do I need to know how the calvin cycle works? These types of questions are pretty hard because they will always be relative on the specific question at hand. Only our scientific common sense, logistic limitations and funding scarcity prevent us from this pitfall.</p>
+
+<p>For me there is a tension in every model that we develop (be it statistical or process-based) between the ability to understand the machinery of causal links leading to some pattern and the predictive ability. Developing models with specific mechanisms will come at the cost of being poorer in terms of predictive abilities than models aimed solely at having high predictive power (see: ti understand or to predict or two culture in statistic). My opinion on this topic is very much affected by my brief incursion into the field of species distribution modeling where the models that perform (currently) the best are complex black-box algorithm massaging hundreds of variables and providing seemingly accurate predictions (but see <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2011.02659.x/full">this paper on ways</a> to bridge this gap).</p>
+
+<p>There have been recent calls to make ecology more of a predictive science (see), arguing that for ecology to be taken up by society and policy-maker we should make relevant and accurate predictions. Actually some have argued along these lines for quite some time now (See eg Peters’ book).
+As argued above and <a href="https://biologyforfun.wordpress.com/2017/01/24/prediction-in-ecology-implementing-a-priority/">in a previous post</a>, there will be some tension when developing models aimed at having high predictive power between understanding (derived from mechanisms, cause and experiment) and prediction. It might well be that the best model in terms of predictive power might not be a super-complex meta-SEM derived from careful experimental work unraveling the mechanisms at play, it might be that a machine learning algorithm fed with millions of data will perfom better. The question for me is what is the niche for causality in a science turned towards prediction?</p>
+
+<p>I’ll be happy to hear from you, dear reader, if you have some ideas or some critics regarding this important topic.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#causality" class="page__taxonomy-item" rel="tag">causality</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ecology" class="page__taxonomy-item" rel="tag">ecology</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#prediction" class="page__taxonomy-item" rel="tag">prediction</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#sems" class="page__taxonomy-item" rel="tag">SEMs</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#biological-stuff" class="page__taxonomy-item" rel="tag">Biological Stuff</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/categories/#opinion-posts" class="page__taxonomy-item" rel="tag">Opinion Posts</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-07-10T00:00:00+02:00">July 10, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Cause%2C+mechanism+and+prediction+in+ecology%20http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fcause-mechanism-and-prediction-in-ecology%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fcause-mechanism-and-prediction-in-ecology%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fcause-mechanism-and-prediction-in-ecology%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fbiological%2520stuff%2Fopinion%2520posts%2Fcause-mechanism-and-prediction-in-ecology%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/r%20and%20stat/adding-group-level-predictors-in-glmm-using-lme4/" class="pagination--pager" title="Adding group-level predictors in GLMM using lme4
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" class="pagination--pager" title="Introduction to point pattern analysis for ecologists
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/adding-group-level-predictors-in-glmm-using-lme4/" rel="permalink">Adding group-level predictors in GLMM using lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Sometime I happen to be wrong, this is one of these instance. The issue: a colleague measured individual plant growth and measured light irradiation received...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

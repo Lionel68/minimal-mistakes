@@ -1,0 +1,721 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>DataFrame manipulation in R from basics to dplyr - biologyforfun</title>
+
+
+
+
+<meta name="description" content="In my surroundings at work I see quite a few people managing their data in spreadsheet software like Excel or Calc, these software will do the work but I usually tend to do as little data manipulation in them as possible and to turn as soon as possible my spreadsheets into csv files and then bring the data to R where every single manipulation I do on them is recorded by default in the history (if you use RStudio) or in scripts if you are documenting your work (which should always be the way to go). The aim of this post is to show how to do some manipulations often done on data (ie subsetting, summarizing, ordering …) in R. As always there are a thousand way to do an operation, I will go through the basic way to do these manipulation using the vector-based approach of R and then at the end show how new libraries allow you to do these manipulation on data frame using code easily understandable for those not grasping (yet) the magic of vector-based operations. (As always a nicer RPubs version of this article is available at: http://rpubs.com/Lionel/33216, if anyone around now how to transfer .Rmd files to Wordpress blog I’ll be glad to hear about it)">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="DataFrame manipulation in R from basics to dplyr">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/dataframe-manipulation-in-r-from-basics-to-dplyr/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/dataframe-manipulation-in-r-from-basics-to-dplyr/">
+
+
+
+  <meta property="og:description" content="In my surroundings at work I see quite a few people managing their data in spreadsheet software like Excel or Calc, these software will do the work but I usually tend to do as little data manipulation in them as possible and to turn as soon as possible my spreadsheets into csv files and then bring the data to R where every single manipulation I do on them is recorded by default in the history (if you use RStudio) or in scripts if you are documenting your work (which should always be the way to go). The aim of this post is to show how to do some manipulations often done on data (ie subsetting, summarizing, ordering …) in R. As always there are a thousand way to do an operation, I will go through the basic way to do these manipulation using the vector-based approach of R and then at the end show how new libraries allow you to do these manipulation on data frame using code easily understandable for those not grasping (yet) the magic of vector-based operations. (As always a nicer RPubs version of this article is available at: http://rpubs.com/Lionel/33216, if anyone around now how to transfer .Rmd files to Wordpress blog I’ll be glad to hear about it)">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-10-11T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="DataFrame manipulation in R from basics to dplyr">
+    <meta itemprop="description" content="In my surroundings at work I see quite a few people managing their data in spreadsheet software like Excel or Calc, these software will do the work but I usually tend to do as little data manipulation in them as possible and to turn as soon as possible my spreadsheets into csv files and then bring the data to R where every single manipulation I do on them is recorded by default in the history (if you use RStudio) or in scripts if you are documenting your work (which should always be the way to go). The aim of this post is to show how to do some manipulations often done on data (ie subsetting, summarizing, ordering …) in R. As always there are a thousand way to do an operation, I will go through the basic way to do these manipulation using the vector-based approach of R and then at the end show how new libraries allow you to do these manipulation on data frame using code easily understandable for those not grasping (yet) the magic of vector-based operations. (As always a nicer RPubs version of this article is available at: http://rpubs.com/Lionel/33216, if anyone around now how to transfer .Rmd files to Wordpress blog I’ll be glad to hear about it)">
+    <meta itemprop="datePublished" content="October 11, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">DataFrame manipulation in R from basics to dplyr
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>In my surroundings at work I see quite a few people managing their data in spreadsheet software like Excel or Calc, these software will do the work but I usually tend to do as little data manipulation in them as possible and to turn as soon as possible my spreadsheets into csv files and then bring the data to R where every single manipulation I do on them is recorded by default in the history (if you use RStudio) or in scripts if you are documenting your work (which should always be the way to go). The aim of this post is to show how to do some manipulations often done on data (ie subsetting, summarizing, ordering …) in R. As always there are a thousand way to do an operation, I will go through the basic way to do these manipulation using the vector-based approach of R and then at the end show how new libraries allow you to do these manipulation on data frame using code easily understandable for those not grasping (yet) the magic of vector-based operations. (As always a nicer RPubs version of this article is available at: http://rpubs.com/Lionel/33216, if anyone around now how to transfer .Rmd files to Wordpress blog I’ll be glad to hear about it)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#################
+#Data management#
+#################
+
+
+#the data frame I will use
+data&lt;-data.frame(Factor1=rep(LETTERS[1:5],each=20),Factor2=sample(letters[1:10],100,replace=TRUE),Var1=rnorm(100,2,4),Var2=rpois(100,2))
+#some simple summary
+summary(data)
+table(data$Factor1)
+table(data$Factor2)
+
+#####basic way using vectors######
+#subsetting
+#only keep observation with Factor1 equal to A
+sub1&lt;-subset(data,Factor1=="A")
+#only keep observation with Factor1 equal to A and Var2 lower than 4
+data$Factor1=="A"
+sub2&lt;-data[data$Factor1=="A" &amp; data$Var2&lt;4,]
+summary(sub2)
+#only keep every thrird rows
+head(data[seq(1,nrow(data),3),])
+#only keep row number 2,6,13,22 from column 1 and 4
+data[c(2,6,13,22),c(1,4)] #when numbers are following each other can use :, ie 1:10
+
+#summarising
+library(plyr)
+#get the mean value and standard error of Var1 for each level of Factor1
+rbind.fill(by(data,data$Factor1,function(x) return(data.frame(Factor1=unique(x$Factor1),Mean=mean(x$Var1),SE=sd(x$Var1)/sqrt(length(x$Var1))))))
+#get the 25% and 75% quantile for Var2 for each level of Factor2
+rbind.fill(by(data,data$Factor2,function(x) return(data.frame(Factor2=unique(x$Factor2),Q_25=quantile(x$Var2,prob=0.25),Q_75=quantile(x$Var2,prob=0.75)))))
+</code></pre></div></div>
+
+<p>Wow these two last calls can seem rather intimidating at first but as always you need to start by the center and then walk away from it to understand what is happening in these two lines, let’s look at the first one for example. First we call an un-named function on the dataframe data and we apply this function to each level of data$Factor1 separately, we pass these chunks of data to the function and call them x, now this function will return a dataframe made of three columns, the first one named Factor1 take the unique value present in the column Factor1 of the x chunks, the second one takes the mean of the Var1 values, the third one divide the standard deviation of Var1 values by the square root of the number of observations (giving the standard error around the mean). As the by function will return a series of dataframe we can combine them together in one dataframe using rbind.fill. This is rather long lines of code, keep them in mind as at the end of the post you will see how to do this in a different way.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#changing column order
+data&lt;-data[,c(1,4,3,2)]
+head(data)
+#also work with column names
+data&lt;-data[,c("Factor1","Var1","Factor2","Var2")]
+head(data)
+#sorting the rows first by Factor1 then by Factor2
+data&lt;-data[do.call(order,list(data$Factor1,data$Factor2)),]
+
+######increasing complexity, switching from long to wide format########
+library(reshape2)
+#the long format makes one column keeping the info on a grouping variable (eg Sex) instead of making a separate column for each levels
+#the object data is for example in a long format, we may want to make a separate column for each level of Factor1 and storing Var1 in the rows
+data$Observation&lt;-rep(1:20,time=5)
+data_wide&lt;-dcast(Observation~Factor1,data = data,value.var = "Var1") #the left-hand side of the formula is the variable that will make up the rows the right hand side the columns
+#if certain combination are missing one can use the fill argument
+data_wide&lt;-dcast(Factor2~Factor1,data=data,fun.aggregate = length,fill=0) #here we count how many observations are for each levels of Factor2 and Factor1
+#other functions can be provided if nore then one values are present in each cells
+data_wide&lt;-dcast(Factor2~Factor1,data=data,fun.aggregate = sum,value.var="Var2",fill=0)
+#turning back the data to a long format
+data_long&lt;-melt(data_wide,value.name = "Sum_Var2",id.vars="Factor2",variable.name = "Factor1") #melt the data frame id.vars correspond to the column that contain the factor infos
+#long format are then pretty handy to use for plotting
+library(ggplot2)
+ggplot(data_long,aes(x=Factor2,y=Sum_Var2,colour=Factor1))+geom_point()
+#but is also the way the data should be structure for data analysis:
+lm(Sum_Var2~Factor2+Factor1,data_long)
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/10/data1.png"><img src="https://biologyforfun.files.wordpress.com/2014/10/data1.png" alt="data1" /></a></p>
+
+<p>For more about long and wide format you can also look at the great article in the R cookbook on this: http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/.
+Now let’s turn to a new library that came out to my attention recently and that is extremely elegant and easy to use. More info on this library: http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#####using the dplyr to turn all data manipulation easy######
+library(dplyr)
+#the five functions of dplyr, dplyr works with data frame instead of vectors which makes data frame manipulation much more straightforward
+filter(data,Factor1%in%c("A","D"),Var1&gt;=0) #similar to subset
+head(select(data,contains("factor",ignore.case=TRUE))) #only return some specific columns see ?select for more possibilities
+head(arrange(data,Factor1,Var1))
+head(mutate(data,Var3=Var1+Var2,M_1=(Observation+Var2)/length(Var2)))
+summarise(data,sum(Var2))
+#summarise becomes extremely handy when use with group_by
+data_d&lt;-summarise(group_by(data,Factor1),Mean=mean(Var1),SE=sd(Var1)/sqrt(n())) #remember the huge by function needed to get the same results
+#the n() function is built-in with dplyr and count how many element there are
+#going from the full dataset to a graph summarising mean difference between factor is swift and painless using these functions
+ggplot(data_d,aes(x=Factor1,y=Mean))+geom_point(colour="red",size=3,show_guide=FALSE)+geom_errorbar(aes(ymin=Mean-2*SE,ymax=Mean+2*SE),width=.1)
+</code></pre></div></div>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2014/10/data2.png"><img src="https://biologyforfun.files.wordpress.com/2014/10/data2.png" alt="data2" /></a></p>
+
+<p>As always as you dwell deeper in these topics you can see that the options are extremely numerous which makes R extremely enjoyable for data manipulation once the basics are understood. As R is used nowadays for most of the data analysis (in my field of work at least), I see it natural to bring the data as soon as possible into R to really play with it and grasp there structure instead of just doing linear models in R and then using other software to make plots or observe basic patterns in the data. Enjoy your data manips’!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#dplyr" class="page__taxonomy-item" rel="tag">dplyr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-10-11T00:00:00+02:00">October 11, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=DataFrame+manipulation+in+R+from+basics+to+dplyr%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fdataframe-manipulation-in-r-from-basics-to-dplyr%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fdataframe-manipulation-in-r-from-basics-to-dplyr%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fdataframe-manipulation-in-r-from-basics-to-dplyr%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fdataframe-manipulation-in-r-from-basics-to-dplyr%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/first-scientific-conference-inspiration-meetings-and-walking/" class="pagination--pager" title="First scientific conference; Inspiration, Meetings and Walking
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/happy-birthday-biologyforfun/" class="pagination--pager" title="Happy birthday biologyforfun
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/dataframe-manipulation-in-r-from-basics-to-dplyr/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/dataframe-manipulation-in-r-from-basics-to-dplyr"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

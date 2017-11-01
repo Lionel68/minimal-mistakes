@@ -1,0 +1,701 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Regular expression and associated functions in R - biologyforfun</title>
+
+
+
+
+<meta name="description" content="When working with strings regular expressions are an extremely powerful tool to look for specific patterns in the strings. In informatics a string is several characters put together, this can be words, sentences, or DNA code. Regular expression were developed in the fifties (thanks to Jeff Newmiller comment) by computer scientists (https://en.wikipedia.org/wiki/Regular_expression) and I discovered them using Perl (http://www.perl.org/). They have also been implemented in various other programming languages due to their nice functionalities. Here I will present the functions in R that use regular expression and will present some general use of regular expression in ecology. As always a cleaner version of the post is available at: http://rpubs.com/Lionel/19068">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Regular expression and associated functions in R">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/regular-expression-and-associated-functions-in-r/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/regular-expression-and-associated-functions-in-r/">
+
+
+
+  <meta property="og:description" content="When working with strings regular expressions are an extremely powerful tool to look for specific patterns in the strings. In informatics a string is several characters put together, this can be words, sentences, or DNA code. Regular expression were developed in the fifties (thanks to Jeff Newmiller comment) by computer scientists (https://en.wikipedia.org/wiki/Regular_expression) and I discovered them using Perl (http://www.perl.org/). They have also been implemented in various other programming languages due to their nice functionalities. Here I will present the functions in R that use regular expression and will present some general use of regular expression in ecology. As always a cleaner version of the post is available at: http://rpubs.com/Lionel/19068">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2014-06-01T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Regular expression and associated functions in R">
+    <meta itemprop="description" content="When working with strings regular expressions are an extremely powerful tool to look for specific patterns in the strings. In informatics a string is several characters put together, this can be words, sentences, or DNA code. Regular expression were developed in the fifties (thanks to Jeff Newmiller comment) by computer scientists (https://en.wikipedia.org/wiki/Regular_expression) and I discovered them using Perl (http://www.perl.org/). They have also been implemented in various other programming languages due to their nice functionalities. Here I will present the functions in R that use regular expression and will present some general use of regular expression in ecology. As always a cleaner version of the post is available at: http://rpubs.com/Lionel/19068">
+    <meta itemprop="datePublished" content="June 01, 2014">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Regular expression and associated functions in R
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>When working with strings regular expressions are an extremely powerful tool to look for specific patterns in the strings. In informatics a string is several characters put together, this can be words, sentences, or DNA code. Regular expression were developed in the fifties (thanks to Jeff Newmiller comment) by computer scientists (https://en.wikipedia.org/wiki/Regular_expression) and I discovered them using Perl (http://www.perl.org/). They have also been implemented in various other programming languages due to their nice functionalities. Here I will present the functions in R that use regular expression and will present some general use of regular expression in ecology. As always a cleaner version of the post is available at: http://rpubs.com/Lionel/19068</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#regular expression functions, there are 7 functions that can use regular expression
+?grep
+</code></pre></div></div>
+
+<p>These functions will look for a certain pattern in the provided string(s), that may be a vector of strings.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># example using grep
+words &lt;- c("abc", "Cde", "Truc", "Machin")  #a vector of string
+grep("c", words)  #looking for 'C' in each element of the vector, this return the index of the element in the vector containing the pattern ('C')
+grep("c", words, value = TRUE)  #same but return the element of the vector containing the pattern
+# by default grep is case-sensitive, can be turned to case-insensitive
+grep("C", words, ignore.case = TRUE)
+# example using grepl
+grepl("c", words)  #return a vector of logical indicating if the pattern was found in the elements of the vector
+# example using sub and gsub, these two function replace the pattern by a
+# replacement value specified by the user
+species &lt;- c("Rattus_domesticus", "Formica_rufa", "Germanium_pratense_germanica")
+sub("_", " ", species)  #sub will only replace the first occurence of the pattern in the string
+gsub("_", " ", species)  #gsub will replace all occurences
+# example using regexpr and gregexpr
+species &lt;- c("Onthophagus_vacca", "Copris_hispanus", "Carabus_hispanus_hispanus")
+regexpr("hisp", species)  #regexpr return the position in the string of the first occurence of the pattern as well as the length of the pattern matched
+gregexpr("hisp", species)  #gregexpr will return the position of all matched occurence of the pattern
+regexec("hisp", species)  #similar as regexpr but with a different output formatting
+</code></pre></div></div>
+
+<p>As seen in the few examples above when we have a clear idea of what the pattern is that we want to match we can just use it for the pattern argument in the functions. However sometimes we do not know the exact form of the pattern or we want to match at one time several closely related strings, this is where regular expressions come into play. They are an abstracted way to represent the different element (letters, digits, space …) present in the strings.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># the regular expression help page in R
+?regex
+# regular expression with 5 different strings
+words &lt;- c("Bonjour", "Bienvenue", "Au revoir", "A la bonne heure", "2 heures")
+#'\\w' will match any letters (a-z) present in the strings
+grep("\\w", words)  #there are letters in all elements of the string
+# now if we want to keep only elements having exactly 7 letters we use:
+grep("\\w{7}", words)
+# we can also match digits using '\\d', space '\\s' and their negation:
+# '\\W','\\D','\\S' could you guess what the coming regular expression
+# will match?
+grep("\\w{2}\\W\\w+", words, value = TRUE)
+# by placing '^' we match from the beginning of the string, similarly $ will
+# match the end
+grep("^\\w{2}\\W\\w+$", words, value = TRUE)
+# a last one using '\\d'
+grep("\\d\\W\\w+", words, value = TRUE)
+</code></pre></div></div>
+
+<p>Several comments, using {n} will look for a string where the item is matched n times, {n,} matched n or more times, {n,m} matched at least n times but no more than m times. We can also use + for matching an item one or more times and * for matching zero or more times. Have a look at ?regex where everything is explained in length.</p>
+
+<p>Now I used regular expression most of the time to specifically format labels or species names, this is where gsub in combination with regular expression become very handy. For example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># We have three labels with a plot ID BX followed by a genus species
+# information with 3 letters each (Poatri = Poa trivialis), we would like to
+# have the first letter for the genus and the species as upper-case
+species &lt;- c("B1_Poatri", "B2_PlaLan", "B3_lAtPRA")
+# in sub and gsub we can put part of the pattern between parentheses to call
+# it in the replacement argument
+gsub(".{5}(\\w{1}).*", "\\1", species)
+# now we use the argument perl=TRUE to use the \\U and \\L special
+# symbols that set the following letters to upper and lower-case
+# respectively
+gsub("(.{3})(\\w{1})(\\w{2})(\\w{1})(\\w{2})", "\\1\\U\\2\\L\\3\\U\\4\\L\\5", 
+    species, perl = TRUE)
+</code></pre></div></div>
+
+<p>Here is the end of this first overview of regular expression in R, I used them quite often for formatting strings when I don’t want to spend hours with calc. There are many subtleties not covered here (UTF-8 mode, perl mode …) but these informations should be enough to get everyone started.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#perl" class="page__taxonomy-item" rel="tag">Perl</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-06-01T00:00:00+02:00">June 01, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Regular+expression+and+associated+functions+in+R%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fregular-expression-and-associated-functions-in-r%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fregular-expression-and-associated-functions-in-r%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fregular-expression-and-associated-functions-in-r%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fregular-expression-and-associated-functions-in-r%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/opinion%20posts/pourquoi-je-vais-aller-voter-le-25-mai/" class="pagination--pager" title="Pourquoi je vais aller voter le 25 mai
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/r%20and%20stat/using-bootmer-to-do-model-comparison-in-r/" class="pagination--pager" title="Using bootMer to do model comparison in R
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/regular-expression-and-associated-functions-in-r/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/regular-expression-and-associated-functions-in-r"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

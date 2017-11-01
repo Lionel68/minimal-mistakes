@@ -10,3 +10,15 @@ main:
     url: /blog/
   # - title: "Sitemap"
   #   url: /sitemap/
+
+docs:
+  - title: Blog quick-links
+    children:
+      - title: Categories
+        url: /categories/
+      - title: Tags
+        url: /tags/
+  - title: Blogroll
+    children:
+      - title: biologyforfun
+        url: http://biologyforfun.wordpress.com/

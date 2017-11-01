@@ -4,6 +4,8 @@ layout: archive
 permalink: /blog/
 author_profile: true
 comments: true
+sidebar:
+  nav: 'docs'
 ---
 
 This is my blog page.

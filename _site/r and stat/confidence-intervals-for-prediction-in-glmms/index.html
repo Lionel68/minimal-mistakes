@@ -1,0 +1,765 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Confidence Intervals for prediction in GLMMs - biologyforfun</title>
+
+
+
+
+<meta name="description" content="With LM and GLM the predict function can return the standard error for the predicted values on either the observed data or on new data. This is then used to draw confidence or prediction intervals around the fitted regression lines. The confidence intervals (CI) focus on the regression lines and can be interpreted as (assuming that we draw 95% CI): “If we would repeat our sampling X times the regression line would fall between this interval 95% of the time”. On the other hand the prediction interval focus on single data point and could be interpreted as (again assuming that we draw 95% CI): “If we would sample X times at these particular value for the explanatory variables, the response value would fall between this interval 95% of the time”. The wikipedia page has some nice explanation about the meaning of confidence intervals.For GLMM the predict function does not allow one to derive standard error, the reason being (from the help page of predict.merMod): “There is no option for computing standard errors of predictions because it is difficult to define an efficient method that incorporates uncertainty in the variance parameters”. This means there is for now no way to include in the computation of the standard error for predicted values the fact that the fitted random effect standard deviation are just estimates and may be more or less well estimated. We can however still derive confidence or prediction intervals keeping in mind that we might underestimate the uncertainty around the estimates.">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Confidence Intervals for prediction in GLMMs">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/confidence-intervals-for-prediction-in-glmms/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/confidence-intervals-for-prediction-in-glmms/">
+
+
+
+  <meta property="og:description" content="With LM and GLM the predict function can return the standard error for the predicted values on either the observed data or on new data. This is then used to draw confidence or prediction intervals around the fitted regression lines. The confidence intervals (CI) focus on the regression lines and can be interpreted as (assuming that we draw 95% CI): “If we would repeat our sampling X times the regression line would fall between this interval 95% of the time”. On the other hand the prediction interval focus on single data point and could be interpreted as (again assuming that we draw 95% CI): “If we would sample X times at these particular value for the explanatory variables, the response value would fall between this interval 95% of the time”. The wikipedia page has some nice explanation about the meaning of confidence intervals.For GLMM the predict function does not allow one to derive standard error, the reason being (from the help page of predict.merMod): “There is no option for computing standard errors of predictions because it is difficult to define an efficient method that incorporates uncertainty in the variance parameters”. This means there is for now no way to include in the computation of the standard error for predicted values the fact that the fitted random effect standard deviation are just estimates and may be more or less well estimated. We can however still derive confidence or prediction intervals keeping in mind that we might underestimate the uncertainty around the estimates.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-06-17T00:00:00+02:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://biologyforfun.wordpress.com/" class="">biologyforfun</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Confidence Intervals for prediction in GLMMs">
+    <meta itemprop="description" content="With LM and GLM the predict function can return the standard error for the predicted values on either the observed data or on new data. This is then used to draw confidence or prediction intervals around the fitted regression lines. The confidence intervals (CI) focus on the regression lines and can be interpreted as (assuming that we draw 95% CI): “If we would repeat our sampling X times the regression line would fall between this interval 95% of the time”. On the other hand the prediction interval focus on single data point and could be interpreted as (again assuming that we draw 95% CI): “If we would sample X times at these particular value for the explanatory variables, the response value would fall between this interval 95% of the time”. The wikipedia page has some nice explanation about the meaning of confidence intervals.For GLMM the predict function does not allow one to derive standard error, the reason being (from the help page of predict.merMod): “There is no option for computing standard errors of predictions because it is difficult to define an efficient method that incorporates uncertainty in the variance parameters”. This means there is for now no way to include in the computation of the standard error for predicted values the fact that the fitted random effect standard deviation are just estimates and may be more or less well estimated. We can however still derive confidence or prediction intervals keeping in mind that we might underestimate the uncertainty around the estimates.">
+    <meta itemprop="datePublished" content="June 17, 2015">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Confidence Intervals for prediction in GLMMs
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>With LM and GLM the predict function can return the standard error for the predicted values on either the observed data or on new data. This is then used to draw confidence or prediction intervals around the fitted regression lines. The confidence intervals (CI) focus on the regression lines and can be interpreted as (assuming that we draw 95% CI): “If we would repeat our sampling X times the regression line would fall between this interval 95% of the time”. On the other hand the prediction interval focus on single data point and could be interpreted as (again assuming that we draw 95% CI): “If we would sample X times at these particular value for the explanatory variables, the response value would fall between this interval 95% of the time”. The <a href="https://en.wikipedia.org/wiki/Confidence_interval#Meaning_and_interpretation">wikipedia page</a> has some nice explanation about the meaning of confidence intervals.
+For GLMM the predict function does not allow one to derive standard error, the reason being (from the help page of predict.merMod): “There is no option for computing standard errors of predictions because it is difficult to define an efficient method that incorporates uncertainty in the variance parameters”. This means there is for now no way to include in the computation of the standard error for predicted values the fact that the fitted random effect standard deviation are just estimates and may be more or less well estimated. We can however still derive confidence or prediction intervals keeping in mind that we might underestimate the uncertainty around the estimates.</p>
+
+<p>[code language=”r”]</p>
+
+<p>library(lme4)</p>
+
+<p>#first case simple lmer, simulate 100 data points from 10 groups with one continuous fixed effect variable
+x&lt;-runif(100,0,10)
+f&lt;-gl(n = 10,k = 10)
+data&lt;-data.frame(x=x,f=f)
+modmat&lt;-model.matrix(~x,data)
+#the fixed effect coefficient
+fixed&lt;-c(1,0.5)
+#the random effect
+rnd&lt;-rnorm(10,0,0.7)
+#the simulated response values
+data$y&lt;-rnorm(100,modmat%*%fixed+rnd[f],0.3)</p>
+
+<p>#model
+m&lt;-lmer(y~x+(1|f),data)</p>
+
+<p>#first CI and PI using predict-like method, using code posted here: http://glmm.wikidot.com/faq
+newdat&lt;-data.frame(x=seq(0,10,length=20))
+mm&lt;-model.matrix(~x,newdat)
+newdat$y&lt;-mm%<em>%fixef(m) 
+#predict(m,newdat,re.form=NA) would give the same results
+pvar1 &lt;- diag(mm %</em>% tcrossprod(vcov(m),mm))
+tvar1 &lt;- pvar1+VarCorr(m)$f[1] # must be adapted for more complex models
+newdat &lt;- data.frame(
+  newdat
+  , plo = newdat$y-1.96<em>sqrt(pvar1)
+  , phi = newdat$y+1.96</em>sqrt(pvar1)
+  , tlo = newdat$y-1.96<em>sqrt(tvar1)
+  , thi = newdat$y+1.96</em>sqrt(tvar1)
+)</p>
+
+<p>#second version with bootMer
+#we have to define a function that will be applied to the nsim simulations
+#here we basically get a merMod object and return the fitted values
+predFun&lt;-function(.) mm%*%fixef(.) 
+bb&lt;-bootMer(m,FUN=predFun,nsim=200) #do this 200 times
+#as we did this 200 times the 95% CI will be bordered by the 5th and 195th value
+bb_se&lt;-apply(bb$t,2,function(x) x[order(x)][c(5,195)])
+newdat$blo&lt;-bb_se[1,]
+newdat$bhi&lt;-bb_se[2,]</p>
+
+<p>plot(y~x,data)
+lines(newdat$x,newdat$y,col=”red”,lty=2,lwd=3)
+lines(newdat$x,newdat$plo,col=”blue”,lty=2,lwd=2)
+lines(newdat$x,newdat$phi,col=”blue”,lty=2,lwd=2)
+lines(newdat$x,newdat$tlo,col=”orange”,lty=2,lwd=2)
+lines(newdat$x,newdat$thi,col=”orange”,lty=2,lwd=2)
+lines(newdat$x,newdat$bhi,col=”darkgreen”,lty=2,lwd=2)
+lines(newdat$x,newdat$blo,col=”darkgreen”,lty=2,lwd=2)
+legend(“topleft”,legend=c(“Fitted line”,”Confidence interval”,”Prediction interval”,”Bootstrapped CI”),col=c(“red”,”blue”,”orange”,”darkgreen”),lty=2,lwd=2,bty=”n”)</p>
+
+<p>[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/06/bootglmm1.png"><img src="https://biologyforfun.files.wordpress.com/2015/06/bootglmm1.png" alt="bootGLMM1" /></a></p>
+
+<p>This looks pretty familiar, the prediction interval being always bigger than the confidence interval.
+Now in the help page for the predict.merMod function the authors of the lme4 package wrote that bootMer should be the prefered method to derive confidence intervals from GLMM. The idea there is to simulate N times new data from the model and get some statistic of interest. In our case we are interested in deriving the bootstrapped fitted values to get confidence interval for the regression line. bb$t is a matrix with the observation in the column and the different bootstrapped samples in the rows. To get the 95% CI for the fitted line we then need to get the [0.025<em>N,0.975</em>N] values of the sorted bootstrapped values.</p>
+
+<p>The bootstrapped CI falls pretty close to the “normal” CI, even if for each bootstrapped sample new random effect values were calculated (because use.u=FALSE per default in bootMer)</p>
+
+<p>Now let’s turn to a more complex example, a Poisson GLMM with two crossed random effects:</p>
+
+<p>[code language=”r”]</p>
+
+<p>#second case more complex design with two crossed RE and a poisson response
+x&lt;-runif(100,0,10)
+f1&lt;-gl(n = 10,k = 10)
+f2&lt;-as.factor(rep(1:10,10))
+data&lt;-data.frame(x=x,f1=f1,f2=f2)
+modmat&lt;-model.matrix(~x,data)</p>
+
+<p>fixed&lt;-c(-0.12,0.35)
+rnd1&lt;-rnorm(10,0,0.7)
+rnd2&lt;-rnorm(10,0,0.2)</p>
+
+<p>mus&lt;-modmat%*%fixed+rnd1[f1]+rnd2[f2]
+data$y&lt;-rpois(100,exp(mus))</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>m&lt;-glmer(y~x+(1</td>
+      <td>f1)+(1</td>
+      <td>f2),data,family=”poisson”)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>#for GLMMs we have to back-transform the prediction after adding/removing the SE
+newdat&lt;-data.frame(x=seq(0,10,length=20))
+mm&lt;-model.matrix(~x,newdat)
+y&lt;-mm%<em>%fixef(m)
+pvar1 &lt;- diag(mm %</em>% tcrossprod(vcov(m),mm))
+tvar1 &lt;- pvar1+VarCorr(m)$f1[1]+VarCorr(m)$f2[1]  ## must be adapted for more complex models
+newdat &lt;- data.frame(
+  x=newdat$x,
+  y=exp(y),
+   plo = exp(y-1.96<em>sqrt(pvar1))
+  , phi = exp(y+1.96</em>sqrt(pvar1))
+  , tlo = exp(y-1.96<em>sqrt(tvar1))
+  , thi = exp(y+1.96</em>sqrt(tvar1))
+)</p>
+
+<p>#second version with bootMer
+predFun&lt;-function(.) exp(mm%*%fixef(.)) 
+bb&lt;-bootMer(m,FUN=predFun,nsim=200)
+bb_se&lt;-apply(bb$t,2,function(x) x[order(x)][c(5,195)])
+newdat$blo&lt;-bb_se[1,]
+newdat$bhi&lt;-bb_se[2,]</p>
+
+<p>#plot
+plot(y~x,data)
+lines(newdat$x,newdat$y,col=”red”,lty=2,lwd=3)
+lines(newdat$x,newdat$plo,col=”blue”,lty=2,lwd=2)
+lines(newdat$x,newdat$phi,col=”blue”,lty=2,lwd=2)
+lines(newdat$x,newdat$tlo,col=”orange”,lty=2,lwd=2)
+lines(newdat$x,newdat$thi,col=”orange”,lty=2,lwd=2)
+lines(newdat$x,newdat$bhi,col=”darkgreen”,lty=2,lwd=2)
+lines(newdat$x,newdat$blo,col=”darkgreen”,lty=2,lwd=2)
+legend(“topleft”,legend=c(“Fitted line”,”Confidence interval”,”Prediction interval”,”Bootstrapped CI”),col=c(“red”,”blue”,”orange”,”darkgreen”),lty=2,lwd=2,bty=”n”)</p>
+
+<p>[/code]</p>
+
+<p><a href="https://biologyforfun.files.wordpress.com/2015/06/bootglmm2.png"><img src="https://biologyforfun.files.wordpress.com/2015/06/bootglmm2.png" alt="bootGLMM2" /></a></p>
+
+<p>Again in this case the bootstrapped CI falled pretty close to the “normal” CI. We have here seen three different way to derive intervals representing the uncertainty around the regression lines (CI) and the response points (PI). Choosing among them would depend on what you want to see (what is the level of uncertainty around my fitted line vs if I sample new observations which value will they take), but also for complex model on computing power, as bootMer can take some time to run for GLMM with many observations and complex model structure.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#glmm" class="page__taxonomy-item" rel="tag">GLMM</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2015-06-17T00:00:00+02:00">June 17, 2015</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Confidence+Intervals+for+prediction+in+GLMMs%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fconfidence-intervals-for-prediction-in-glmms%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fconfidence-intervals-for-prediction-in-glmms%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fconfidence-intervals-for-prediction-in-glmms%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fconfidence-intervals-for-prediction-in-glmms%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/exploration-of-functional-diversity-indices-using-shiny/" class="pagination--pager" title="Exploration of Functional Diversity indices using Shiny
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/count-data-to-log-or-not-to-log/" class="pagination--pager" title="Count data: To Log or Not To Log
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  8 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/confidence-intervals-for-prediction-in-glmms/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/confidence-intervals-for-prediction-in-glmms"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+  </body>
+</html>

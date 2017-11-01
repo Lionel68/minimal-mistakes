@@ -1,11 +1,869 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-10-29T13:03:45+01:00</updated><id>http://localhost:4000/</id><title type="html">biologyforfun</title><subtitle></subtitle><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><entry><title type="html">Hello world</title><link href="http://localhost:4000/jekyll/moving_to_a_new_world/" rel="alternate" type="text/html" title="Hello world" /><published>2017-10-28T00:00:00+02:00</published><updated>2017-10-28T00:00:00+02:00</updated><id>http://localhost:4000/jekyll/moving_to_a_new_world</id><content type="html" xml:base="http://localhost:4000/jekyll/moving_to_a_new_world/">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-11-01T17:12:14+01:00</updated><id>http://localhost:4000/</id><title type="html">biologyforfun</title><subtitle></subtitle><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><entry><title type="html">Mind the gap: when the news article run ahead of the science</title><link href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="alternate" type="text/html" title="Mind the gap: when the news article run ahead of the science" /><published>2017-10-18T00:00:00+02:00</published><updated>2017-10-18T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/">&lt;p&gt;This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;Scrolling through lemonde.fr website I found &lt;a href=&quot;http://www.lemonde.fr/biodiversite/article/2017/10/18/en-trente-ans-pres-de-80-des-insectes-auraient-disparu-en-europe_5202939_1652692.html&quot;&gt;this article&lt;/a&gt; about a long-term study that looked at the long-term changes in insect biomass. In this article one can reads:&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;‘Le facteur majeur permettant d’expliquer un effondrement aussi rapide, avancent les auteurs, est l’intensification des pratiques agricoles’&lt;/p&gt;
 
-&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rnorm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;In english this gives (more or less): ‘According to the authors, the major driver explaining this swift collapse is the agricultural intensification’.&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+&lt;p&gt;Woaw, this topic being dear to me I tracked down the article: ‘&lt;a href=&quot;http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0185809&quot;&gt;More than 75 percent decline over 27 years in total flying insect biomass in protected areas&lt;/a&gt;’ by Hallmann et al. Which is a very cool one with a nice dataset based on 27 years of observations in protected areas in western Germany. The data has been collected using standardized sampling method by the &lt;a href=&quot;http://www.entomologica.org/&quot;&gt;entomological society of Krefeld&lt;/a&gt; (will expand in a later post on the invaluable role these societies have been and will be playing in documenting biodiversity and its changes). So all very nice, except, that the study provides no information regarding the effect of changing agricultural practices on insect biomass. Read that least sentence again. Got it? The authors state: ‘Agricultural intensification (e.g. pesticide usage, year-round tillage, increased use of fertilizers and frequency of agronomic measures) that we could not incorporate in our analyses, may form a plausible cause’, that’s it. This study reports that insect biomass have been declining by around 76% over 27 years but when the authors tried to model this decline, residual variations was way larger than the contribution of the tested covariates. So basically, insect biomass is strongly declining but we do not why.&lt;/p&gt;
+
+&lt;p&gt;This does not diminish the importance of this study which is super important in reporting temporal trends in biomass (remember &lt;a href=&quot;http://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(14)00245-6?_returnURL=http%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0169534714002456%3Fshowall%3Dtrue&quot;&gt;this article&lt;/a&gt;?) for taxa that are currently understudied. So thumbs up to the authors and the entomological society of Krefeld, but thumbs down to the speedy journalists that are looking for some catchy title and fast conclusion. I found a couple of nicer and more balanced press coverage of this article, like &lt;a href=&quot;https://phys.org/news/2017-10-percent-decrease-total-insect-biomass.html&quot;&gt;this one&lt;/a&gt;, or &lt;a href=&quot;http://www.the-scientist.com/?articles.view/articleNo/50673/title/Germany-Sees-Drastic-Decrease-in-Insects/&quot;&gt;that one&lt;/a&gt; that focus way more on the fact that this study is a first step towards a better understanding of the temporal dynamics of insects.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="communication" /><category term="ecology" /><category term="insects" /><category term="journalism" /><summary type="html">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.</summary></entry><entry><title type="html">Interpreting three-way interactions in R</title><link href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="alternate" type="text/html" title="Interpreting three-way interactions in R" /><published>2017-10-03T00:00:00+02:00</published><updated>2017-10-03T00:00:00+02:00</updated><id>http://localhost:4000/r%20and%20stat/three-way-interactions-in-r</id><content type="html" xml:base="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/">&lt;p&gt;A reader asked in a comment to my post on &lt;a href=&quot;https://biologyforfun.wordpress.com/2014/04/08/interpreting-interaction-coefficient-in-r-part1-lm/&quot;&gt;interpreting two-way interactions&lt;/a&gt; if I could also explain interaction between two categorical variables and one continuous variable. Rather than just dwelling on this particular case, here is a full blog post with all possible combination of categorical and continuous variables and how to interprete standard model outputs. Do note that three-way interactions can be (relatively) easy to understand conceptually but when it comes down to interpreting the meaning of individual coefficients it will get pretty tricky.&lt;/p&gt;
+
+&lt;h2 id=&quot;three-categorical-variables&quot;&gt;Three categorical variables&lt;/h2&gt;
+
+&lt;p&gt;The first case is when all three interacting variables are categorical, something like: country, sex, education level.&lt;/p&gt;
+
+&lt;p&gt;The key insight to understand three-way interactions involving categorical variables is to realize that each model coefficient can be switched on or off depending on the level of the factors. It is worth considering the equation for such a model:&lt;/p&gt;
+
+&lt;p&gt;y = Intercept + F12 * (F1 == 2) + F22 * (F2 == 2) + F23 * (F2 == 3) + F24 * (F2 == 4) + \ F32 * (F3 == 2) + F12:F22 * (F1 == 2) * (F2 == 2) + F12:F23 * (F1 ==2) * (F2 == 3) + \ F12:F24 * (F1 == 2) * (F2 == 4) + F12:F32 * (F1 == 2) * (F3 == 2) + F22:F32 * (F2 == 2) * (F3 == 2) + \ F23:F32 * (F2 == 3) * (F3 == 2) + F24:F32 * (F2 == 4) * (F3 == 2) + F12:F22:F32 * (F1 == 2) * (F2 == 2) * (F3 == 2) + \ F12:F23:F32 * (F1 == 2) * (F2 == 3) * (F3 == 2) + F12:F24:F32 * (F1 == 2) * (F2 == 4) * (F3 == 2)&lt;/p&gt;
+
+&lt;p&gt;This might seem overwhelming at first but bear with me a little while longer. In this equation the (FX == Y) are so-called indicator functions, for instance (F1 == 2) returns a 1 when the level of the factor F1 is equal to 2 and return 0 in all other cases. These indicator function will switch on or off the regression coefficient depending on the particular combination of factor levels.&lt;/p&gt;
+
+&lt;p&gt;Got it? No? Then let’s simulate some data to see how an example can help us get a better understanding:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;set.seed(20170925) #to get stable results for nicer plotting
+#three categorical variables
+dat &amp;lt;- data.frame(F1=gl(n = 2,k = 50),
+                  F2=factor(rep(rep(1:4,times=c(12,12,13,13)),2)),
+                  F3=factor(rep(c(1,2),times=50)))
+#the model matrix
+modmat &amp;lt;- model.matrix(~F1*F2*F3,dat)
+#effects
+betas &amp;lt;- runif(16,-2,2)
+#simulate some response
+dat$y &amp;lt;- rnorm(100,modmat%*%betas,1)
+#check the design
+xtabs(~F1+F2+F3,dat)
+#model
+m &amp;lt;- lm(y~F1*F2*F3,dat) 
+summary(m) 
+Call: lm(formula = y ~ F1 * F2 * F3, data = dat)  
+ Residuals: Min 1Q Median 3Q Max   
+-2.23583 -0.49807 0.01231 0.60524 2.31008 
+
+  Coefficients: Estimate Std. Error t value Pr
+(Intercept)   1.2987     0.3908   3.323  0.00132 **
+F12           1.1204     0.5526   2.027  0.04579 *
+F22          -0.7929     0.5526  -1.435  0.15507
+F23          -1.6522     0.5325  -3.103  0.00261 **
+F24           1.4206     0.5526   2.571  0.01191 *
+F32           0.2779     0.5526   0.503  0.61637
+F12:F22      -1.5760     0.7815  -2.017  0.04694 *
+F12:F23      -0.9997     0.7531  -1.327  0.18797
+F12:F24      -0.2002     0.7815  -0.256  0.79846
+F12:F32      -0.5022     0.7815  -0.643  0.52224
+F22:F32      -0.3491     0.7815  -0.447  0.65627
+F23:F32      -2.2512     0.7674  -2.933  0.00432 **
+F24:F32      -0.5596     0.7674  -0.729  0.46791
+F12:F22:F32   0.9872     1.1052   0.893  0.37430
+F12:F23:F32   1.6078     1.0853   1.481  0.14224
+F12:F24:F32   1.8631     1.0853   1.717  0.08972 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Residual standard error: 0.9572 on 84 degrees of freedom
+Multiple R-squared: 0.8051, Adjusted R-squared: 0.7703
+F-statistic: 23.13 on 15 and 84 DF, p-value: &amp;lt; 2.2e-16
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Understanding raw model outcome is made easier by going through specific cases by setting the different variables to different levels.&lt;/p&gt;
+
+&lt;p&gt;For instance say we have an observation where F1 == 1, F2 == 1 and F3 == 1, in this case we have:&lt;/p&gt;
+
+&lt;p&gt;y_i = Intercept + F12 * 0 + F22 * 0 + F23 * 0 + F24 * 0 + F32 * 0 and so on …&lt;/p&gt;
+
+&lt;p&gt;So in this case our model predicted a value of:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+coef(m)[1]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;(Intercept)
+1.298662&lt;/p&gt;
+
+&lt;p&gt;Now if we have F1 == 2, F2 == 1 and F3 == 1 we have:&lt;/p&gt;
+
+&lt;p&gt;y_i = Intercept + F12 * 1 + F22 * 0 + F23 * 0 + F24 * 0 + F32 * 0 and so on …&lt;/p&gt;
+
+&lt;p&gt;Model prediction in this case is:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+coef(m)[1] + coef(m)[2]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;(Intercept)
+2.419048
+``&lt;/p&gt;
+
+&lt;p&gt;Let’s get a bit more complicated, for cases where: F1 == 2, F2 == 3 and F3 == 2:&lt;/p&gt;
+
+&lt;p&gt;y_i = Intercept + F12 * 1 + F22 * 0 + F23 * 1 + F24 * 0 + F32 * 1 + F12:F22 * 0 + F12:F23 * 1 + F12:F32 * 1 + F22:F32 * 0 + F23:F32 * 1 + F24:F32 * 0 + F12:F22:F32 * 0 + F12:F23:F32 * 1 + F12:F24:F32 * 0&lt;/p&gt;
+
+&lt;p&gt;Model prediction in this case is:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+coef(m)[1] + coef(m)[2] + coef(m)[4] + coef(m)[6] + coef(m)[8] + coef(m)[10] + coef(m)[12] + coef(m)[16]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;(Intercept)
+-0.8451774&lt;/p&gt;
+
+&lt;p&gt;The key message from all this tedious writing is that the interpretation of model coefficient involving interactions cannot be easily done when considering coefficient in isolation. One needs to add coefficients together to get predicted values in different cases and then one can compare how going from one level to the next affect the response variable.&lt;/p&gt;
+
+&lt;p&gt;When plotting interactions you have to decide which variables you want to focus on, as depending on how you specify the plot certain comparison will be easier than others. Here I want to focus on the effect of F1 on my response:
+`
+#model prediction
+pred &amp;lt;- expand.grid(F1=factor(1:2),F2=factor(1:4),F3=factor(1:2))
+pred$y &amp;lt;- predict(m,pred)
+#plot
+ggplot(dat,aes(x=F2,y=y,fill=F1))+geom_boxplot(outlier.size = 0,color=NA)+
+facet_grid(~F3,labeller=”label_both”)+
+geom_linerange(data = pred[1:2,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[1,],aes(label=”F12”,hjust=0.4,vjust=4))+
+geom_linerange(data=pred[3:4,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2)+
+geom_text(data = pred[3,],aes(label=”F12+\nF12:F22”,hjust=0.35,vjust=2))+
+geom_linerange(data=pred[5:6,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=4)+
+geom_text(data = pred[5,],aes(label=”F12+\nF12:F23”,hjust=0.35,vjust=-0.5))+
+geom_linerange(data=pred[7:8,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2)+
+geom_text(data = pred[7,],aes(label=”F12+\nF12:F24”,hjust=0.35,vjust=2))+
+geom_linerange(data = pred[9:10,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[9,],aes(label=”F12”,hjust=0.4,vjust=-3))+
+geom_linerange(data = pred[11:12,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[11,],aes(label=”F12+F12:F22+\nF12:F32\n+F12:F22:F32”,hjust=0.4,vjust=0))+
+geom_linerange(data = pred[13:14,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[13,],aes(label=”F12+F12:F23+\nF12:F32\n+F12:F23:F32”,hjust=0.4,vjust=1.2))+
+geom_linerange(data = pred[15:16,],aes(ymin=y[1],ymax=y[2]),color=”orange”,size=2) +
+geom_text(data = pred[15,],aes(label=”F12+F12:F24+\nF12:F32\n+F12:F24:F32”,hjust=0.7,vjust=1))+
+geom_point(data=pred)
+`&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="interaction" /><category term="LM" /><category term="R" /><summary type="html">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one continuous variable. Rather than just dwelling on this particular case, here is a full blog post with all possible combination of categorical and continuous variables and how to interprete standard model outputs. Do note that three-way interactions can be (relatively) easy to understand conceptually but when it comes down to interpreting the meaning of individual coefficients it will get pretty tricky.</summary></entry><entry><title type="html">Introduction to point pattern analysis for ecologists</title><link href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="alternate" type="text/html" title="Introduction to point pattern analysis for ecologists" /><published>2017-08-06T00:00:00+02:00</published><updated>2017-08-06T00:00:00+02:00</updated><id>http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists</id><content type="html" xml:base="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/">&lt;p&gt;Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific assumptions regarding the ways the data were generated, so let’s first see what type of ecological data may or may not be relevant for point pattern analysis.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-data-for-point-pattern-analysis&quot;&gt; What data for point pattern analysis?&lt;/h2&gt;
+
+&lt;p&gt;The most important assumptions of point pattern analysis is that both the number and the location of the points need to be &lt;strong&gt;random&lt;/strong&gt;. In addition, we need to know the area that was sampled (the so-called &lt;em&gt;window&lt;/em&gt;). Examples where point pattern analysis is relevant:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Tree position in a forest plot&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ant nests in a grassland patch&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Examples not suited for point pattern analysis:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt; Community composition at &lt;em&gt;a priori&lt;/em&gt; defined subplots forming a regular grid within a larger plot&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt; The position of fixed number of bird’s nests is recorded within a given area&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Examples that may or may not be suited to point pattern analysis:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt; Radio-tracking data of animal movements (see the numerous techniques available for this specific type of data)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt; Tree position in a forest plot is mapped every year forming a replicated point pattern (see specific chapter in the spatstat book)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Point pattern in R&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&quot;http://spatstat.org/&quot;&gt;spatstat&lt;/a&gt; package provide a large number of functions and classes to work with point pattern data. I will use an example dataset throughout to show some of the (numerous) capacities of this package. This dataset consist of the location of plant and ant nests within a coastal dune system in western Europe. The dataset was collected by B. Sercu and J. Goldberg plus UGent students, thanks to them for allowing me to use their dataset. You can download the data from &lt;a href=&quot;https://github.com/Lionel68/Blog/tree/master/PointPatternAnalysis&quot;&gt;this link&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-a-point-pattern-from-existing-data&quot;&gt;Creating a point pattern from existing data&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#load the libraries
+library(spatstat)
+library(tidyverse)
+
+
+
+
+#load the dataset
+dat &amp;lt;- read.table(&quot;data/Dataset mieren af.csv&quot;,sep=&quot;;&quot;,head=TRUE)
+#put the coords in meters
+dat$X &amp;lt;- dat$X/100
+dat$Y &amp;lt;- dat$Y/100
+
+#creating the point pattern
+(all_pp &amp;lt;- ppp(dat[,&quot;X&quot;],dat[,&quot;Y&quot;],owin(c(0,15),c(0,10))))
+class(all_pp)
+plot(all_pp)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_1.png&quot; alt=&quot;pp_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The spatstat package use a special class (the “ppp” class) to deal with point pattern. To create ppp objects we need to use the &lt;em&gt;ppp&lt;/em&gt; function, it requires at least three arguments: (i) the x coordinates, (ii) the y coordinates and (iii) the window or the area over which we have recorded the point pattern. For this last argument we can use the &lt;em&gt;owin _function to create a window object that will be used by the _ppp&lt;/em&gt; function. The &lt;em&gt;owin&lt;/em&gt; function requires two arguments: (i) the range of x coordinates and (ii) the range of y coordinates.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-manipulation-of-point-pattern-objects&quot;&gt;Data manipulation of point pattern objects&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#a first manipulation would be to add information to each points
+#the so-called marks, in this example we could add 
+#the species names
+marks(all_pp) &amp;lt;- dat$Soort
+
+#a second manipulation could be to remove any duplicated points
+all_pp &amp;lt;- unique(all_pp)
+
+#then add the coordinate unit
+unitname(all_pp) &amp;lt;- c(&quot;meter&quot;,&quot;meter&quot;)
+summary(all_pp)
+
+#we could subset the point pattern using the marks
+ant_pp &amp;lt;- subset(all_pp,marks==&quot;Tetramorium_caespitum&quot;)
+#in that case we do not need the marks any more
+ant_pp &amp;lt;- unmark(ant_pp)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The concept of marks is a pretty important one so I’ll spend some extra words on it. Marks can be numeric or factor vector of the same length as the point pattern, these are extra informations that were collected for each points. In this example this is the species names of plants and ants recorded, but this could also be the height of the trees or the number of eggs in bird nests. The marks will automatically be used when plotting the point pattern, try “plot(all_pp)” for instance. Note that you can also pass data frame as marks to have multivariate marks.&lt;/p&gt;
+
+&lt;p&gt;A second cool set of manipulation is based on the window, basically one can subset a point pattern to specific windows:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;w &amp;lt;- hexagon(centre=c(5,5))
+plot(ant_pp[w])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_2.png&quot; alt=&quot;pp_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;See ?owin for the many ways available to create windows.&lt;/p&gt;
+
+&lt;p&gt;A final manipulation that I’d like to mention now is the &lt;em&gt;split.ppp&lt;/em&gt; function, can you guess what it is doing?&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#split based on the species names
+split_pp &amp;lt;- split(all_pp)
+class(split_pp)
+as.matrix(lapply(split_pp,npoints),ncol=1)
+#one could also use: by(all_pp,marks(all_pp),npoints)
+
+#split based on a window
+split_ant_pp &amp;lt;- split(ant_pp,f=w)
+summary(split_ant_pp)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I just scratched here the many functionalities that are implemented in the spatstat packages to manipulate point pattern, have a look at the help pages, vignettes and online forum to help you out in this critical step.&lt;/p&gt;
+
+&lt;h2 id=&quot;exploratory-analysis-of-point-patterns&quot;&gt;Exploratory analysis of point patterns&lt;/h2&gt;
+
+&lt;p&gt;This is a very important step in any point pattern analysis, this step can help you: (i) explore the intensity, and (ii) see if the point pattern deviates from random expectations.&lt;/p&gt;
+
+&lt;p&gt;We can easily derive an estimation of the density (or intensity) of the point pattern using the &lt;em&gt;density&lt;/em&gt; function:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dens_all &amp;lt;- density(split_pp)
+plot(dens_all)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_3.png&quot; alt=&quot;pp_3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The first important thing is to find out if the point pattern was generated by one intensity function, in that case the point pattern is homogeneous, or if the point pattern was generated by several intensity functions, in that case the point pattern is inhomogeneous. This is an important first step in any analysis of point pattern as most functions and models assume homogeneity by default. I will show here two ways to infer the homogeneity of a point pattern: (i) simulation and (ii) quadrat count&lt;/p&gt;
+
+&lt;p&gt;The first approach consist in simulating completely spatially random point patterns based on the average intensity in the observed point pattern. If the density estimates of the observed and simulated point patterns are similar then we have evidence that the point pattern is homogeneous.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#compare the observed density to randomly simulated ones 
+#based on the intensity
+
+#select a random position for the observed data in the figure
+pos &amp;lt;- sample(1:16,1)
+#simulate 15 CSR point pattern
+simp &amp;lt;- rpoispp(lambda = intensity(ant_pp),
+                win = Window(ant_pp),nsim=15)
+#replace the simulated set at the pos'th position by 
+#the observed dataset
+tmp &amp;lt;- simp[[pos]]
+simp[[pos]] &amp;lt;- ant_pp
+simp[[16]] &amp;lt;- tmp
+names(simp)[16] &amp;lt;- &quot;Simulation 16&quot;
+#compute density estimates
+densp &amp;lt;- density(simp)
+#plot, can you detect which one was the observed dataset?
+par(mfrow=c(4,4),mar=c(0,0,4,4))
+plot(as.listof(densp),zlim=range(unlist(lapply(densp,range))))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_4.png&quot; alt=&quot;pp_4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you can find the real dataset within the simulated ones then there is evidence that an inhomogeneous process generated the data. You have to use special functions in that case.&lt;/p&gt;
+
+&lt;p&gt;The second approach consist in dividing the window in quadrats and to count the number of points per quadrat. Using a chi-square test one can infer if the point pattern was homogeneous (p &amp;gt; 0.05) or inhomogeneous (p &amp;lt; 0.05):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;quadrat.test(ant_pp)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output tell us that the null hypothesis of the point pattern being generated by complete spatial random process is rejected, we have some evidence that the point pattern is inhomogeneous or non-stationary. There is one issue with the quadrat approach: one need to define the size of the quadrats, the default value is to create 25 quadrats, but I find it hard to come up with reasonable explanation for using that or other values.&lt;/p&gt;
+
+&lt;p&gt;Bottom-line is: it seems that our ant point pattern is inhomogeneous, we’ll need to use specific methods.&lt;/p&gt;
+
+&lt;p&gt;A commonly used exploratory analysis of point pattern is the K-Ripley function. The idea is to count the number of neighboring points within increasing distance from a focal point. Imagine drawing circles with a focal point as the center and counting the number of other points that are within this circle, now do this while increasing the radius of the circles and for each point. If the point pattern follow Complete Spatial Randomness (CSR) then there is a known relationship between this count number (K) and the distance considered (r). In R the code to achieve this on the ant nests point pattern is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ee_iso &amp;lt;- envelope(ant_pp,fun=Kest,
+                   funargs=list(correction=&quot;border&quot;),global=TRUE)
+plot(ee_iso)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_5.png&quot; alt=&quot;pp_5&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here I derived an envelope around the expected ($K_{theo}(r)$) K values from simulated random point process. I applied a border correction, see ?Kest for more informations on the different corrections available. I also use a global estimator for the envelope (global=TRUE) to ensure constant envelope width at any distance (see &lt;a href=&quot;http://book.spatstat.org/sample-chapters/chapter07.pdf&quot;&gt;this book chapter&lt;/a&gt;). The observed curve ($K_{obs}(r)$) fall above the expected one which means that there are more points than expected within certain distance of one another, or in other words the points are more clustered than expected. If the observed curve would fall below the expected one then the points are more dispersed than expected. The function &lt;em&gt;Kest&lt;/em&gt; assume an homogeneous or stationary intensity function, this means that by using &lt;em&gt;Kest&lt;/em&gt; we assume that the point pattern was generated by one homogeneous intensity function characterized by the average intensity of our point pattern (&lt;em&gt;intensity(ant_pp)&lt;/em&gt;). However as we saw before, we have some evidence that the point pattern of the ant nests is not homogeneous, we should therefore take this into account by using a modified version of the Ripley’s K function implemented in the &lt;em&gt;Kinhom&lt;/em&gt; function:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ee_inhom &amp;lt;- envelope(ant_pp,fun=Kinhom,global = TRUE)
+plot(ee_inhom)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_6.png&quot; alt=&quot;pp_6&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This time the observed curve is below the expected one for large distances, implying more dispersion in the nests than expected under CSR taking into account the inhomogeneity of the point pattern. The way &lt;em&gt;Kinhom&lt;/em&gt; works is by deriving an intensity estimate from the data (similar to density.ppp) and by weighting each point based on their estimated intensity. Note that the confidence band derived on these two graphs are &lt;strong&gt;&lt;em&gt;not&lt;/em&gt;&lt;/strong&gt; confidence intervals, see ?envelope for an explanation, alternatively you can use ?varblock or ?lohboot to derive bootstrapped confidence intervals of the expected K values under CSR.
+There are many more methods and functions available to explore point pattern, I choose Ripley’s K here as it is the most commonly used function.&lt;/p&gt;
+
+&lt;p&gt;What do we take from this exploratory analysis:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Ant nests show inhomogeneous pattern&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;There is some evidence that at large distances ant nests are more spaced than expected from the estimated intensity function.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now we can move to the next step and model our point pattern.&lt;/p&gt;
+
+&lt;h2 id=&quot;building-point-pattern-models&quot;&gt;Building Point Pattern Models&lt;/h2&gt;
+
+&lt;p&gt;spatstat provides many functions and methods for fitting models to point pattern data allowing testing specific hypothesis on the drivers of the point pattern. With our ant nest data example we could be interested to see, for instance, if nest density depend on the density of particular plant species. Point pattern models try to predict variation in the intensity over the area, the response variable in these models are not the point themselves but rather the intensity function that generated the data. The first function we’ll see is &lt;em&gt;ppm&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#fit an intercept-only poisson point process model
+m0 &amp;lt;- ppm(ant_pp ~ 1)
+m0
+
+
+
+
+Stationary Poisson process
+Intensity: 0.7
+ Estimate S.E. CI95.lo CI95.hi Ztest Zval
+log(lambda) -0.3566749 0.09759001 -0.5479478 -0.165402 *** -3.654831
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is the simplest model one can fit, the model basically tells us that the intensity (the density of ant nests) is $e^{-0.36} = 0.70$ throughout the observed area. Just try to run &lt;em&gt;plot(predict(m0))&lt;/em&gt; to see what this model implies. Note that the exponential is there because these models are log-linear by default. Now we can use the coordinates as predictor in a model:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;m1 &amp;lt;- ppm(ant_pp ~ polynom(x,y,2))
+m1
+plot(m1,se=FALSE,how=&quot;image&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_7.png&quot; alt=&quot;pp_7&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This model fitted the following relation: $log(\lambda) = x+y+x^2+y^2+x:y$, so basically a quadratic relation for each coordinate axis plus an interaction term. The plot show the predicted intensity (the $\lambda$) from the model with the observed ant nests added to these. There are quite some handy transformation available for specifying formulas in &lt;em&gt;ppm&lt;/em&gt; models (see Table 9.1 page 12 in &lt;a href=&quot;http://book.spatstat.org/sample-chapters/chapter09.pdf&quot;&gt;this book chapter&lt;/a&gt;). As for every model an important next step here is model validation, several functions are available: &lt;em&gt;diagnose.ppm&lt;/em&gt; plot many important model diagnostic:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;diagnose.ppm(m1,which = &quot;smooth&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_8.png&quot; alt=&quot;pp_8&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;By default &lt;em&gt;diagnose.ppm&lt;/em&gt; produce four plots, here I only asked for a plot of the smoothed residuals so that we can identify areas where the model badly fits the observed point patterns. There are some areas with poor fit from this model. One can also use the fitted intensity in the &lt;em&gt;Kinhom&lt;/em&gt; function to see if the observed point pattern is more or less clustered than expected from the model fit:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;eem &amp;lt;- envelope(ant_pp,Kinhom,funargs = list(lambda=m1),
+                 global=TRUE)
+plot(eem)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_9.png&quot; alt=&quot;pp_9&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here we see that the observed point pattern is more clustered than expected based on the model. One solution would be to use clustered poisson point process models (function &lt;em&gt;kppm&lt;/em&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;m2 &amp;lt;- kppm(ant_pp ~ polynom(x,y,2))
+plot(m2,what=&quot;statistic&quot;,pause=FALSE)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_10.png&quot; alt=&quot;pp_10&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The dotted green line show the expected K values based on the predictor in the models, the solid black line adds to the predictor the fitted clustering process (in this case a Thomas process, see ?kppm for other options) and the dashed red line are the (iso-corrected) observed K values. Adding a clustering process into the model somehow improved it but it is still not perfect. Simulating point patterns from the fitted model is also easy, we will use it here to see if there are marked differences between the observed and the simulated point pattern:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#a random position
+pos &amp;lt;- sample(1,1:16)
+#simulated 15 point pattern from the model
+sims &amp;lt;- simulate(m2,nsim = 15)
+#put the observed point pattern in the random position
+tmp &amp;lt;- sims[[pos]]
+sims[[pos]] &amp;lt;- ant_pp
+sims[[16]] &amp;lt;- tmp
+names(sims)[16] &amp;lt;- &quot;Simulation 16&quot;
+#compute density estimates
+densp &amp;lt;- density(sims)
+#plot, can you detect which one was the observed dataset?
+par(mfrow=c(4,4),mar=c(0,0,4,4))
+plot(as.listof(densp),zlim=range(unlist(lapply(densp,range))))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_11.png&quot; alt=&quot;pp_11&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I cannot really recognize the observed pattern, therefore this model is rather good.&lt;/p&gt;
+
+&lt;p&gt;The predictors of the point patterns could also be pixel image (or “im”) objects, in our example we will use as predictors the densities of one plant species: Senecio jacobaea:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;m3 &amp;lt;- kppm(ant_pp ~ Senecio_jacobaea,data=dens_all)
+#let's look at the expected K values
+plot(m3,what=&quot;statistic&quot;,pause=FALSE)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_12.png&quot; alt=&quot;pp_12&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This model is clearly better than the previous one. The effect of the covariates can be plotted using for instance the &lt;em&gt;effectfun&lt;/em&gt; function:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#looking at the effect of Senecio jacobaea
+plot(effectfun(m3,&quot;Senecio_jacobaea&quot;))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_13.png&quot; alt=&quot;pp_13&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;But one can draw way cooler maps in spatstat:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#draw a cool perspective map
+pp &amp;lt;- predict(m3)
+M&amp;lt;-persp(dens_all$Senecio_jacobaea,colin=pp,box=FALSE,
+         visible=TRUE,apron = TRUE,theta=55,phi=25,
+         expand=6,main=&quot;Senecio jacobaea density&quot;)
+perspPoints(ant_pp,Z=dens_all$Senecio_jacobaea,M=M,pch=20)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/08/pp_14.png&quot; alt=&quot;pp_14&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The height of the plot represent the density of Senecio jacobaea shoots, the color the fitted intensity for the ant nests and the points represent the actual observed ant nests. There still some areas in this plot which do not correspond to the observed pattern, one could expand this model by using other clustering process, adding the x/y coordinates to the model, trying different plant species, adding other covariates like temperature, elevation or soil conditions …&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;The spatstat package contains tons of ways to handle, explore and fit models to point pattern data. This introduction is rather lengthy but I just scratched the surface of all the possibilities offered by the package. I hope to have covered the most important aspects to get you started with point pattern analysis, if you want to know more the &lt;a href=&quot;http://spatstat.org/book.html&quot;&gt;new spatstat book&lt;/a&gt; is a great reference.&lt;/p&gt;
+
+&lt;p&gt;PS: You can find all this post &lt;a href=&quot;http://rpubs.com/hughes/295880&quot;&gt;in rpubs&lt;/a&gt;.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="R" /><category term="Spatial Data" /><category term="Statistics" /><summary type="html">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific assumptions regarding the ways the data were generated, so let’s first see what type of ecological data may or may not be relevant for point pattern analysis.</summary></entry><entry><title type="html">Cause, mechanism and prediction in ecology</title><link href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="alternate" type="text/html" title="Cause, mechanism and prediction in ecology" /><published>2017-07-10T00:00:00+02:00</published><updated>2017-07-10T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/">&lt;p&gt;This is a theme that bugged me for the past few months, through reading (&lt;a href=&quot;http://www.cambridge.org/be/academic/subjects/life-sciences/ecology-and-conservation/critique-ecology?format=PB&amp;amp;isbn=9780521395885#xY81DjjF3wmcduGW.97&quot;&gt;Peters’ critique for ecology&lt;/a&gt;, &lt;a href=&quot;http://www.cambridge.org/gb/academic/subjects/life-sciences/ecology-and-conservation/cause-and-correlation-biology-users-guide-path-analysis-structural-equations-and-causal-inference-r-2nd-edition?format=PB#EjvYwaiKvmuy31uo.97&quot;&gt;Shipley’s path analysis book&lt;/a&gt;), meetings and discussions (&lt;a href=&quot;https://akcomputationalecology.wordpress.com/2017/07/03/report-from-the-first-ik-computational-ecology-meeting/&quot;&gt;IK computation ecology&lt;/a&gt;). So it is time to actually sit down, think this through and organize my thoughts. What better way to achieve this than to write a post?&lt;/p&gt;
+
+&lt;h2 id=&quot;what-are-causes&quot;&gt;What are causes?&lt;/h2&gt;
+
+&lt;p&gt;Rather than providing a lengthy definition (which is pretty arduous given that even philosopher do not seem to agree on this), I will follow Shipley’s approach to define causal relations using the properties associated to them. So a causal relation implies:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;transitivity: if light cause photosynthesis and photosynthesis cause biomass production then light cause biomass production.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;markov condition: following the example above, if you block photosynthesis from operating and varying, light will not cause biomass production anymore&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;irreflexibility: biomass production cannot cause biomass production&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;asymmetry: if light cause photosynthesis, photosynthesis cannot cause light.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;what-are-mechanisms&quot;&gt;What are mechanisms?&lt;/h2&gt;
+
+&lt;p&gt;Ecologists often justify their research as a quest to unravel the mechanistic relationship between variable X and Y, whether this emphasis is warranted will be discussed later on, for now let’s try to understand what we mean usually by “mechanism”.&lt;/p&gt;
+
+&lt;p&gt;The clearest definition I could come up with is: a mechanism is a set of causal relations that produce from some starting condition(s) one or more effects. Basically every time you try to answer “How?” questions you are going for mechanisms. A mechanistic understanding would be achieved by proving that some data are more likely to emerge following mechanism M than following some other mechanism N. Other definitions abund in the literature for instance in &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/ecog.02480/abstract&quot;&gt;Cabral et al (2016)&lt;/a&gt;: “Mechanism - A causal explanation linking two ecological variables” or &lt;a href=&quot;https://www.researchgate.net/publication/201997244_Ecological_experiments_scale_phenomenology_mechanism_and_the_illusion_of_generality&quot;&gt;Dunham and Beaupre 1998&lt;/a&gt;: “an appropriate level of reductionism that provides a causal explanation of the functional relationship among a set of variables”. So a research agenda aiming at improving mechanistic understanding will have to deal with causes and how to identify them. On a side note, it is intersting to realize that mechanisms are often developed as narratives (Cabral and Dunham definition use the term “explanation”), this can become an issue if terms are vaguely defined so that multiple causal chains can be built from a single mechanism.&lt;/p&gt;
+
+&lt;p&gt;An important point to make here is the potential pitfall of infinite regress when exploring mechanisms. Infinite regress is basically aiming at decomposing a mechanism into a large (infinite) number of causal relations. Taking again the example from above of light causing biomass production: light -&amp;gt; photosynthesis -&amp;gt; biomass production, one can decompose this mechanism further: light -&amp;gt; excitation of photosystem I and II -&amp;gt; ATP production -&amp;gt; calvin cycle -&amp;gt; biomass production and so on. As Shipley nicely puts it: “the trick is always to choose a level of causal complexity that is sufficiently detailed that it meets the goals of the study while remaining applicable in practice”, learning this trick may take a whole career time in ecology.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-should-we-care-about-mechanisms&quot;&gt;Why should we care about mechanisms?&lt;/h2&gt;
+
+&lt;p&gt;Understanding the mechanism (set of causal links) between two variables is assumed to be one step towards generalization and the discovery of the laws of ecology. Many (virtual) ink has been used on whether such generality or laws exist in ecology, I won’t go into this here, the interested reader can head to &lt;a href=&quot;http://www.jstor.org/stable/3546712?seq=1#page_scan_tab_contents&quot;&gt;the paper&lt;/a&gt; that started it all (at least for community ecology), and &lt;a href=&quot;http://www.sciencedirect.com/science/article/pii/S0169534706000334&quot;&gt;some response&lt;/a&gt; and &lt;a href=&quot;https://dynamicecology.wordpress.com/2015/06/17/the-five-roads-to-generality-in-ecology/&quot;&gt;ways&lt;/a&gt; to reach generality. The point is, one of the often stated aim of ecology as a science is to unravel general laws and theories to help us better understand the object under scrutiny (see the preface of MacArthur’s book &lt;a href=&quot;http://press.princeton.edu/titles/1502.html&quot;&gt;Geographical ecology&lt;/a&gt;). So if you followed my argumentation, to achieve this broad goal one need to unravel the mechanisms at play and so one will have to work with causality.&lt;/p&gt;
+
+&lt;p&gt;Another reason, a bit more applied and coming from the modelling side, is the belief that models based on mechanisms will be better at extrapolating than mechanism-free models. For example if you want to know if a species of tree will be able to grow in a certain area under climatic change with new conditions, models including some physiological or growth mechanisms are assumed to provide better predictions than models based on relations with no explicit mechanistic underlying (see &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/j.1461-0248.2008.01277.x/full&quot;&gt;this&lt;/a&gt; paper).&lt;/p&gt;
+
+&lt;h2 id=&quot;how-do-we-identify-cause-and-mechanism-in-empirical-data&quot;&gt;How do we identify cause and mechanism in empirical data?&lt;/h2&gt;
+
+&lt;p&gt;Here I will emphasize three approaches that are used in ecology to derive mechanistic understanding: (i) experiments, (ii) structural equation models and (iii) mechanistic models.&lt;/p&gt;
+
+&lt;p&gt;The classical route is to use a reductionist approach and to fragment complex chains of causality into simple components and do manipulative experiments on them. For example say that you want to know if plant growth is caused by light through photosynthesis, and you know that photosynthesis use CO2 and release O2. A simple experiment would be to monitor plant growth under light condition with or without provision of CO2. From your hypothesized mechanism you expect that plant will not grow, despite the light, without CO2 provision. Finding experimental results fitting to particular mechanisms is only the beginning of the road, as one will have to see how it fits back in more complex chains, how it depends on factors that were controlled in the experiment (what about nutrient or water availability in the toy example above), how it depends on species identity (are some plant species not using photosynthesis to grow?) and so on. Again lots of ink has been used to advocate the use of reductionist approach in ecology as appropriate tests of mechanisms and theories, but also on the need to combine detailed and controlled experimental results with broad scale observational data (see the &lt;a href=&quot;https://www.jstor.org/stable/i283128&quot;&gt;forum section&lt;/a&gt; in this Oikos 1988 volume).&lt;/p&gt;
+
+&lt;p&gt;Another, more recent way (in ecology), to explore causal relations is through the use of structural equation models (SEMs). SEMs are a general statistical framework that derive from hypothetical causal networks sets of equations that are fitted to data. Comparing amongst different models allow the researcher to provide evidence towards specific mechanisms and theories. It is still a bit obscure to me how one goes from a set of equations and some variance-covariance to causal understanding but apparently &lt;a href=&quot;http://bayes.cs.ucla.edu/BOOK-2K/jw.html&quot;&gt;it works&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A final way that I can see is to fit mechanistic models (some call them process-based models) to data. What exactly qualifies as a mechanistic model is a hard &lt;a href=&quot;https://theartofmodelling.wordpress.com/2012/02/19/mechanistic-models-what-is-the-value-of-understanding/&quot;&gt;if not irrelevant question&lt;/a&gt;, the point is that such models are usually parametrize having in mind specific causal relations and are more tightly linked to specific theory than other models. Some example involve: distribution models based on physiological constraints, dynamic vegetation models based on plant growth and respiration. &lt;a href=&quot;https://dynamicecology.wordpress.com/2016/01/25/trying-to-understand-ecological-data-without-mechanistic-models-is-a-waste-of-time/&quot;&gt;Some&lt;/a&gt; have argued that one cannot achieve understanding (causal relations) without the use of mechanistic models: , &lt;a href=&quot;https://www.zoology.ubc.ca/~krebs/ecological_rants/hypothesis-testing-using-field-data-and-experiments-is-definitely-not-a-waste-of-time/&quot;&gt;some&lt;/a&gt; have argued otherwise.&lt;/p&gt;
+
+&lt;p&gt;The point that one could make is that of a shift of techniques as the understanding on a particular question (“how is light influencing biomass production”) is evolving. Experiments backed up with some theory/prediction/expectation are useful pioneers. Structural equation models are a cool way to translate these causal links unraveled by experiments into more complex settings using for instance observational data. Mechanistic models come at a later stage putting down the relations into (dynamic/nonlinear) equations with specific links to the developing theories. The trick is to be able to realize what are the missing information and what would be the most appropriate technique to do so in one’s field of research, doing this is tricky as we usually specialize on one set of tools whereas the continuing shift of relevant techniques require some intense cooperation among people. In this regard I particularly like the section “We should clearly identify what kind of science we are doing” in the &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/oik.03726/full&quot;&gt;Houlahan paper&lt;/a&gt; published recently.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-much-emphasis-should-we-put-on-improving-our-mechanistic-understanding&quot;&gt;How much emphasis should we put on improving our mechanistic understanding?&lt;/h2&gt;
+
+&lt;p&gt;As mentioned above one should be wary of infinite regress, trying to explain relationship using more and more detailed informations. At some point one has to realize that for the question at hand enough information about the causes are available, for instance if I want to explore how changes in cloud cover under climate change will affect plant biomass production, do I need to know how the calvin cycle works? These types of questions are pretty hard because they will always be relative on the specific question at hand. Only our scientific common sense, logistic limitations and funding scarcity prevent us from this pitfall.&lt;/p&gt;
+
+&lt;p&gt;For me there is a tension in every model that we develop (be it statistical or process-based) between the ability to understand the machinery of causal links leading to some pattern and the predictive ability. Developing models with specific mechanisms will come at the cost of being poorer in terms of predictive abilities than models aimed solely at having high predictive power (see: ti understand or to predict or two culture in statistic). My opinion on this topic is very much affected by my brief incursion into the field of species distribution modeling where the models that perform (currently) the best are complex black-box algorithm massaging hundreds of variables and providing seemingly accurate predictions (but see &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2011.02659.x/full&quot;&gt;this paper on ways&lt;/a&gt; to bridge this gap).&lt;/p&gt;
+
+&lt;p&gt;There have been recent calls to make ecology more of a predictive science (see), arguing that for ecology to be taken up by society and policy-maker we should make relevant and accurate predictions. Actually some have argued along these lines for quite some time now (See eg Peters’ book).
+As argued above and &lt;a href=&quot;https://biologyforfun.wordpress.com/2017/01/24/prediction-in-ecology-implementing-a-priority/&quot;&gt;in a previous post&lt;/a&gt;, there will be some tension when developing models aimed at having high predictive power between understanding (derived from mechanisms, cause and experiment) and prediction. It might well be that the best model in terms of predictive power might not be a super-complex meta-SEM derived from careful experimental work unraveling the mechanisms at play, it might be that a machine learning algorithm fed with millions of data will perfom better. The question for me is what is the niche for causality in a science turned towards prediction?&lt;/p&gt;
+
+&lt;p&gt;I’ll be happy to hear from you, dear reader, if you have some ideas or some critics regarding this important topic.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="causality" /><category term="ecology" /><category term="prediction" /><category term="SEMs" /><summary type="html">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussions (IK computation ecology). So it is time to actually sit down, think this through and organize my thoughts. What better way to achieve this than to write a post?</summary></entry><entry><title type="html">Adding group-level predictors in GLMM using lme4</title><link href="http://localhost:4000/r%20and%20stat/adding-group-level-predictors-in-glmm-using-lme4/" rel="alternate" type="text/html" title="Adding group-level predictors in GLMM using lme4" /><published>2017-06-19T00:00:00+02:00</published><updated>2017-06-19T00:00:00+02:00</updated><id>http://localhost:4000/r%20and%20stat/adding-group-level-predictors-in-glmm-using-lme4</id><content type="html" xml:base="http://localhost:4000/r%20and%20stat/adding-group-level-predictors-in-glmm-using-lme4/">&lt;p&gt;Sometime I happen to be wrong, this is one of these instance. The issue: a colleague measured individual plant growth and measured light irradiation received by each individual, the plants where in groups of 10 individuals and he measured soil parameters at the group-level. To analyze the effect of light on plant growth while controlling for soil and group variation, he built a mixed-effect model with group as a random term and light plus soil as fixed effect. As soil was measured at the group-level all individuals within a group got the same soil value.&lt;/p&gt;
+
+&lt;p&gt;When he came and asked if what he was doing was correct, I said that he had a classical multilevel dataset and that it was not possible to fit it using lme4, since the model would not know how to differentiate between variation explained by group effects and variation explained by soil effects. Actually this is possible, provided that the variable measured at the group-level is continuous (see &lt;a href=&quot;https://biologyforfun.wordpress.com/2015/08/31/two-little-annoying-stats-detail/&quot;&gt;this old post&lt;/a&gt; on a similar issue), one may add group-level predictors in lme4 fits. Let’s see how it works:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#load libraries
+library(lme4)
+library(ggplot2)
+library(gridExtra)
+
+#simulate some data
+
+#first case one group-level predictor 
+#and one individual level no interaction
+
+#group-level predictor
+soil &amp;lt;- runif(20,-2,2)
+#individual level predictor
+light &amp;lt;- runif(200,-2,2)
+#group-level regression
+grp_eff &amp;lt;- rnorm(20,2*soil,1)
+#group index
+group &amp;lt;- gl(n = 20,k = 10,
+labels = letters[1:20])
+#expected individual values
+linpred &amp;lt;- 2 + grp_eff[group] + 2*light
+#simulated individual values
+growth &amp;lt;- rnorm(200,linpred,1)
+#putting it together
+dat &amp;lt;- data.frame(Group=group,Light=light,
+Soil=soil[group],Growth=growth)
+
+#model
+(m &amp;lt;-lmer(Growth~Light+Soil+(1|Group),dat))
+&amp;lt;em&amp;gt;
+Linear mixed model fit by REML ['lmerMod']
+Formula: Growth ~ Light + Soil + (1 | Group)
+ Data: dat
+REML criterion at convergence: 608.1304
+Random effects:
+ Groups Name Std.Dev.
+ Group (Intercept) 0.6773 
+ Residual 1.0046 
+Number of obs: 200, groups: Group, 20
+Fixed Effects:
+(Intercept) Light Soil 
+ 2.354 2.042 2.122  
+&amp;lt;/em&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The parameter estimates looks pretty good, closed to the values used to simulate the data. It works! One can easily add group-level regression in lme4 provided that the group-level predictor(s) are continuous.
+Now we can make nice plots of the group and individual-level regressions.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#gather group-level deviation values 
+#in one dataframe together with deviation
+rf &amp;lt;- ranef(m,condVar=TRUE)
+rff &amp;lt;- data.frame(Group=letters[1:20],Soil=soil,RF=rf$Group[,1],Var=attr(rf$Group,&quot;postVar&quot;)[,,1:20])
+#compute the group level regression
+rff$RFF &amp;lt;- with(rff,RF+fixef(m)[2]*Soil)
+#plot
+p1 &amp;lt;- ggplot(rff,aes(x=Soil,y=RFF,ymin=RFF-2*Var,ymax=RFF+2*Var))+geom_point()+
+ geom_abline(aes(intercept=0,slope=fixef(m)[2]))+geom_linerange()+
+ labs(y=&quot;Group-level effect&quot;,title=&quot;Group-level regression&quot;)
+
+#predict individual-level regression 
+#for average group and average soil
+newdat &amp;lt;- expand.grid(Light=seq(-2,2,length=20),Soil=0)
+newdat$Pred &amp;lt;- predict(m,newdata=newdat,re.form=~0)
+#plot
+p2 &amp;lt;- ggplot(dat,aes(x=Light,y=Growth))+geom_point()+
+ geom_line(data=newdat,aes(x=Light,y=Pred))+labs(title=&quot;Individual-level regression&quot;)
+
+grid.arrange(p1,p2,ncol=2)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://biologyforfun.wordpress.com/2017/06/19/adding-group-level-predictors-in-glmm-using-lme4/grplvl1/&quot;&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/06/grplvl1.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;A word of caution now on using group-level regressions: I would be very careful (or better avoid) using p-values from such models. The degrees of freedom to test the soil effect are clearly inflated and are hard to guess, so I would advise against significance testing on the group-level regression.
+We can of course expand this approach to more complex situation (see some examples &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1890/09-1043.1/full&quot;&gt;here&lt;/a&gt;), let’s see an example where we had an interaction between the group and the individual-level predictors:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#add interaction between group and individual-level 
+#and unbalanced design
+
+#group index
+group &amp;lt;- factor(sample(letters[1:20],
+         size = 200,replace=TRUE))
+grp_eff &amp;lt;- rnorm(20,2*soil,1)
+
+#expected individual values
+linpred &amp;lt;- 2 + grp_eff[group] + 2 * light -  (grp_eff[group] * light)
+#simulated individual values
+growth &amp;lt;- rnorm(200,linpred,1)
+#putting it together
+dat &amp;lt;- data.frame(Group=group,Light=light,
+       Soil=soil[group],Growth=growth)
+
+#model
+(m &amp;lt;-lmer(Growth~Light*Soil+(1|Group),dat))
+
+&amp;lt;em&amp;gt;
+Linear mixed model fit by REML ['lmerMod']
+Formula: Growth ~ Light * Soil + (1 | Group)
+   Data: dat
+REML criterion at convergence: 731.4661
+Random effects:
+ Groups   Name        Std.Dev.
+ Group    (Intercept) 0.5474  
+ Residual             1.4182  
+Number of obs: 200, groups:  Group, 20
+Fixed Effects:
+(Intercept)        Light         Soil   Light:Soil  
+      2.138        1.961        1.844       -1.865  
+&amp;lt;/em&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is where it starts to get tricky for me, the estimate of the interaction between group and individual-level predictors is twice as big as the simulated value. Maybe I am doing something wrong in the simulation part …
+Anyhow we can still do some cool plots:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#group-level plot
+rf &amp;lt;- ranef(m,condVar=TRUE)
+rff &amp;lt;- data.frame(Group=letters[1:20],Soil=soil,RF=rf$Group[,1],Var=attr(rf$Group,&quot;postVar&quot;)[,,1:20])
+#compute the group level regression
+rff$RFF &amp;lt;- with(rff,RF+2.16*Soil)
+p1 &amp;lt;- ggplot(rff,aes(x=Soil,y=RFF,ymin=RFF-2*Var,ymax=RFF+2*Var))+geom_point()+
+  geom_abline(aes(intercept=0,slope=2.16))+geom_linerange()+
+  labs(y=&quot;Group-level effect&quot;,title=&quot;Group-level regression&quot;)
+
+#predict individual effect for average group and average soil
+newdat &amp;lt;- expand.grid(Light=seq(-2,2,length=20),Soil=c(-2,0,2))
+newdat$Pred &amp;lt;- predict(m,newdata=newdat,re.form=~0)
+
+p2 &amp;lt;- ggplot(dat,aes(x=Light,y=Growth))+geom_point()+
+  geom_line(data=newdat,aes(x=Light,y=Pred,color=factor(Soil)))+
+  labs(title=&quot;Individual-level regression&quot;)+
+  scale_color_discrete(name=&quot;Soil&quot;)
+
+grid.arrange(p1,p2,ncol=2)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://biologyforfun.wordpress.com/2017/06/19/adding-group-level-predictors-in-glmm-using-lme4/grplvl2/&quot;&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/06/grplvl2.png&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it, one does not need to use more complex modelling technique like maximum likelihood estimation or multilevel bayesian regression, one can use rather straightforward lme4 fits for exploring group-level regressions. 
+A must-read for anyone interested in hierarchical/multilevel models is the &lt;a href=&quot;http://www.stat.columbia.edu/~gelman/arm/&quot;&gt;Gelman and Hill book&lt;/a&gt;.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="lme4" /><category term="multilevel" /><category term="nR" /><category term="R" /><summary type="html">Sometime I happen to be wrong, this is one of these instance. The issue: a colleague measured individual plant growth and measured light irradiation received by each individual, the plants where in groups of 10 individuals and he measured soil parameters at the group-level. To analyze the effect of light on plant growth while controlling for soil and group variation, he built a mixed-effect model with group as a random term and light plus soil as fixed effect. As soil was measured at the group-level all individuals within a group got the same soil value.</summary></entry><entry><title type="html">On the price of (my) higher education</title><link href="http://localhost:4000/opinion%20posts/on-the-price-of-my-higher-education/" rel="alternate" type="text/html" title="On the price of (my) higher education" /><published>2017-05-30T00:00:00+02:00</published><updated>2017-05-30T00:00:00+02:00</updated><id>http://localhost:4000/opinion%20posts/on-the-price-of-my-higher-education</id><content type="html" xml:base="http://localhost:4000/opinion%20posts/on-the-price-of-my-higher-education/">&lt;p&gt;With my higher education studies behind me, I wanted to reflect a bit on the different amount of tuition fees that I experienced moving around European universities.&lt;/p&gt;
+
+&lt;h2 id=&quot;stage-1-france&quot;&gt;&lt;strong&gt;Stage 1: France&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;I started in 2008 with a Bachelor of science in Strasbourg, at that time you had to pay around 500€ for a year. In these 500€ around half of it went to pay for health insurance and only around 200€ were actual tuition fees. So with these fees you got one year of university courses plus basic health coverage. Since my parents annual incomes were below a certain threshold I actually did not had to pay any tuition fees and that for all 3 years in my Bachelor. On top of that I got a couple of grants giving me around 300€ per month between October and June. This meant that I could focus on my studies and enjoying student life without having to take a student job during the semester. So many thanks to the French state for that!&lt;/p&gt;
+
+&lt;h2 id=&quot;stage-2-erasmus-in-the-uk&quot;&gt;Stage 2: Erasmus in the UK&lt;/h2&gt;
+
+&lt;p&gt;For the last year of my Bachelor I applied and got an Erasmus grant to go study in Leeds. This is how it worked at that time (in 2010-2011): an Erasmus student pays the tuition fees at his/her home university and get a grant (~1200€). For students from a less wealthy background the Erasmus grant will not cover the extra costs of studying abroad especially not in expensive countries like in the UK. So there was at that time (no idea if this is still working) a couple of extra help you could get. My parents income still being below a certain threshold I got around 3000€ from the government and the region of Alsace delivered 1200€ grants for Erasmus students. At the end of the day this meant that I had to pay no tuition fees to go study in the UK and received more than 5000€ in grant money. Again a pretty nice deal knowing that my British classmate had to pay 3000£ of tuition fees a year. So thanks to the European Union, please do keep this great program running, it is capital to build a European society.&lt;/p&gt;
+
+&lt;p&gt;It is ironic to note that it was in that same year that the English government passed a law to allow universities to raise the tuition fees up to 9000£, which of course brought a lot of students to demonstrate and express their anger towards these politicians, who got free higher ed but were imposing to their children such a burden.&lt;/p&gt;
+
+&lt;h2 id=&quot;stage-3-germany&quot;&gt;Stage 3: Germany&lt;/h2&gt;
+
+&lt;p&gt;After my year in the UK, I went to study in Bonn in Germany. In Germany there is no tuition fees per se. Students do have to pay something for each semester but this is to pay social security and potentially a transport ticket (so called “semester ticket”). So in Bonn in the years 2011-2013 I had to pay around 250€ per semester which gave me university courses plus a transport pass for free travel in trains, trams and buses for the whole region of &lt;a href=&quot;https://en.wikipedia.org/wiki/North_Rhine-Westphalia&quot;&gt;Nordrhein-Wesftalen&lt;/a&gt;. German students can also apply and get grants if they are from low-income family (BAföG), but during these two years I was for the first time without state grants. I tried to get a student job but speaking a halting German did not help, also I was not aware of the massive potential of assistant jobs that most German research groups offer. If you are a foreigner in a German university, do ask around you for “HiWi Stellen”, it is most likely that even basic German knowledge would be sufficient for some positions. Anyhow this meant that I lived on my economies for the three semesters that I spent in Bonn.&lt;/p&gt;
+
+&lt;h2 id=&quot;stage-4-back-to-france&quot;&gt;Stage 4: Back to France&lt;/h2&gt;
+
+&lt;p&gt;For my master thesis I applied to a very neat project on distribution modeling of dung beetles in Montpelier in France. In France, since 2010, every internships lasting more than 2 months are paid. The law sets the minimal amount that should be gratified. In 2013 this was around 400€ per month. So I could start my life in research while being financially supported which was great motivation to do &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/ddi.12249/full&quot;&gt;some good work&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;some-reflexions&quot;&gt;Some reflexions&lt;/h2&gt;
+
+&lt;p&gt;I am extremely thankful to all the programs that allowed me to go through my university studies without having to take a loan and without having to fear to pay the bills at the end of the month. Also having no pressure to absolutely get a well-paid job after studying gave me huge freedom to explore what I like, what I am good at and how I can contribute back to the society. If we believe that we need diversity of skills and experiences to tackle some of the challenges that we face, then we should strive to give to students this feeling of intellectual freedom unclouded by financial worries. As a citizen I will fight to keep tuition fees low in France and to &lt;a href=&quot;https://www.theguardian.com/education/2016/sep/13/government-urged-to-protect-eu-student-exchange-scheme&quot;&gt;maintain the Erasmus program&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Some further reading/visioning on this:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Do check the articles under the diversity tag at &lt;a href=&quot;https://smallpondscience.com/tag/diversity/&quot;&gt;Small Pond Science&lt;/a&gt; for more in-depth reflexion on these issues from a US perspective.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Also look at this &lt;a href=&quot;http://info.arte.tv/fr/etudiants-lavenir-credit&quot;&gt;nice documentary by Arte&lt;/a&gt; on the sombre future of higher education if the current trend continues.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="education" /><category term="erasmus" /><category term="fees" /><category term="grant" /><summary type="html">With my higher education studies behind me, I wanted to reflect a bit on the different amount of tuition fees that I experienced moving around European universities.</summary></entry><entry><title type="html">Adding standard errors for interaction terms</title><link href="http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms/" rel="alternate" type="text/html" title="Adding standard errors for interaction terms" /><published>2017-05-17T00:00:00+02:00</published><updated>2017-05-17T00:00:00+02:00</updated><id>http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms</id><content type="html" xml:base="http://localhost:4000/r%20and%20stat/adding-standard-errors-for-interaction-terms/">&lt;p&gt;This is something that bugged me for some time, how do we add up standard errors? This is relevant when you fit a model with interaction terms and you are interested not only in the deviation between different categories in your data (like male, female juvenils) but also whether the effect of some covariates on the response differ from 0.&lt;/p&gt;
+
+&lt;p&gt;Let’s look at a simple example, say you recorded the number of trees in 4 areas of your city: in the north, east, south and west. And you want to see if the average income in the different area of the town influence the number of trees. You are not only interested in knowing whether income effect of tree number differ between the areas but also if the income effect is significant within individual areas.&lt;/p&gt;
+
+&lt;p&gt;Let’s simulate some data reflecting this particular example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#some simulated data
+dat &amp;lt;- data.frame(income_std=runif(100,-2,2),
+  area=gl(n = 4,k=25,labels = c(&quot;North&quot;,&quot;East&quot;,&quot;South&quot;,&quot;West&quot;)))
+modmat &amp;lt;- model.matrix(~income_std*area,dat)
+coeff &amp;lt;- c(1,2,-0.5,1.2,0.6,-1.3,-0.2,2)
+dat$tree_nb &amp;lt;- rnorm(100,mean = modmat%*%coeff,sd=1)
+
+#fit the model 
+(m &amp;lt;- lm(tree_nb~income_std*area,dat))
+
+Call:
+lm(formula = tree_nb ~ income_std * area, data = dat)
+
+Coefficients:
+         (Intercept)            income_std              areaEast             areaSouth              areaWest   income_std:areaEast  
+              1.0441                2.2062               -0.3837                0.9858                0.7059               -1.9570  
+income_std:areaSouth   income_std:areaWest  
+             -0.5658                1.8735
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To get the effect of income in the different areas, we just need to add the estimated coefficients, for example the slope of number of trees vs income in the west of the city is: 2.21 + 1.87 = 4.08. How do we get the standard error for this sum? &lt;a href=&quot;https://en.wikipedia.org/wiki/Variance#Sum_of_correlated_variables&quot;&gt;Wikipedia&lt;/a&gt; is here to help, the variance of a sum is basically the sum of the variance plus two times the covariance, in an equation:&lt;/p&gt;
+
+&lt;p&gt;$latex \sigma_{X+Y}^{2} = \sigma_{X}^{2} + \sigma_{Y}^{2} + 2 * Cov(X,Y)$&lt;/p&gt;
+
+&lt;p&gt;If we want the standard error we just need to plug in the standard errors instead of the variance (the $latex \sigma$’s) and take the square root.&lt;/p&gt;
+
+&lt;p&gt;Now the standard error are readily available in the &lt;em&gt;summary&lt;/em&gt; of a fitted model, and for the covariance you can access them using the &lt;em&gt;vcov&lt;/em&gt; function. I made a little function that does it for you (code at the end of the post), you basically provide the name of the factor variable (name_f argument) and the name of the covariate (name_x argument). If you leave name_x empty the function will return the intercept for each levels. Here is how you would apply it in the example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#compute the summed SE
+(sum_se &amp;lt;- rbind(add_se(m,name_f = &quot;area&quot;),
+                add_se(m,name_f = &quot;area&quot;,name_x = &quot;income_std&quot;)))
+
+                          Coef        SE
+areaEast             0.6603816 0.1997875
+areaSouth            2.0298995 0.2008723
+areaWest             1.7499887 0.2051546
+income_std:areaEast  0.2491587 0.2051456
+income_std:areaSouth 1.6403689 0.1740335
+income_std:areaWest  4.0796633 0.1817601
+
+#a plot
+library(viridis)
+col_vec &amp;lt;- viridis(4)
+plot(tree_nb~income_std,dat,pch=16,col=col_vec[dat$area])
+abline(a = coef(m)[1],b=coef(m)[2],col=col_vec[1],lwd=2)
+abline(a = sum_se[1,1],b=sum_se[4,1],col=col_vec[2],lwd=2)
+abline(a = sum_se[2,1],b=sum_se[5,1],col=col_vec[3],lwd=2)
+abline(a = sum_se[3,1],b=sum_se[6,1],col=col_vec[4],lwd=2)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/05/add_se.png&quot; alt=&quot;add_se&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Of course one could extend this to three-way or X-way interactions, you would just need to grab the relevant covariance values within the variance-covariance matrix returned by &lt;em&gt;vcov&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Happy summing.&lt;/p&gt;
+
+&lt;p&gt;The code of the function:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#function parameter
+#@model: a lm or glm fitted model
+#@name_f: a character string with the name of the categorical (factor) variable
+#@name_x: a character string with the name fo the interacting variable, by default the intercept
+add_se &amp;lt;- function(model,name_f,name_x=&quot;Intercept&quot;){
+  #grab the standard error of the coefficients
+  se_vec &amp;lt;- summary(model)$coefficients[,2]
+  if(name_x==&quot;Intercept&quot;){
+    #the stabdard error of the intercept
+    se_x &amp;lt;- se_vec[1]
+    #get the level-specific standard errors
+    se_f &amp;lt;- se_vec[grep(name_f,names(se_vec))]
+    se_f &amp;lt;- se_f[-grep(&quot;:&quot;,names(se_f))]
+    #get the covariance between the intercept and the level-specific parameters
+    vcov_f &amp;lt;- vcov(model)[grep(name_f,rownames(vcov(model))),grep(name_x,colnames(vcov(model)))]
+    vcov_f &amp;lt;- vcov_f[-grep(&quot;:&quot;,names(vcov_f))]
+    #the estimated average value at each level
+    coef_f &amp;lt;- coef(model)[1]+coef(model)[names(vcov_f)]
+  }
+  else{
+    #similar code for the case of another variable than the intercept
+    se_x &amp;lt;- se_vec[name_x]
+    se_f &amp;lt;- se_vec[grep(name_f,names(se_vec))]
+    se_f &amp;lt;- se_f[grep(&quot;:&quot;,names(se_f))]
+    vcov_f &amp;lt;- vcov(model)[grep(name_f,rownames(vcov(model))),grep(name_x,colnames(vcov(model)))][,1]
+    vcov_f &amp;lt;- vcov_f[grep(&quot;:&quot;,names(vcov_f))]
+    coef_f &amp;lt;- coef(model)[name_x]+coef(model)[names(vcov_f)]
+  }
+  #compute the summed SE
+  se_f &amp;lt;- sqrt(se_x**2+se_f**2+2*vcov_f)
+  #create the output dataframe
+  out &amp;lt;- data.frame(Coef=coef_f,SE=se_f)
+  return(out)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="GLM" /><category term="LM" /><category term="R" /><category term="Statistics" /><summary type="html">This is something that bugged me for some time, how do we add up standard errors? This is relevant when you fit a model with interaction terms and you are interested not only in the deviation between different categories in your data (like male, female juvenils) but also whether the effect of some covariates on the response differ from 0.</summary></entry><entry><title type="html">Simulating SEMs for piecewiseSEM: part 1 the basics</title><link href="http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/" rel="alternate" type="text/html" title="Simulating SEMs for piecewiseSEM: part 1 the basics" /><published>2017-05-08T00:00:00+02:00</published><updated>2017-05-08T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/r%20and%20stat/simulating-sems-for-piecewisesem-part-1-the-basics/">&lt;p&gt;Structural Equation Models are being used more and more frequently by ecologists due to the appeal of linking variables together in complex web of interactions. There are currently two main libraries in R to fit such models: &lt;a href=&quot;http://lavaan.ugent.be/&quot;&gt;lavaan&lt;/a&gt; and &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12512/full&quot;&gt;piecewiseSEM&lt;/a&gt;. The aim of this post is not to discuss the advantages and drawbacks of these two libraries, the interested reader can have a look at &lt;a href=&quot;https://jonlefcheck.net/2014/07/06/piecewise-structural-equation-modeling-in-ecological-research/&quot;&gt;this&lt;/a&gt; post.&lt;/p&gt;
+
+&lt;p&gt;Rather the aim of this post is to simulate relations among a set of variables, to generate some data with random relations and to fit the relation to the data using piecewiseSEM. All the code can be found &lt;a href=&quot;https://github.com/Lionel68/Blog/tree/master/SimSEM&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I just want to disclaim here that I am skeptical of the piecewiseSEM approach. Because one accept the model when the (linear) relations &lt;strong&gt;not&lt;/strong&gt; fitted by the models are &lt;strong&gt;not&lt;/strong&gt; important (in jargon: all variables are conditionally independent). I  like to compare the approach of piecewiseSEM to &lt;a href=&quot;http://www.visual-arts-cork.com/prehistoric/hand-stencils-rock-art.htm&quot;&gt;hand stencils&lt;/a&gt; : we are interested to make a model for the hand. But we do not actually test the model to see if it fits the image of the hand itself but rather the pigment halo surrounding it. Maybe this is ok and actually better in some cases than lavaan but until I am convinced otherwise I will keep my skepticism.&lt;/p&gt;
+
+&lt;h2 id=&quot;rationale&quot;&gt;Rationale&lt;/h2&gt;
+
+&lt;p&gt;One key insight is to see SEMs as a specific class of &lt;a href=&quot;https://en.wikipedia.org/wiki/Graph_theory&quot;&gt;graphs&lt;/a&gt;. We have nodes (the variables) and we have edges (the relations/regressions). piecewiseSEM requires that the graphs be acyclic, which means that if we start at one node there is no way to come back to this node. If we see the graph (the SEM model) as a matrix of _variables x variables _and each entry can either be 0 meaning no relation and 1 meaning relation, an acyclic graph will have ones only in the lower triangle. (a bit more complex than this but for now this’ll do). Of course the diagonal will only contain 0s, we do not want to model the effect of variable X1 on variable X1.&lt;/p&gt;
+
+&lt;p&gt;Now we can generate a matrix and be sure that it will be acyclic so that we can fit the model with piecewiseSEM. But how many 1s should we put in the matrix? There I use another concept from graph theory which is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Ecological_network&quot;&gt;connectance&lt;/a&gt; computed as the number of edges divided by the number of nodes squared. If we want to build a SEM with a specific connectance we can get the number of links to model.&lt;/p&gt;
+
+&lt;p&gt;Armed with this we can build matrix representing the hypothesized relations (function &lt;em&gt;relation&lt;/em&gt; in the code), turn this into a list of models (function &lt;em&gt;formula_list&lt;/em&gt; and &lt;em&gt;model_list&lt;/em&gt; in the code) and fit a piecewiseSEM. As an example here are four SEMs with varying number of variables and connectance created by the code:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/05/fig1.png&quot; alt=&quot;Fig1&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+
+&lt;p&gt;In a first step I generated data with no relations, one could of course in a later step try generating the data with the exact relation or slightly different relations. I then fitted piecewiseSEM with variation in the sample size (from 20 to 100) and in the number of variables (from 5 to 10) while keeping the connectance fixed at 0.3. This connectance value means that we fit 7 paths for 5 variables and 30 paths for 10 variables. This was replicated many times for each combination of sample size and number of variables (100 times) and I tracked if the model was estimated to be consistent with the data or not (if the Fisher C p-value was higher than 0.05), how many paths were significant and what was the average value of significant paths.&lt;/p&gt;
+
+&lt;p&gt;Here are the results for the proportion of times a model was estimated consistent:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/05/fig2.png&quot; alt=&quot;Fig2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is super surprising around 95% of the models were said to be consistent with the data even if they just fitted noise. I re-checked the original publication on piecewiseSEM to see if I incorrectly inverted the threshold but no, that was not the case … I will try and see if lavaan is as wrong in this case.&lt;/p&gt;
+
+&lt;p&gt;Now let’s look at the proportion of paths estimated to be significant:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/05/fig3.png&quot; alt=&quot;Fig3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is better, around 5% of the paths are estimated to be significant, which is what is expected. In other words even your dataset is only noise (no relation between the variables), in 5% of the cases you will assume a relation that does not exist. That is the curse of using significance thresholds. The issue with SEMs is that we are fitting so many relations that it is certain that you will end up with some significant relations, don’t know if one can adjust p-values in SEM for multiple testing issues …&lt;/p&gt;
+
+&lt;p&gt;Finally I look at the average value of the significant paths:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://biologyforfun.files.wordpress.com/2017/05/fig4.png&quot; alt=&quot;Fig4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Not much to say here, the values are usually on average around 0 which is to be expected since we just had noise.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;piecewiseSEM seems to accept many models that are just noise and because one fits many models one will certainly end up with some significant relations that could always be explained post-hoc. Of course this was just a small exercise and this should be expanded and compared to lavaan or other algorithms.&lt;/p&gt;
+
+&lt;p&gt;Wishing you Happy but Careful modeling.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="R" /><category term="SEMs" /><category term="Simulation" /><summary type="html">Structural Equation Models are being used more and more frequently by ecologists due to the appeal of linking variables together in complex web of interactions. There are currently two main libraries in R to fit such models: lavaan and piecewiseSEM. The aim of this post is not to discuss the advantages and drawbacks of these two libraries, the interested reader can have a look at this post.</summary></entry><entry><title type="html">How not to control for multiple testing</title><link href="http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing/" rel="alternate" type="text/html" title="How not to control for multiple testing" /><published>2017-04-17T00:00:00+02:00</published><updated>2017-04-17T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/r%20and%20stat/how-not-to-control-for-multiple-testing/">&lt;p&gt;While reading the method section of a recent article by &lt;a href=&quot;https://www.nature.com/nature/journal/v536/n7617/full/nature19092.html&quot;&gt;Solivares et al&lt;/a&gt;, I came upon the following paragraph:&lt;/p&gt;
+
+&lt;p&gt;“The inclusion of many predictors in statistical models increases the chance of type I error (false positives). To account for this we used a Bernoulli process to detect false discovery rates, where the probability (&lt;em&gt;P&lt;/em&gt;) of finding a given number of significant predictors (K) just by chance is a proportion of the total number of predictors tested (&lt;em&gt;N&lt;/em&gt; = 16 in our case: the abundance and richness of 7 and 9 trophic groups, respectively) and the &lt;em&gt;P&lt;/em&gt; value considered significant (&lt;em&gt;α&lt;/em&gt; = 0.05 in our case)&lt;a href=&quot;http://www.nature.com/nature/journal/v536/n7617/full/nature19092.html#ref39&quot;&gt;39&lt;/a&gt;, &lt;a href=&quot;http://www.nature.com/nature/journal/v536/n7617/full/nature19092.html#ref40&quot;&gt;40&lt;/a&gt;. The probability of finding three significant predictors on average, as we did, is therefore, &lt;em&gt;P&lt;/em&gt; = [16!/(16 − 3)!3!] × 0.053(1 − 0.05)(16 − 3) = 0.0359 [added note from me: 0.053 should actually be: 0.053], indicating that the effects we found are very unlikely to be spurious. The probability of false discovery rates when considering all models and predictors fit (14 ecosystem services × 16 richness and abundance metrics) and the ones that were significant amongst them (52: 25 significant abundance predictors and 27 significant richness predictors) was even lower (&lt;em&gt;P&lt;/em&gt; &amp;lt; 0.0001).”&lt;/p&gt;
+
+&lt;p&gt;I have never read such an argument before. I am no statistician but I think that the arguments presented by the authors do not account for multiple testing issues. This paragraph is in no way comforting me that the authors took steps to prevent such issues to affect their conclusions. Do note that this post is not a critic of the article in general (even if I would have a couple of things to say) or of the conclusions drawn by the authors.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-a-bernoulli-process&quot;&gt;What is a Bernoulli process?&lt;/h2&gt;
+
+&lt;p&gt;A Bernoulli process is when you make a series of trials where each single one of them can have only two outcomes (like success and failures) and you can attribute a probability to each outcome. Flipping a coin is a Bernoulli process, only two outcomes are possible, either the coin lands on heads, either it lands on tails. If the coin is fair the probability of getting a head is 0.5. If you flip the coin n times and assume that the throws are independent between them, we can get the probability of getting k heads (k being an integer between 0 and 10) by using the binomial distribution:&lt;/p&gt;
+
+&lt;p&gt;P(X=k) = (n! / (n-k)!k!) * pk * (1-p)n-k&lt;/p&gt;
+
+&lt;p&gt;The probability of obtaining 10 heads from 10 flips of a fair coin is:&lt;/p&gt;
+
+&lt;p&gt;P(X=10) = (10! / (10-10)!10!) * 0.510 * 0.510-10 = 0.0009, so P &amp;lt; 0.001&lt;/p&gt;
+
+&lt;h2 id=&quot;is-multiple-testing-a-bernoulli-process&quot;&gt;Is multiple testing a Bernoulli process?&lt;/h2&gt;
+
+&lt;p&gt;It might seem tempting to do so, people often assume that if the p-value is larger than 0.05 then there is no effect (failure) and if the p-value is smaller 0.05 then there is an effect (success). From this rationale we could somehow assume that everything is random, that there are no effects, use the 0.05 threshold as the probability to have a success and see how likely it is to obtain k successes from multiple tests assuming that all p-values are independent. This is wrong. If you feel unsure what exactly are p-values, a nice &lt;a href=&quot;http://esajournals.onlinelibrary.wiley.com/hub/issue/10.1002/ecy.2014.95.issue-3/&quot;&gt;starting place is the 2014 forum in Ecology&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The core of the arguments from the publication is: “To account for this we used a Bernoulli process to detect false discovery rates, where the probability (&lt;em&gt;P&lt;/em&gt;) of finding a given number of significant predictors (K) just by chance is a proportion of the total number of predictors tested […] and the &lt;em&gt;P&lt;/em&gt; value considered significant”. No need to invoke a Bernoulli process to detect false discovery, on average 5% of all effects reported significant are wrongly classified. The authors tested (16*14) 224 effects, so at least 11 of the reported significant effect are wrongly classified. In addition, I am unsure what the authors meant with “just by chance”, fitting a specific statistical model does not happen just by chance. I hope that we are doing a bit better in ecology than just assembling random predictors and seeing what affect what. When fitting a series of models, we have developed a rationale for doing so, limiting the amount of tested relationships to the one that fits to our ideas of the world. There is no “just by chance” in detecting a significant effect or not, there are effects that fits with the data at hand and others that do not. So the probabilities reported by the authors are, to my mind, meaningless, they do not account for multiple testing in any way. If I were to test 1 billion relationship and I found 1 million to be significant, what would be the meaning of: P(X=1’000’000) ?&lt;/p&gt;
+
+&lt;h2 id=&quot;what-could-the-authors-have-done&quot;&gt;What could the authors have done?&lt;/h2&gt;
+
+&lt;p&gt;The issue of multiple testing is not new, there are many ways to try to account for this issue. Simple correction to the threshold used to class effects into significant or non-significant, like the Bonferroni correction or other methods like the Hochberg procedure can be applied. Other methods that try to control the false discovery rates exist and have been advocated by ecologists like in &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/j.0030-1299.2005.13727.x/full&quot;&gt;Verhoven et al&lt;/a&gt; or &lt;a href=&quot;http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00061.x/full&quot;&gt;Pike et al&lt;/a&gt;. So there are plenty of methods out there, no need to invent new ones in a paper like this which is primarily interested in reporting ecological patterns.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I guess that the authors got asked by one of the reviewers if they were taking into account the issue of multiple testing, and they added this paragraph as a response. I am a bit baffled that the editor and/or the reviewers accepted such argumentation. Anyhow I sincerely hope that it is the first and only time that I will read such argumentation in an ecological paper. To finish, let me re-emphasize that this post is in no way intended to discredit the work of the authors, it is just expressing my concerns over this paragraph that may appeal to others and flourish in the literature.&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="ecology" /><category term="multiple testing" /><category term="Statistics" /><summary type="html">While reading the method section of a recent article by Solivares et al, I came upon the following paragraph:</summary></entry><entry><title type="html">About my PhD defense in Germany</title><link href="http://localhost:4000/biological%20stuff/opinion%20posts/about-my-phd-defense-in-germany/" rel="alternate" type="text/html" title="About my PhD defense in Germany" /><published>2017-04-10T00:00:00+02:00</published><updated>2017-04-10T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/opinion%20posts/about-my-phd-defense-in-germany</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/opinion%20posts/about-my-phd-defense-in-germany/">&lt;p&gt;I recently held my defense and will most certainly make a couple of posts in the ”near” future on important aspects of the PhD that might helped current or future PhDs. In this post I will talk a bit about my experience during the defense and what helped me preparing it but also holding it.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-defense-is-very-much-context-dependent&quot;&gt;A defense is very much context-dependent:&lt;/h2&gt;
+
+&lt;p&gt;There are large differences in the format of a defense between countries and even within a country between different universities. In France PhD candidate make a presentation of circa 45min before answering questions from a jury composed of 5-8 people, the defense in itself lasting around 3hrs. In Belgium, the PhD candidate meet his/her committee in a pre-defense that is closed to the public. During this meeting (nasty) questions and (relevant) critics are raised and the candidate has then 2 months to revise the thesis. After that the public defense is mostly a formal event where only general and mild questions are asked. In Sweden, an&lt;a href=&quot;https://scientistseessquirrel.wordpress.com/2016/06/16/the-opponent-system-my-experience-at-a-swedish-phd-defence/&quot;&gt; external examiner takes up the role of the opponent &lt;/a&gt;and basically present the work of the candidate to the thesis committee and the audience. After that there is a question phase where the candidate has some work to do. I just wanted to outline these few examples to make you realize how widely different the actual defense can be, be sure to become familiar with your system already in the first years of your PhD to know what is expected of you and how it will proceed. This is even more important if you graduate in a foreign country where you might naively expect things to be like at home. The best way to achieve this is to attend defense at your faculty.&lt;/p&gt;
+
+&lt;p&gt;At the university where I graduated (Technical University Munich) the defense is traditionally a one-hour long discussion with the committee with no public. The candidate briefly present his/her main results and conclusions (without powerpoint) followed by questions and discussions with the committee. It is actually more a formal event than an exam in itself the main aim of the defense being (and I quote the chair of my committee): “To prove that he is the one behind the work contained in the thesis”. The TUM also allow candidate to make the defense open to the public, I decided to do so and I actually was the first one in my chair to go that way.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-i-prepared-for-the-defense&quot;&gt;How I prepared for the defense:&lt;/h2&gt;
+
+&lt;p&gt;Since I was the first candidate to have an open defense in my chair I did not had the first-hand experience on how the defense usually goes at my university. I asked some former PhDs and they gave me some infos like how was the atmosphere during the defense, what type of nasty questions the committee came up with and so on. I also read a couple of blog post providing advice to prepare for the defense-like exams, I liked this &lt;a href=&quot;https://dynamicecology.wordpress.com/2013/03/28/surviving-your-comprehensive-exams/&quot;&gt;one&lt;/a&gt; or this &lt;a href=&quot;http://matt.might.net/articles/phd-defense-tips/&quot;&gt;one&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The preparation of the defense consists of two connected tasks: developing the talk and training for the questions.
+For the talk part I spent a week or so going over my thesis and picking up the results that I wanted to highlight in the short time that was given to me (10-15min) and also putting together a structure for the talk. I decided to spend a third of the time giving some background information into my research (experimental biodiversity ecosystem function) and the study system I used (the Jena experiment). The rest of the talk being a short summary of the chapters focusing on the results. As I mentioned above the candidate are expected to give the talk without visual aid, so it is basically a scientific speech, which can be a bit scary since we tend to rely more and more on our slides in scientific talks. I rehearsed the speech once a day for 10 days before the defense, the first days mumbling while being prostrated in my bed. And then gradually standing alone, standing in front of a friend and finally in front of colleagues for a practice session. This way I slowly built up some confidence learning to put in some pauses or some re-phrasing of complex results. A few days before the defense I had a practice session with some colleagues (~5 of them). It is a large difference to talk at home in front of a friend or flatmate and to talk in the university in front of fellow scientists. So, if you have the possibility, do rehearse your talk in university settings.
+For preparing the question part, I asked around to former PhDs what type of questions they were asked. There are some general questions that are to be expected such as: “Do the results that you showed in system/compartments/species X also apply in system/compartments/species Y?”, “What are the implications of your work?/ Can you make some recommendation based on you results?”, “What hypothesis are supported/rejected by your work?”. I did not actually rehearse answering these types of questions, I mostly spent my time reading general ecology books, PhD thesis and recent conceptual or opinions articles in my field of research. So I had in my head a couple of arguments and concepts that I could develop if I were to be asked a range of questions. I scratched down on pieces of paper these ideas and how I would link them to some questions.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-arduous-dayshours-before-the-defense&quot;&gt;The arduous Days/Hours before the defense:&lt;/h2&gt;
+
+&lt;p&gt;These were pretty hard time for me, I went through cycles of stress, going from “You are well-prepared, it is just a formal event” to “What will happen if I blank-out, loose my train of thoughts” within a few hours. Some days I felt pretty good and happy in the daytime and then before going to bed starting to stress out of nowhere. Several things helped me during these times: knowing that my parents would be there to support me, walking, and sleeping. The day before the defense I was not locked in my room pouring over old and new manuscript, rather my parents came in town and we spent the day strolling through the city. The day of the defense I walked a bit in the morning, went to do some shopping for the party afterwards. I gave responsibilities to my parents to prepare the party and spent some time running a bit around to grab stuff, to meet people allowing myself to be gradually stressed out. This was not really helped by every second people asking me: “Are you stressed?”, this is a pretty stupid things to ask to a PhD candidates minutes away from his/her defense. What helped at that time was doing a bit of small talking with people I did not meet for some time and that came specifically for the occasion.&lt;/p&gt;
+
+&lt;h2 id=&quot;during-the-defense&quot;&gt;During the defense:&lt;/h2&gt;
+
+&lt;p&gt;The chair of my committee gave some introductory words that were pretty soothing added to that the fact that the audience had all very positive and smiley faces, this all gave me some confidence for the talk that went pretty well. I might have stumbled a couple of time but all in all the training paid. After that I was allowed to sit and I faced my 4 judges, my supervisor launched straight away a series of questions on hypothesis and unified theories that got me a bit unprepared, he jumped on some of the nonsense that I uttered in those moments but I gradually got grip of my arguments. One of my examiner always started his questions by giving some background, some results from his systems then phrasing out some question and giving some possible alternatives before asking for my opinion. I really enjoyed talking with him and I wish all future candidate to have at least one member of jury being that way.
+The defense in itself went pretty fast, it was not an experience that I’d like to live again tomorrow, but after it, it became clear that 90% of the stress that I felt for the defense was self-generated:  my worst enemy for the defense was myself. Something to chew on for the next years.&lt;/p&gt;
+
+&lt;h2 id=&quot;after-the-defense&quot;&gt;After the defense:&lt;/h2&gt;
+
+&lt;p&gt;In Germany after the defense there is a party and if since my labmates where cool they organized some game where I had to face my supervisor. The games were customized to the methods I used for my PhD, so for one game we were given leaves and we were told to remove (eat!) a specific area from the leaves (like 10%), this is inspired by the herbivory measurements I made. In another game we had plasticine dummies with marks on them and we had to identify what object/animal left these marks, these included coffee bean or corkscrew, this was again inspired by some of the measurements we did.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion:&lt;/h2&gt;
+
+&lt;p&gt;All my recommendations for preparing your defense boils down to: (i) assist PhD defense(s) in your university, it is even better if you can see some members of your future committee while they grill some other poor candidate, (ii) take as many opportunity as possible to train your presentation, if possible train it in the room where you will have the defense, (iii) ask PostDocs or past-PhDs student around you to talk about their experience, people react differently to these kind of situation, it is best to have a large sample size of past experience on this, (iv) try to take some holiday before your defense to concentrate on preparing it, allowing yourself loads of little treats, like nice walks, cool food, loads of sleep, cool movies or whatever makes you happy.&lt;/p&gt;
+
+&lt;p&gt;If you face your defense soon, I wish you good luck!&lt;/p&gt;</content><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><category term="Advice" /><category term="Defense" /><category term="PhD" /><summary type="html">I recently held my defense and will most certainly make a couple of posts in the ”near” future on important aspects of the PhD that might helped current or future PhDs. In this post I will talk a bit about my experience during the defense and what helped me preparing it but also holding it.</summary></entry></feed>
