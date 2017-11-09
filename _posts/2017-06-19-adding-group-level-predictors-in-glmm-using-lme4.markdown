@@ -14,7 +14,7 @@ Sometime I happen to be wrong, this is one of these instance. The issue: a colle
 
 When he came and asked if what he was doing was correct, I said that he had a classical multilevel dataset and that it was not possible to fit it using lme4, since the model would not know how to differentiate between variation explained by group effects and variation explained by soil effects. Actually this is possible, provided that the variable measured at the group-level is continuous (see [this old post](https://biologyforfun.wordpress.com/2015/08/31/two-little-annoying-stats-detail/) on a similar issue), one may add group-level predictors in lme4 fits. Let's see how it works:
 
-    
+    ```r
     #load libraries
     library(lme4)
     library(ggplot2)
@@ -44,7 +44,7 @@ When he came and asked if what he was doing was correct, I said that he had a cl
     
     #model
     (m <-lmer(Growth~Light+Soil+(1|Group),dat))
-    <em>
+    
     Linear mixed model fit by REML ['lmerMod']
     Formula: Growth ~ Light + Soil + (1 | Group)
      Data: dat
@@ -57,7 +57,7 @@ When he came and asked if what he was doing was correct, I said that he had a cl
     Fixed Effects:
     (Intercept) Light Soil 
      2.354 2.042 2.122  
-    </em>
+    ```
 
 
 
