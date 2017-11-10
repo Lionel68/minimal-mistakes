@@ -8,25 +8,6 @@ tags:
 - R
 ---
 
-```r 
-library(MASS)
-library(lme4)
-library(lattice)
-library(brms)
-library(ggplot2)
-library(gridExtra)
-
-posDef <- function(d, k, corr = FALSE){
-  W <- matrix(rnorm(d*k),ncol=k)
-  S <- tcrossprod(W) 
-  diag(S) <- diag(S) + runif(d)
-  if(corr){
-    S <- cov2cor(S)
-  }
-  return(S)
-}
-```
-
 The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For instance imagine the following R formula:
 
 $y \sim X1 + (X1 | Group)$
@@ -38,6 +19,25 @@ Where X1 is a categorical variable like sex, treatment or nationality.
 In this first example we will put together some simulated data from a full factorial design meaning that all groups (say all individuals) have data for all levels of the categorical variables. This can happen for example if you tested the speed of one operation from different workers using different kind of machines. 
 
 ```r
+#load the libraries
+library(MASS)
+library(lme4)
+library(lattice)
+library(brms)
+library(ggplot2)
+library(gridExtra)
+#a function to create appropriate variance-covariance matrices
+#adapted from here: https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices
+posDef <- function(d, k, corr = FALSE){
+  W <- matrix(rnorm(d*k),ncol=k)
+  S <- tcrossprod(W) 
+  diag(S) <- diag(S) + runif(d)
+  if(corr){
+    S <- cov2cor(S)
+  }
+  return(S)
+}
+
 set.seed(20171105)
 N <- 120 #number of observations
 J <- 12 #number of workers
@@ -67,7 +67,7 @@ ggplot(dat,aes(x=Ind_ID,y=Time,color=Machine))+geom_point()+
   geom_hline(yintercept = c(1,4,-3),color=c("red","green","blue"),linetype="dashed")
 ```
 
-![]("/assets/factor_re_1.png")
+![]("/assets/images/factor_re_1.png")
 
 The dotted line show the population-level effect of the different machines, workers are, on average faster with machine **b** and slower on machine **c**. The solid line is joining the average values per machine across the different workers. We can see that, for instance, that Worker 3 is worse than average across all machines, Worker 1 show average operating time for machine b and c but much faster operating time on machine a.
 
@@ -124,7 +124,7 @@ ggplot(dat,aes(x=Machine,y=Time))+geom_jitter()+
   geom_point(data=newdat,aes(x=x,color=Method))+
   geom_linerange(data=newdat,aes(x=x,ymin=LCI,ymax=UCI,color=Method))
 ```
-![]("/assets/factor_re_2.png")
+![]("/assets/images/factor_re_2.png")
 
 
 So for this particular dataset it did not appear worthwhile to actually estimate the extra covariance parameters. There is quite some discussion on which strategy one should adopt when chosing between alternative random effect structure, see the discussion and the article linked in [the FAQ](https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#singular-models-random-effect-variances-estimated-as-zero-or-correlations-estimated-as---1). 
@@ -156,7 +156,7 @@ ggplot(dat2,aes(x=Ind_ID,y=Time,color=Machine))+geom_point()+
   geom_hline(yintercept = c(1,4,-3),color=c("red","green","blue"),linetype="dashed")
 ```
 
-![]("/assets/factor_re_3.png")
+![]("/assets/images/factor_re_3.png")
 
 We can start to fit the same two models as before:
 
@@ -176,7 +176,7 @@ This model worked. We can explore the random terms that were fitted with this mo
 grid.arrange(dotplot(ranef(m_4,condVar=TRUE,whichel="Ind_ID"))[[1]],dotplot(ranef(m_4,condVar=TRUE,whichel="Ind_ID:Machine"))[[1]],ncol=2)
 ```
 
-![]("/assets/factor_re_4.png")
+![]("/assets/images/factor_re_4.png")
 
 You can check with the figure above that indeed worker 9 was faster than average on machine c, while worker 3 was slower than average on machine c. Using the code from above one can also plot the model predictions:
 
@@ -192,7 +192,7 @@ ggplot(dat,aes(x=Machine,y=Time))+geom_jitter()+
   geom_point(data=newdat,color="red")+
   geom_linerange(data=newdat,aes(ymin=LCI,ymax=UCI),color="red")
 ```
-![]("/assets/factor_re_5.png")
+![]("/assets/images/factor_re_5.png")
 
 We see here that the model prediction are slightly off, especially for machine a, this is certainly due to small samples combined with large variations.
 
