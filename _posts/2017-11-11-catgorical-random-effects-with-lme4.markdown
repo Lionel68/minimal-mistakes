@@ -183,7 +183,7 @@ This model worked. We can explore the random terms that were fitted with this mo
 grid.arrange(dotplot(ranef(m_4,condVar=TRUE,whichel="Ind_ID"))[[1]],dotplot(ranef(m_4,condVar=TRUE,whichel="Ind_ID:Machine"))[[1]],ncol=2)
 ```
 
-![fig4]({{ site.url }}{{ site.baseurl }}/assets/images/factor_re_4.png){% endraw %}
+![fig4]({{ site.url }}{{ site.baseurl }}/assets/images/factor_re_4.png)
 
 
 You can check with the figure above that indeed worker 9 was faster than average on machine c, while worker 3 was slower than average on machine c. Using the code from above one can also plot the model predictions:
