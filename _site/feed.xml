@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-11-01T17:42:32+01:00</updated><id>http://localhost:4000/</id><title type="html">biologyforfun</title><subtitle></subtitle><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><entry><title type="html">Mind the gap: when the news article run ahead of the science</title><link href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="alternate" type="text/html" title="Mind the gap: when the news article run ahead of the science" /><published>2017-10-18T00:00:00+02:00</published><updated>2017-10-18T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/">&lt;p&gt;This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-11-10T14:49:39+01:00</updated><id>http://localhost:4000/</id><title type="html">biologyforfun</title><subtitle></subtitle><author><name>Lionel</name><email>lionel.hertzog[a]ugent.be</email></author><entry><title type="html">Mind the gap: when the news article run ahead of the science</title><link href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="alternate" type="text/html" title="Mind the gap: when the news article run ahead of the science" /><published>2017-10-18T00:00:00+02:00</published><updated>2017-10-18T00:00:00+02:00</updated><id>http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science</id><content type="html" xml:base="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/">&lt;p&gt;This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.&lt;/p&gt;
 
 &lt;p&gt;Scrolling through lemonde.fr website I found &lt;a href=&quot;http://www.lemonde.fr/biodiversite/article/2017/10/18/en-trente-ans-pres-de-80-des-insectes-auraient-disparu-en-europe_5202939_1652692.html&quot;&gt;this article&lt;/a&gt; about a long-term study that looked at the long-term changes in insect biomass. In this article one can reads:&lt;/p&gt;
 
@@ -495,7 +495,8 @@ As argued above and &lt;a href=&quot;https://biologyforfun.wordpress.com/2017/01
 
 &lt;p&gt;When he came and asked if what he was doing was correct, I said that he had a classical multilevel dataset and that it was not possible to fit it using lme4, since the model would not know how to differentiate between variation explained by group effects and variation explained by soil effects. Actually this is possible, provided that the variable measured at the group-level is continuous (see &lt;a href=&quot;https://biologyforfun.wordpress.com/2015/08/31/two-little-annoying-stats-detail/&quot;&gt;this old post&lt;/a&gt; on a similar issue), one may add group-level predictors in lme4 fits. Let’s see how it works:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#load libraries
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```r
+#load libraries
 library(lme4)
 library(ggplot2)
 library(gridExtra)
@@ -524,7 +525,7 @@ Soil=soil[group],Growth=growth)
 
 #model
 (m &amp;lt;-lmer(Growth~Light+Soil+(1|Group),dat))
-&amp;lt;em&amp;gt;
+
 Linear mixed model fit by REML ['lmerMod']
 Formula: Growth ~ Light + Soil + (1 | Group)
  Data: dat
@@ -537,7 +538,7 @@ Number of obs: 200, groups: Group, 20
 Fixed Effects:
 (Intercept) Light Soil 
  2.354 2.042 2.122  
-&amp;lt;/em&amp;gt;
+```
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The parameter estimates looks pretty good, closed to the values used to simulate the data. It works! One can easily add group-level regression in lme4 provided that the group-level predictor(s) are continuous.
