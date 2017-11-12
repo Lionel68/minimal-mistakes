@@ -5,7 +5,7 @@ permalink: /about/
 
 ## What to find on this site?
 
-First of all welcome here! I d hope that yu'll find some interesting informations while navigating through these pages. By going to the [Research]({{ site.baseurl }}{% link _pages/research.md %}) tab, you will find out more about what questions I am exploring. Clicking on the [Publication]({{ site.baseurl }}{% link _pages/publication.md %}) tab, you will end up with a more-or-less updated list of publications. For the non-reseacher out there, publications are the crux of scientific work. When two researchers speak together, 50% of the time they talk about their paper. Finally, here you may also find my [Blog]({{ site.baseurl }}{% link _pages/blog.md %}) where I talk about:
+First of all welcome here! I d hope that yu'll find some interesting informations while navigating through these pages. By going to the [Research]({{"/_pages/research.md" | absolute_url}}) tab, you will find out more about what questions I am exploring. Clicking on the [Publication]({{"/_pages/publication.md" | absolute_url}}) tab, you will end up with a more-or-less updated list of publications. For the non-reseacher out there, publications are the crux of scientific work. When two researchers speak together, 50% of the time they talk about their paper. Finally, here you may also find my [Blog]({{"/_pages/blog.md" | absolute_url}}) where I talk about:
 
 * R: best stat software in the world,
 * Statistics: equivalent to data juggling, 
@@ -14,7 +14,7 @@ First of all welcome here! I d hope that yu'll find some interesting information
 
 ## Where is biologyforfun.wordpress?
 
-Just head over to the [Blog]({{ site.baseurl }}{% link _pages/blog.md %}) tab, feel free to leave out some comments or suggestions.
+Just head over to the [Blog]({{"/_pages/blog.md" | absolute_url}}) tab, feel free to leave out some comments or suggestions.
 
 ## A short CV
 
