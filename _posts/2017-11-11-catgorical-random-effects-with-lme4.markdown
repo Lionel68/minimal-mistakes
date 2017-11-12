@@ -1,6 +1,7 @@
 ---
 title: "Categorical random effects with lme4"
 date: "November, 11 2017"
+mathjax: true
 categories:
 - R and Stat
 tags:
@@ -47,6 +48,21 @@ dat <- data.frame(Machine = factor(rep(letters[1:3],times=40)))
 modmat <- model.matrix(~.,dat) #the model matrix
 dat$Ind_ID <- rep(1:J,each=N/J) #add the worker ID to the data frame
 xtabs(~Ind_ID+Machine,dat) #to check the design
+##       Machine
+## Ind_ID a b c
+##     1  4 3 3
+##     2  3 4 3
+##     3  3 3 4
+##     4  4 3 3
+##     5  3 4 3
+##     6  3 3 4
+##     7  4 3 3
+##     8  3 4 3
+##     9  3 3 4
+##     10 4 3 3
+##     11 3 4 3
+##     12 3 3 4
+
 #the coefficient for the regression
 mu_b <- c(1,3,-4) #these are the population-level coefficients, the average operation time parameters
 sigma_b <- posDef(3,2) #this is the variance-covariance matrix, how variable are the population-level coefficients
@@ -57,7 +73,7 @@ linpred <- rowSums(modmat * betas[dat$Ind_ID,])
 dat$Time <- rnorm(N,linpred,1)
 ```
 
-The tricky part to get at this point is the generation of the worker-level coefficients. One need to imagine that there is a population of worker out there and that there is some average operating time per machine types at the population-level. These average operating time is what we set in the __mu\_b__ object. Now, we assume that single worker would deviate from this population average and we encapsulate this deviation in the variance-covariance __sigma\b__ matrix. A key point to note is that the operating time may not deviate independetly form one another. For example worker better than average with machine **a** might worse than average with machine **b**. This is what the covariance indicates.
+The tricky part to get at this point is the generation of the worker-level coefficients. One need to imagine that there is a population of worker out there and that there is some average operating time per machine types at the population-level. These average operating time is what we set in the _mu\_b_ object. Now, we assume that single worker would deviate from this population average and we encapsulate this deviation in the variance-covariance _sigma\_b_ matrix. A key point to note is that the operating time may not deviate independetly form one another. For example worker better than average with machine **a** might worse than average with machine **b**. This is what the covariance indicates.
 
 A plot of the data might be helpful at this point:
 ```r
@@ -79,12 +95,30 @@ In the model we want to have variation in the effect of machines on operating ti
 
 ```r
 (m <- lmer(Time ~ Machine + (Machine | Ind_ID), dat))
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Time ~ Machine + (Machine | Ind_ID)
+##    Data: dat
+## REML criterion at convergence: 419.9672
+## Random effects:
+##  Groups   Name        Std.Dev. Corr       
+##  Ind_ID   (Intercept) 2.0730              
+##           Machineb    0.9329   -0.22      
+##           Machinec    1.2394   -0.32  0.16
+##  Residual             1.0605              
+## Number of obs: 120, groups:  Ind_ID, 12
+## Fixed Effects:
+## (Intercept)     Machineb     Machinec  
+##       1.029        2.687       -3.769
 ```
 
 This model estimated for all parameters their variation between the workers (see the Std.Dev column above) plus the correlation in the varying effect. Basically this tells us that worker that were better than average on machine **a** tended to be a bit worst than average on machine **b** and **c**. We can compare the fitted correlation to the one we used to simulate our data:
 
 ```r
 cov2cor(sigma_b)
+##            [,1]       [,2]        [,3]
+## [1,]  1.0000000 0.17863836 -0.15839289
+## [2,]  0.1786384 1.00000000  0.02149436
+## [3,] -0.1583929 0.02149436  1.00000000
 ```
 
 This might seem a bit far from the actual values that we fed in. One could look at the confidence intervals (using profile or bootMer) on these values to see how precise the estimates are.
@@ -93,6 +127,19 @@ Anyhow it is pretty costly and hard for a mixed effect model to estimate many va
 
 ```r
 (m_2 <- lmer(Time ~ Machine + (1 | Ind_ID) + (1 | Ind_ID:Machine), dat))
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Time ~ Machine + (1 | Ind_ID) + (1 | Ind_ID:Machine)
+##    Data: dat
+## REML criterion at convergence: 421.1847
+## Random effects:
+##  Groups         Name        Std.Dev.
+##  Ind_ID:Machine (Intercept) 0.8559  
+##  Ind_ID         (Intercept) 1.8806  
+##  Residual                   1.0616  
+## Number of obs: 120, groups:  Ind_ID:Machine, 36; Ind_ID, 12
+## Fixed Effects:
+## (Intercept)     Machineb     Machinec  
+##       1.032        2.682       -3.766
 ```
 
 According to the [github FAQ](https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#model-specification) this random effect notation assume intercept varying among workers and among machines within workers (nested random effects). So the model will estimate for each worker a deviation from the average operating time, the model estimated that the standard deviation of these deviations was 1.88. In addition there will be an extra deviation for each worker on each machines, the model estimated that the standard deviation of these deviation was 0.86.
@@ -147,6 +194,20 @@ dat2 <- data.frame(Machine = factor(rep(letters[1:3],times=40)))
 modmat2 <- model.matrix(~.,dat2) #the model matrix
 dat2$Ind_ID <- rep(1:J,times=N/J) #add the worker ID to the data frame
 xtabs(~Ind_ID+Machine,dat2) #to check the design
+##       Machine
+## Ind_ID  a  b  c
+##     1  10  0  0
+##     2   0 10  0
+##     3   0  0 10
+##     4  10  0  0
+##     5   0 10  0
+##     6   0  0 10
+##     7  10  0  0
+##     8   0 10  0
+##     9   0  0 10
+##     10 10  0  0
+##     11  0 10  0
+##     12  0  0 10
 
 #we will use the same coefficients as before
 #the predicted values
@@ -169,12 +230,28 @@ We can start to fit the same two models as before:
 
 ```r
 m_3 <- lmer(Time ~ Machine + (Machine | Ind_ID),dat2)
+## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control
+## $checkConv, : Hessian is numerically singular: parameters are not uniquely
+## determined
 ```
 
 The model did not fit due to some numerical issues, basically we do not have enough data to fit the complexity we are asking for with this model. One option is to go out and collect more data, another option is to try out a simpler model:
 
 ```r
 (m_4 <- lmer(Time ~ Machine + (1 | Ind_ID) + (1 | Ind_ID:Machine),dat2))
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Time ~ Machine + (1 | Ind_ID) + (1 | Ind_ID:Machine)
+##    Data: dat2
+## REML criterion at convergence: 386.2318
+## Random effects:
+##  Groups         Name        Std.Dev.
+##  Ind_ID         (Intercept) 1.288   
+##  Ind_ID:Machine (Intercept) 1.490   
+##  Residual                   1.047   
+## Number of obs: 120, groups:  Ind_ID, 12; Ind_ID:Machine, 12
+## Fixed Effects:
+## (Intercept)     Machineb     Machinec  
+##       2.216        1.932       -5.978
 ```
 
 This model worked. We can explore the random terms that were fitted with this model:
