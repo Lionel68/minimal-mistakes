@@ -13,7 +13,7 @@ In the Jena experiment I investigated the effect of plant diversity on arthropod
 
 Currently  am working on an interfaculty project at the university of Gent looking at the effect of tree composition shifts on communities and ecosystem function in a spatially-explicit way. Basically, we measure birds, insects, plants or pathogens in forest fragments with different tree species composition (red oak, beech, pedonculate oak), and these fragments change in size and isolation. Some are small and surrounded by urban habitats while other are larger and surrounded by pastures or crop fields. This is a very interesting set up because previous experiments on the links between biodiversity and the functioning of the ecosystems were not embedded within a landscape. Taking this spatial dimension into account is key to translate the results from the many experiments worldwide to the actual world. If you are interested by this topic a [recent issue](http://rstb.royalsocietypublishing.org/content/371/1694) at the Philosophical Transcription of the Royal Society tries to address this question. 
 
-![east Flanders]({{ site.url }}{{ site.baseurl }}/assets/images/LanCover_polygon.png)
+![east Flanders]({{ site.url }}{{ site.baseurl }}/assets/images/LandCover_polygon.png)
 
 
 ## Simulating movement to explore sampling issues and global change effects
