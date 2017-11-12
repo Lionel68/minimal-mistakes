@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -362,6 +366,14 @@
 
       <section class="page__content" itemprop="text">
         
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+
+            </nav>
+          </aside>
+        
         <p>In my surroundings at work I see quite a few people managing their data in spreadsheet software like Excel or Calc, these software will do the work but I usually tend to do as little data manipulation in them as possible and to turn as soon as possible my spreadsheets into csv files and then bring the data to R where every single manipulation I do on them is recorded by default in the history (if you use RStudio) or in scripts if you are documenting your work (which should always be the way to go). The aim of this post is to show how to do some manipulations often done on data (ie subsetting, summarizing, ordering …) in R. As always there are a thousand way to do an operation, I will go through the basic way to do these manipulation using the vector-based approach of R and then at the end show how new libraries allow you to do these manipulation on data frame using code easily understandable for those not grasping (yet) the magic of vector-based operations. (As always a nicer RPubs version of this article is available at: http://rpubs.com/Lionel/33216, if anyone around now how to transfer .Rmd files to Wordpress blog I’ll be glad to hear about it)</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#################
@@ -569,6 +581,40 @@ ggplot(data_d,aes(x=Factor1,y=Mean))+geom_point(colour="red",size=3,show_guide=F
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -656,40 +702,6 @@ ggplot(data_d,aes(x=Factor1,y=Mean))+geom_point(colour="red",size=3,show_guide=F
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -746,6 +758,8 @@ ggplot(data_d,aes(x=Factor1,y=Mean))+geom_point(colour="red",size=3,show_guide=F
 
 
   
+
+
 
 
 

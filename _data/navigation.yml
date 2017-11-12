@@ -8,6 +8,8 @@ main:
     url: /publications/
   - title: "Blog"
     url: /blog/
+  - title: "ARt"
+    url: /art/
   # - title: "Sitemap"
   #   url: /sitemap/
 

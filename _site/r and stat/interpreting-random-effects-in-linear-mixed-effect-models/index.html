@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,19 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+<ul class="toc__menu">
+  <li><a href="#the-intuition">The Intuition</a></li>
+  <li><a href="#a-simple-example">A simple example</a></li>
+  <li><a href="#a-more-complex-example">A more complex example</a></li>
+</ul>
+
+            </nav>
+          </aside>
         
         <p>Recently I had more and more trouble to find topics for stats-orientated posts, fortunately a recent question from a reader gave me the idea for this one.</p>
 
@@ -584,6 +601,40 @@ ggplot(pred_slp,aes(x=Days,y=Reaction,color=Subject))+
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -671,40 +722,6 @@ ggplot(pred_slp,aes(x=Days,y=Reaction,color=Subject))+
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -761,6 +778,8 @@ ggplot(pred_slp,aes(x=Days,y=Reaction,color=Subject))+
 
 
   
+
+
 
 
 

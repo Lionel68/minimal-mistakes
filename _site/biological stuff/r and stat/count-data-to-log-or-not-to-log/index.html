@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,14 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+
+            </nav>
+          </aside>
         
         <p>Count data are widely collected in ecology, for example when one count the number of birds or the number of flowers. These data follow naturally a Poisson or negative binomial distribution and are therefore sometime tricky to fit with standard LMs. A traditional approach has been to log-transform such data and then fit LMs to the transformed data. Recently a <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00021.x/full">paper</a> advocated against the use of such transformation since it led to high bias in the estimated coefficients. More recently another <a href="http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12386/abstract?userIsAuthenticated=false&amp;deniedAccessCustomisedMessage=">paper</a> argued that log-transformation of count data followed by LM led to lower type I error rate (ie saying that an effect is significant when it is not) than GLMs. What should we do then?</p>
 
@@ -581,6 +593,40 @@ ggplot(output4,aes(x=sd.eps,y=Bias,color=Model))+geom_path(size=2)+facet_wrap(~b
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -668,40 +714,6 @@ ggplot(output4,aes(x=sd.eps,y=Bias,color=Model))+geom_path(size=2)+facet_wrap(~b
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -758,6 +770,8 @@ ggplot(output4,aes(x=sd.eps,y=Bias,color=Model))+geom_path(size=2)+facet_wrap(~b
 
 
   
+
+
 
 
 

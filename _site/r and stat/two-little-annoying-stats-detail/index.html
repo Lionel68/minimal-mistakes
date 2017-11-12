@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,53 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+<ul class="toc__menu">
+  <li><a href="#intercept--------temp------month2------month3------month4">(Intercept)        temp      month2      month3      month4</a></li>
+  <li><a href="#09567796---20654349---04307483---12649599---08925088">0.9567796   2.0654349   0.4307483   1.2649599  -0.8925088</a></li>
+  <li><a href="#intercept--------temp">(Intercept)        temp</a></li>
+  <li><a href="#1157095----2063714">1.157095    2.063714</a></li>
+  <li><a href="#month">$month</a></li>
+  <li><a href="#intercept">(Intercept)</a></li>
+  <li><a href="#1---01916665">1  -0.1916665</a></li>
+  <li><a href="#2---02197100">2   0.2197100</a></li>
+  <li><a href="#3---10131908">3   1.0131908</a></li>
+  <li><a href="#4---10412343">4  -1.0412343</a></li>
+  <li><a href="#groups---name--------stddev">Groups   Name        Std.Dev.</a></li>
+  <li><a href="#month----intercept-087720">month    (Intercept) 0.87720</a></li>
+  <li><a href="#residual-------------098016">Residual             0.98016</a></li>
+  <li><a href="#1-08831761">[1] 0.8831761</a></li>
+  <li><a href="#intercept--09567796--02039313--4691676-9080522e-06">(Intercept)  0.9567796  0.2039313  4.691676 9.080522e-06</a></li>
+  <li><a href="#temp---------20654349--01048368-19701440-2549792e-35">temp         2.0654349  0.1048368 19.701440 2.549792e-35</a></li>
+  <li><a href="#month2-------04307483--02862849--1504614-1357408e-01">month2       0.4307483  0.2862849  1.504614 1.357408e-01</a></li>
+  <li><a href="#month3-------12649599--02772677--4562233-1511379e-05">month3       1.2649599  0.2772677  4.562233 1.511379e-05</a></li>
+  <li><a href="#month4-------08925088--02789932--3199035-1874375e-03">month4      -0.8925088  0.2789932 -3.199035 1.874375e-03</a></li>
+  <li><a href="#estimate-std-error----t-value">Estimate Std. Error    t value</a></li>
+  <li><a href="#intercept--09567796--04525224--21143256">(Intercept)  0.9567796  0.4525224  2.1143256</a></li>
+  <li><a href="#temp---------20654349--01048368-197014396">temp         2.0654349  0.1048368 19.7014396</a></li>
+  <li><a href="#month2-------04307483--06390118--06740851">month2       0.4307483  0.6390118  0.6740851</a></li>
+  <li><a href="#month3-------12649599--06350232--19919901">month3       1.2649599  0.6350232  1.9919901</a></li>
+  <li><a href="#month4-------08925088--06357784--14038048">month4      -0.8925088  0.6357784 -1.4038048</a></li>
+  <li><a href="#intercept--------temp------month2------month3------month4-1">(Intercept)        temp      month2      month3      month4</a></li>
+  <li><a href="#-2064083----2141428----1644968----4590429----3064715">-2.064083    2.141428    1.644968    4.590429    3.064715</a></li>
+  <li><a href="#1--266714133--126677658--147977624--002506236">[1] -2.66714133 -1.26677658  1.47977624  0.02506236</a></li>
+  <li><a href="#groups---name--------stddev-1">Groups   Name        Std.Dev.</a></li>
+  <li><a href="#month----intercept-074327">month    (Intercept) 0.74327</a></li>
+  <li><a href="#residual-------------093435">Residual             0.93435</a></li>
+  <li><a href="#month-1">$month</a></li>
+  <li><a href="#intercept-1">(Intercept)</a></li>
+  <li><a href="#1--1378195e-15">1  1.378195e-15</a></li>
+  <li><a href="#2--7386264e-15">2  7.386264e-15</a></li>
+  <li><a href="#3--2118975e-14">3 -2.118975e-14</a></li>
+  <li><a href="#4--7752347e-15">4 -7.752347e-15</a></li>
+</ul>
+
+            </nav>
+          </aside>
         
         <p>UPDATED: Thanks to Ben and Florian comments I’ve updated the first part of the post</p>
 
@@ -740,6 +791,40 @@ lines(temp_new$temp,pred_temp,lwd=3,col=”red”)</p>
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -827,40 +912,6 @@ lines(temp_new$temp,pred_temp,lwd=3,col=”red”)</p>
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -917,6 +968,8 @@ lines(temp_new$temp,pred_temp,lwd=3,col=”red”)</p>
 
 
   
+
+
 
 
 

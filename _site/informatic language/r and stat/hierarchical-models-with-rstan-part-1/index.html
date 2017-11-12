@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,18 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+<ul class="toc__menu">
+  <li><a href="#a-few-words-about-rstan">A few words about RStan:</a></li>
+  <li><a href="#first-example-with-simulated-data">First example with simulated data:</a></li>
+</ul>
+
+            </nav>
+          </aside>
         
         <p>Real-world data sometime show complex structure that call for the use of special models. When data are organized in more than one level, <a href="http://www.cambridge.org/de/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models?format=PB&amp;isbn=9780521686891">hierarchical models</a> are the most relevant tool for data analysis. One classic example is when you record student performance from different schools, you might decide to record student-level variables (age, ethnicity, social background) as well as school-level variable (number of student, budget). In this post I will show how to fit such models using RStan. As there is much to say and try on such models I restrict myself in this post to a rather simple example, I will extend this to more complex situations in latter posts.</p>
 
@@ -732,6 +748,40 @@ legend(x=2.1,y=10,legend=paste("Gr",1:10),ncol = 1,col=cols,pch=16,bty="n",xpd=N
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -819,40 +869,6 @@ legend(x=2.1,y=10,legend=paste("Gr",1:10),ncol = 1,col=cols,pch=16,bty="n",xpd=N
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -909,6 +925,8 @@ legend(x=2.1,y=10,legend=paste("Gr",1:10),ncol = 1,col=cols,pch=16,bty="n",xpd=N
 
 
   
+
+
 
 
 

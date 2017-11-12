@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,14 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+
+            </nav>
+          </aside>
         
         <p>In 2001 the book by Stephen Hubbell on the <a href="http://press.princeton.edu/titles/7105.html">neutral theory of biodiversity</a> was a major shift from classical community ecology. Before this book the niche-assembly framework was dominating the study of community dynamics. Very briefly under this framework local species composition is the result of the resource available at a particular site and species presence or absence depends on species niche (as defined in <a href="http://press.uchicago.edu/ucp/books/book/chicago/E/bo3638660.html">Chase 2003</a>). As a result community assembly was seen as a deterministic process and a specific set of species should emerge from a given set of resources and species composition should be stable as long as the system is not disturbed. Hubbell theory based on a dispersal-assembly framework (historically developed by <a href="https://books.google.de/books?hl=de&amp;lr=&amp;id=YBDWCgAAQBAJ&amp;oi=fnd&amp;pg=PR7&amp;dq=theory+island+biogeography&amp;ots=czmii1b2IK&amp;sig=EA1QSu629rDRYP2tIR4BuoWpsLo">MacArthur and Wilson</a>) was a departure from this mainstream view of community dynamics by assuming that local species composition are transient with the absence of any equilibrium. Species abundance follow a random walk under ecological drift, species are continuously going locally extinct while a constant rain of immigrants from the metacommunity bring new recruits. The interested reader is kindly encouraged to read: <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1461-0248.2006.00996.x/full">this</a>, <a href="http://www.jstor.org/stable/10.1086/652373?seq=1#page_scan_tab_contents">that</a> or <a href="http://www.sciencedirect.com/science/article/pii/S0169534706001650">that.</a></p>
 
@@ -598,6 +610,40 @@ ggplot(rich,aes(x=Time,y=Rich,color=factor(D)))+geom_path()
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -685,40 +731,6 @@ ggplot(rich,aes(x=Time,y=Rich,color=factor(D)))+geom_path()
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -775,6 +787,8 @@ ggplot(rich,aes(x=Time,y=Rich,color=factor(D)))+geom_path()
 
 
   
+
+
 
 
 

@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,14 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+
+            </nav>
+          </aside>
         
         <p>Setting the right random effect part in mixed effect models can be tricky in many applied situation. I will not talk here about choosing whether a grouping variable (sites, individuals …) should be included as a fixed term or as a random term, please see Gelman and Hill (2006) and Zuur et al (2009) for informations. Here I will present the use of the bootMer function in the package lme4 to compare two models with different random effect terms specification and decide whether one model do a (significantly) better job at fitting the data. The standard way to compare two model is to derive the likelihood ratio test (LRT) value and since these should follow a chi-square distribution derive a p-value corresponding to the probability to observe such an extreme LRT under the null hypothesis that both model perform equally well. This approach works relatively fine for GLM but for (G)LMM several problem arises due mainly to boundary effects (the null hypothesis being in this case that the variance of the random effects is 0) see Bolker et al (2009). One way to do model comparison in (G)LMM is to derive bootstrapped likelihood values from the two competing models and to draw confidence intervals around the observed values to decide if one model perform better than the other. Below are some code with simulated data (a cleaner version with more graphs can be found here: <a href="http://rpubs.com/hughes/22059">http://rpubs.com/hughes/22059</a>):</p>
 
@@ -590,6 +602,40 @@ Zuur, A., Ieno, E. N., Walker, N., Saveliev, A. A., &amp; Smith, G. M. (2009). M
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -677,40 +723,6 @@ Zuur, A., Ieno, E. N., Walker, N., Saveliev, A. A., &amp; Smith, G. M. (2009). M
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -767,6 +779,8 @@ Zuur, A., Ieno, E. N., Walker, N., Saveliev, A. A., &amp; Smith, G. M. (2009). M
 
 
   
+
+
 
 
 

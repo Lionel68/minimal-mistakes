@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -362,6 +366,14 @@
 
       <section class="page__content" itemprop="text">
         
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+
+            </nav>
+          </aside>
+        
         <p>When working with strings regular expressions are an extremely powerful tool to look for specific patterns in the strings. In informatics a string is several characters put together, this can be words, sentences, or DNA code. Regular expression were developed in the fifties (thanks to Jeff Newmiller comment) by computer scientists (https://en.wikipedia.org/wiki/Regular_expression) and I discovered them using Perl (http://www.perl.org/). They have also been implemented in various other programming languages due to their nice functionalities. Here I will present the functions in R that use regular expression and will present some general use of regular expression in ecology. As always a cleaner version of the post is available at: http://rpubs.com/Lionel/19068</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#regular expression functions, there are 7 functions that can use regular expression
@@ -549,6 +561,40 @@ gsub("(.{3})(\\w{1})(\\w{2})(\\w{1})(\\w{2})", "\\1\\U\\2\\L\\3\\U\\4\\L\\5",
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -636,40 +682,6 @@ gsub("(.{3})(\\w{1})(\\w{2})(\\w{1})(\\w{2})", "\\1\\U\\2\\L\\3\\U\\4\\L\\5",
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -726,6 +738,8 @@ gsub("(.{3})(\\w{1})(\\w{2})(\\w{1})(\\w{2})", "\\1\\U\\2\\L\\3\\U\\4\\L\\5",
 
 
   
+
+
 
 
 

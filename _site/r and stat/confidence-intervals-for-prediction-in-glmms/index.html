@@ -119,6 +119,7 @@
 <!-- insert favicons. use http://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+
   </head>
 
   <body class="layout--single">
@@ -144,6 +145,9 @@
           
             
             <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
           
         </ul>
         <button type="button">
@@ -361,6 +365,14 @@
       
 
       <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+
+            </nav>
+          </aside>
         
         <p>With LM and GLM the predict function can return the standard error for the predicted values on either the observed data or on new data. This is then used to draw confidence or prediction intervals around the fitted regression lines. The confidence intervals (CI) focus on the regression lines and can be interpreted as (assuming that we draw 95% CI): “If we would repeat our sampling X times the regression line would fall between this interval 95% of the time”. On the other hand the prediction interval focus on single data point and could be interpreted as (again assuming that we draw 95% CI): “If we would sample X times at these particular value for the explanatory variables, the response value would fall between this interval 95% of the time”. The <a href="https://en.wikipedia.org/wiki/Confidence_interval#Meaning_and_interpretation">wikipedia page</a> has some nice explanation about the meaning of confidence intervals.
 For GLMM the predict function does not allow one to derive standard error, the reason being (from the help page of predict.merMod): “There is no option for computing standard errors of predictions because it is difficult to define an efficient method that incorporates uncertainty in the variance parameters”. This means there is for now no way to include in the computation of the standard error for predicted values the fact that the fitted random effect standard deviation are just estimates and may be more or less well estimated. We can however still derive confidence or prediction intervals keeping in mind that we might underestimate the uncertainty around the estimates.</p>
@@ -613,6 +625,40 @@ legend(“topleft”,legend=c(“Fitted line”,”Confidence interval”,”Pre
     
     <h2 class="archive__item-title" itemprop="headline">
       
+        <a href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/" rel="permalink">Categorical random effects with lme4
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For ...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
         <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
 </a>
       
@@ -700,40 +746,6 @@ legend(“topleft”,legend=c(“Fitted line”,”Confidence interval”,”Pre
   </article>
 </div>
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src=
-          
-            "http://localhost:4000/assets/images/tease.png"
-          
-          alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/cause-mechanism-and-prediction-in-ecology/" rel="permalink">Cause, mechanism and prediction in ecology
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
-
-
-
-
-  8 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">This is a theme that bugged me for the past few months, through reading (Peters’ critique for ecology, Shipley’s path analysis book), meetings and discussion...</p>
-  </article>
-</div>
-        
       </div>
     </div>
   
@@ -790,6 +802,8 @@ legend(“topleft”,legend=c(“Fitted line”,”Confidence interval”,”Pre
 
 
   
+
+
 
 
 
