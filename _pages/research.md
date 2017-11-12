@@ -7,7 +7,7 @@ permalink: /research/
 
 In the Jena experiment I investigated the effect of plant diversity on arthropod communities and two functions mediated by arthropods: herbivory and predation. In other words, what is the effect of changing the number of plant species on insects, spiders and millipedes? And also, with these changes in insects, spiders and millipedes, what happens with herbivory and predation rates? The results showed that all arthropods groups were affected by changes in plant diversity, while herbivorous species were directly responding to plant diversity, carnivorous species were affected through changes in plant productivity. You may find a summary of the effect of plant diversity on arthropods in the Jena experiment in [this paper](http://www.sciencedirect.com/science/article/pii/S1439179117300920).
 
-![the Jena experiment]({{ site.url }}{{ site.baseurl }}/assets/images/jena.JPG)
+![the Jena experiment]({{"/assets/images/jena.JPG" | absolute_url}})
 
 ## Effect of fragmentation and tree composition shifts on multitrophic functioning
 
