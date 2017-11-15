@@ -7,19 +7,32 @@ comments: true
 toc: true
 sidebar:
   nav: 'docs'
-gallery:
+gallery_cardioid:
   - url: /assets/images/cardioid.png
     image_path: /assets/images/cardioid.png
-    alt: "placeholder image 1"
+    alt: "Cardioid 1"
     title: "Cardioid"
   - url: /assets/images/cardioid2.png
     image_path: /assets/images/cardioid2.png
     alt: "Cardioid2"
-    title: "Image 2 title caption"
+    title: "Cardioid 2"
   - url: /assets/images/cardioid3.png
     image_path: /assets/images/cardioid3.png
-    alt: "placeholder image 3"
+    alt: "Cardioid3"
     title: "Cardioid3"
+gallery_igraph:
+  - url: /assets/images/igraph1.png
+    image_path: /assets/images/igraph1.png
+    alt: "Igraph 1"
+    title: "igraph"
+  - url: /assets/images/igraph2.png
+    image_path: /assets/images/igraph2.png
+    alt: "Igraph 2"
+    title: "Igraph 2"
+  - url: /assets/images/igraph3.png
+    image_path: /assets/images/igraph3.png
+    alt: "Igraph 3"
+    title: "Igraph 3"
 ---
 
 
@@ -27,4 +40,8 @@ Here are some pattern emerging from (simple) mathematical properties that I find
 
 ## Cardioid
 
-{% include gallery caption="Cardioid is based on two moving circles, they form very nice patterns, have a look at the [wiki](https://en.wikipedia.org/wiki/Cardioid) page to find more infos or click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) for the R script used." %}
+{% include gallery_cardioid caption="Cardioid is based on two moving circles, they form very nice patterns, have a look at the [wiki](https://en.wikipedia.org/wiki/Cardioid) page to find more infos or click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) for the R script used." %}
+
+## Networks
+
+{% include gallery_igraph caption="Networks represent relationships amongst individuals, fortunately drawing lines between fixed dots create mesmerizing pictures, click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) to see the R script used." %}
