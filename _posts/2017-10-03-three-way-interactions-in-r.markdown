@@ -79,11 +79,12 @@ y_i = Intercept + F12 * 0 + F22 * 0 + F23 * 0 + F24 * 0 + F32 * 0 and so on ...
 
 So in this case our model predicted a value of:
 
-`
-coef(m)[1]`
+```r
+coef(m)[1]
 
 (Intercept)
 1.298662
+```
 
 Now if we have F1 == 2, F2 == 1 and F3 == 1 we have:
 
@@ -91,12 +92,12 @@ y_i = Intercept + F12 * 1 + F22 * 0 + F23 * 0 + F24 * 0 + F32 * 0 and so on ...
 
 Model prediction in this case is:
 
-`
-coef(m)[1] + coef(m)[2]`
+```r
+coef(m)[1] + coef(m)[2]
 
 (Intercept)
 2.419048
-``
+```
 
 Let's get a bit more complicated, for cases where: F1 == 2, F2 == 3 and F3 == 2:
 
@@ -104,16 +105,18 @@ y_i = Intercept + F12 * 1 + F22 * 0 + F23 * 1 + F24 * 0 + F32 * 1 + F12:F22 * 0 
 
 Model prediction in this case is:
 
-`
-coef(m)[1] + coef(m)[2] + coef(m)[4] + coef(m)[6] + coef(m)[8] + coef(m)[10] + coef(m)[12] + coef(m)[16]`
+```r
+coef(m)[1] + coef(m)[2] + coef(m)[4] + coef(m)[6] + coef(m)[8] + coef(m)[10] + coef(m)[12] + coef(m)[16]
 
 (Intercept)
 -0.8451774
+```
 
 The key message from all this tedious writing is that the interpretation of model coefficient involving interactions cannot be easily done when considering coefficient in isolation. One needs to add coefficients together to get predicted values in different cases and then one can compare how going from one level to the next affect the response variable.
 
 When plotting interactions you have to decide which variables you want to focus on, as depending on how you specify the plot certain comparison will be easier than others. Here I want to focus on the effect of F1 on my response:
-`
+
+```r
 #model prediction
 pred <- expand.grid(F1=factor(1:2),F2=factor(1:4),F3=factor(1:2))
 pred$y <- predict(m,pred)
@@ -137,4 +140,7 @@ geom_text(data = pred[13,],aes(label="F12+F12:F23+\nF12:F32\n+F12:F23:F32",hjust
 geom_linerange(data = pred[15:16,],aes(ymin=y[1],ymax=y[2]),color="orange",size=2) +
 geom_text(data = pred[15,],aes(label="F12+F12:F24+\nF12:F32\n+F12:F24:F32",hjust=0.7,vjust=1))+
 geom_point(data=pred)
-`
+```
+
+
+

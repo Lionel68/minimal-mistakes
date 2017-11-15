@@ -25,3 +25,16 @@ cardioid(n=50,cst=pi/2,add=TRUE)
 cardioid(n=50,cst=pi,add=TRUE)
 cardioid(n=50,cst=3*pi/2,add=TRUE)
 dev.off()
+
+png('cardioid3.png',width=800,height=800)
+cardioid(n=200)
+cardioid(n=150,cst=pi/2,add=TRUE)
+cardioid(n=100,cst=pi,add=TRUE)
+cardioid(n=50,cst=3*pi/2,add=TRUE)
+dev.off()
+
+png('cardioid4.png',width=800,height=800)
+cardioid(n=200)
+cardioid(n=200,cst=pi,add=TRUE)
+dev.off()
+
