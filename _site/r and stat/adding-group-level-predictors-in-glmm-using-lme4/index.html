@@ -378,141 +378,135 @@
 
 <p>When he came and asked if what he was doing was correct, I said that he had a classical multilevel dataset and that it was not possible to fit it using lme4, since the model would not know how to differentiate between variation explained by group effects and variation explained by soil effects. Actually this is possible, provided that the variable measured at the group-level is continuous (see <a href="https://biologyforfun.wordpress.com/2015/08/31/two-little-annoying-stats-detail/">this old post</a> on a similar issue), one may add group-level predictors in lme4 fits. Let’s see how it works:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```r
-#load libraries
-library(lme4)
-library(ggplot2)
-library(gridExtra)
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#load libraries</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">lme4</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">gridExtra</span><span class="p">)</span><span class="w">
 
-#simulate some data
+</span><span class="c1">#simulate some data</span><span class="w">
 
-#first case one group-level predictor 
-#and one individual level no interaction
+</span><span class="c1">#first case one group-level predictor </span><span class="w">
+</span><span class="c1">#and one individual level no interaction</span><span class="w">
+  
+</span><span class="c1">#group-level predictor</span><span class="w">
+</span><span class="n">soil</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">runif</span><span class="p">(</span><span class="m">20</span><span class="p">,</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span><span class="c1">#individual level predictor</span><span class="w">
+</span><span class="n">light</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">runif</span><span class="p">(</span><span class="m">200</span><span class="p">,</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span><span class="c1">#group-level regression</span><span class="w">
+</span><span class="n">grp_eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="m">20</span><span class="p">,</span><span class="m">2</span><span class="o">*</span><span class="n">soil</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="c1">#group index</span><span class="w">
+</span><span class="n">group</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">gl</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">,</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w">
+</span><span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">])</span><span class="w">
+</span><span class="c1">#expected individual values</span><span class="w">
+</span><span class="n">linpred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">grp_eff</span><span class="p">[</span><span class="n">group</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="o">*</span><span class="n">light</span><span class="w">
+</span><span class="c1">#simulated individual values</span><span class="w">
+</span><span class="n">growth</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="m">200</span><span class="p">,</span><span class="n">linpred</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="c1">#putting it together</span><span class="w">
+</span><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span><span class="n">Light</span><span class="o">=</span><span class="n">light</span><span class="p">,</span><span class="w">
+</span><span class="n">Soil</span><span class="o">=</span><span class="n">soil</span><span class="p">[</span><span class="n">group</span><span class="p">],</span><span class="n">Growth</span><span class="o">=</span><span class="n">growth</span><span class="p">)</span><span class="w">
+  
+</span><span class="c1">#model</span><span class="w">
+</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="n">lmer</span><span class="p">(</span><span class="n">Growth</span><span class="o">~</span><span class="n">Light</span><span class="o">+</span><span class="n">Soil</span><span class="o">+</span><span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Group</span><span class="p">),</span><span class="n">dat</span><span class="p">))</span><span class="w">
 
-#group-level predictor
-soil &lt;- runif(20,-2,2)
-#individual level predictor
-light &lt;- runif(200,-2,2)
-#group-level regression
-grp_eff &lt;- rnorm(20,2*soil,1)
-#group index
-group &lt;- gl(n = 20,k = 10,
-labels = letters[1:20])
-#expected individual values
-linpred &lt;- 2 + grp_eff[group] + 2*light
-#simulated individual values
-growth &lt;- rnorm(200,linpred,1)
-#putting it together
-dat &lt;- data.frame(Group=group,Light=light,
-Soil=soil[group],Growth=growth)
-
-#model
-(m &lt;-lmer(Growth~Light+Soil+(1|Group),dat))
-
-Linear mixed model fit by REML ['lmerMod']
-Formula: Growth ~ Light + Soil + (1 | Group)
- Data: dat
-REML criterion at convergence: 608.1304
-Random effects:
- Groups Name Std.Dev.
- Group (Intercept) 0.6773 
- Residual 1.0046 
-Number of obs: 200, groups: Group, 20
-Fixed Effects:
-(Intercept) Light Soil 
- 2.354 2.042 2.122  
-```
-</code></pre></div></div>
-
+</span><span class="c1">##Linear mixed model fit by REML ['lmerMod']</span><span class="w">
+</span><span class="c1">##Formula: Growth ~ Light + Soil + (1 | Group)</span><span class="w">
+</span><span class="c1">## Data: dat</span><span class="w">
+</span><span class="c1">##REML criterion at convergence: 608.1304</span><span class="w">
+</span><span class="c1">##Random effects:</span><span class="w">
+</span><span class="c1">## Groups Name Std.Dev.</span><span class="w">
+</span><span class="c1">## Group (Intercept) 0.6773 </span><span class="w">
+</span><span class="c1">## Residual 1.0046 </span><span class="w">
+</span><span class="c1">##Number of obs: 200, groups: Group, 20</span><span class="w">
+</span><span class="c1">##Fixed Effects:</span><span class="w">
+</span><span class="c1">##(Intercept) Light Soil </span><span class="w">
+</span><span class="c1">## 2.354 2.042 2.122 </span><span class="w">
+</span></code></pre></div></div>
 <p>The parameter estimates looks pretty good, closed to the values used to simulate the data. It works! One can easily add group-level regression in lme4 provided that the group-level predictor(s) are continuous.
 Now we can make nice plots of the group and individual-level regressions.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#gather group-level deviation values 
-#in one dataframe together with deviation
-rf &lt;- ranef(m,condVar=TRUE)
-rff &lt;- data.frame(Group=letters[1:20],Soil=soil,RF=rf$Group[,1],Var=attr(rf$Group,"postVar")[,,1:20])
-#compute the group level regression
-rff$RFF &lt;- with(rff,RF+fixef(m)[2]*Soil)
-#plot
-p1 &lt;- ggplot(rff,aes(x=Soil,y=RFF,ymin=RFF-2*Var,ymax=RFF+2*Var))+geom_point()+
- geom_abline(aes(intercept=0,slope=fixef(m)[2]))+geom_linerange()+
- labs(y="Group-level effect",title="Group-level regression")
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#gather group-level deviation values </span><span class="w">
+</span><span class="c1">#in one dataframe together with deviation</span><span class="w">
+</span><span class="n">rf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ranef</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">condVar</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span><span class="n">rff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Group</span><span class="o">=</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">],</span><span class="n">Soil</span><span class="o">=</span><span class="n">soil</span><span class="p">,</span><span class="n">RF</span><span class="o">=</span><span class="n">rf</span><span class="o">$</span><span class="n">Group</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">Var</span><span class="o">=</span><span class="nf">attr</span><span class="p">(</span><span class="n">rf</span><span class="o">$</span><span class="n">Group</span><span class="p">,</span><span class="s2">"postVar"</span><span class="p">)[,,</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">])</span><span class="w">
+</span><span class="c1">#compute the group level regression</span><span class="w">
+</span><span class="n">rff</span><span class="o">$</span><span class="n">RFF</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">with</span><span class="p">(</span><span class="n">rff</span><span class="p">,</span><span class="n">RF</span><span class="o">+</span><span class="n">fixef</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="n">Soil</span><span class="p">)</span><span class="w">
+</span><span class="c1">#plot</span><span class="w">
+</span><span class="n">p</span><span class="m">1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">rff</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Soil</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">RFF</span><span class="p">,</span><span class="n">ymin</span><span class="o">=</span><span class="n">RFF</span><span class="m">-2</span><span class="o">*</span><span class="n">Var</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="n">RFF</span><span class="m">+2</span><span class="o">*</span><span class="n">Var</span><span class="p">))</span><span class="o">+</span><span class="n">geom_point</span><span class="p">()</span><span class="o">+</span><span class="w">
+ </span><span class="n">geom_abline</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="n">slope</span><span class="o">=</span><span class="n">fixef</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="m">2</span><span class="p">]))</span><span class="o">+</span><span class="n">geom_linerange</span><span class="p">()</span><span class="o">+</span><span class="w">
+ </span><span class="n">labs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">"Group-level effect"</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s2">"Group-level regression"</span><span class="p">)</span><span class="w">
 
-#predict individual-level regression 
-#for average group and average soil
-newdat &lt;- expand.grid(Light=seq(-2,2,length=20),Soil=0)
-newdat$Pred &lt;- predict(m,newdata=newdat,re.form=~0)
-#plot
-p2 &lt;- ggplot(dat,aes(x=Light,y=Growth))+geom_point()+
- geom_line(data=newdat,aes(x=Light,y=Pred))+labs(title="Individual-level regression")
-
-grid.arrange(p1,p2,ncol=2)
-</code></pre></div></div>
+</span><span class="c1">#predict individual-level regression </span><span class="w">
+</span><span class="c1">#for average group and average soil</span><span class="w">
+</span><span class="n">newdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">expand.grid</span><span class="p">(</span><span class="n">Light</span><span class="o">=</span><span class="n">seq</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="m">20</span><span class="p">),</span><span class="n">Soil</span><span class="o">=</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">newdata</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">re.form</span><span class="o">=~</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="c1">#plot</span><span class="w">
+</span><span class="n">p</span><span class="m">2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Light</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Growth</span><span class="p">))</span><span class="o">+</span><span class="n">geom_point</span><span class="p">()</span><span class="o">+</span><span class="w">
+ </span><span class="n">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Light</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Pred</span><span class="p">))</span><span class="o">+</span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Individual-level regression"</span><span class="p">)</span><span class="w">
+    
+</span><span class="n">grid.arrange</span><span class="p">(</span><span class="n">p</span><span class="m">1</span><span class="p">,</span><span class="n">p</span><span class="m">2</span><span class="p">,</span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
 
 <p><a href="https://biologyforfun.wordpress.com/2017/06/19/adding-group-level-predictors-in-glmm-using-lme4/grplvl1/"><img src="https://biologyforfun.files.wordpress.com/2017/06/grplvl1.png" alt="" /></a></p>
 
 <p>A word of caution now on using group-level regressions: I would be very careful (or better avoid) using p-values from such models. The degrees of freedom to test the soil effect are clearly inflated and are hard to guess, so I would advise against significance testing on the group-level regression.
 We can of course expand this approach to more complex situation (see some examples <a href="http://onlinelibrary.wiley.com/doi/10.1890/09-1043.1/full">here</a>), let’s see an example where we had an interaction between the group and the individual-level predictors:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#add interaction between group and individual-level 
-#and unbalanced design
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#add interaction between group and individual-level </span><span class="w">
+</span><span class="c1">#and unbalanced design</span><span class="w">
 
-#group index
-group &lt;- factor(sample(letters[1:20],
-         size = 200,replace=TRUE))
-grp_eff &lt;- rnorm(20,2*soil,1)
+</span><span class="c1">#group index</span><span class="w">
+</span><span class="n">group</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">],</span><span class="w">
+         </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span><span class="p">,</span><span class="n">replace</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span><span class="w">
+</span><span class="n">grp_eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="m">20</span><span class="p">,</span><span class="m">2</span><span class="o">*</span><span class="n">soil</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w">
 
-#expected individual values
-linpred &lt;- 2 + grp_eff[group] + 2 * light -  (grp_eff[group] * light)
-#simulated individual values
-growth &lt;- rnorm(200,linpred,1)
-#putting it together
-dat &lt;- data.frame(Group=group,Light=light,
-       Soil=soil[group],Growth=growth)
+</span><span class="c1">#expected individual values</span><span class="w">
+</span><span class="n">linpred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">grp_eff</span><span class="p">[</span><span class="n">group</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">light</span><span class="w"> </span><span class="o">-</span><span class="w">  </span><span class="p">(</span><span class="n">grp_eff</span><span class="p">[</span><span class="n">group</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">light</span><span class="p">)</span><span class="w">
+</span><span class="c1">#simulated individual values</span><span class="w">
+</span><span class="n">growth</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="m">200</span><span class="p">,</span><span class="n">linpred</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="c1">#putting it together</span><span class="w">
+</span><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span><span class="n">Light</span><span class="o">=</span><span class="n">light</span><span class="p">,</span><span class="w">
+       </span><span class="n">Soil</span><span class="o">=</span><span class="n">soil</span><span class="p">[</span><span class="n">group</span><span class="p">],</span><span class="n">Growth</span><span class="o">=</span><span class="n">growth</span><span class="p">)</span><span class="w">
 
-#model
-(m &lt;-lmer(Growth~Light*Soil+(1|Group),dat))
-
-&lt;em&gt;
-Linear mixed model fit by REML ['lmerMod']
-Formula: Growth ~ Light * Soil + (1 | Group)
-   Data: dat
-REML criterion at convergence: 731.4661
-Random effects:
- Groups   Name        Std.Dev.
- Group    (Intercept) 0.5474  
- Residual             1.4182  
-Number of obs: 200, groups:  Group, 20
-Fixed Effects:
-(Intercept)        Light         Soil   Light:Soil  
-      2.138        1.961        1.844       -1.865  
-&lt;/em&gt;
-</code></pre></div></div>
-
+</span><span class="c1">#model</span><span class="w">
+</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="n">lmer</span><span class="p">(</span><span class="n">Growth</span><span class="o">~</span><span class="n">Light</span><span class="o">*</span><span class="n">Soil</span><span class="o">+</span><span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Group</span><span class="p">),</span><span class="n">dat</span><span class="p">))</span><span class="w">
+    
+    
+</span><span class="c1">##    Linear mixed model fit by REML ['lmerMod']</span><span class="w">
+</span><span class="c1">##    Formula: Growth ~ Light * Soil + (1 | Group)</span><span class="w">
+</span><span class="c1">##       Data: dat</span><span class="w">
+</span><span class="c1">##    REML criterion at convergence: 731.4661</span><span class="w">
+</span><span class="c1">##    Random effects:</span><span class="w">
+</span><span class="c1">##     Groups   Name        Std.Dev.</span><span class="w">
+</span><span class="c1">##     Group    (Intercept) 0.5474  </span><span class="w">
+</span><span class="c1">##     Residual             1.4182  </span><span class="w">
+</span><span class="c1">##    Number of obs: 200, groups:  Group, 20</span><span class="w">
+</span><span class="c1">##    Fixed Effects:</span><span class="w">
+</span><span class="c1">##    (Intercept)        Light         Soil   Light:Soil  </span><span class="w">
+</span><span class="c1">##          2.138        1.961        1.844       -1.865  </span><span class="w">
+</span></code></pre></div></div>
 <p>This is where it starts to get tricky for me, the estimate of the interaction between group and individual-level predictors is twice as big as the simulated value. Maybe I am doing something wrong in the simulation part …
 Anyhow we can still do some cool plots:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#group-level plot
-rf &lt;- ranef(m,condVar=TRUE)
-rff &lt;- data.frame(Group=letters[1:20],Soil=soil,RF=rf$Group[,1],Var=attr(rf$Group,"postVar")[,,1:20])
-#compute the group level regression
-rff$RFF &lt;- with(rff,RF+2.16*Soil)
-p1 &lt;- ggplot(rff,aes(x=Soil,y=RFF,ymin=RFF-2*Var,ymax=RFF+2*Var))+geom_point()+
-  geom_abline(aes(intercept=0,slope=2.16))+geom_linerange()+
-  labs(y="Group-level effect",title="Group-level regression")
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#group-level plot</span><span class="w">
+</span><span class="n">rf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ranef</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">condVar</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span><span class="n">rff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Group</span><span class="o">=</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">],</span><span class="n">Soil</span><span class="o">=</span><span class="n">soil</span><span class="p">,</span><span class="n">RF</span><span class="o">=</span><span class="n">rf</span><span class="o">$</span><span class="n">Group</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">Var</span><span class="o">=</span><span class="nf">attr</span><span class="p">(</span><span class="n">rf</span><span class="o">$</span><span class="n">Group</span><span class="p">,</span><span class="s2">"postVar"</span><span class="p">)[,,</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">])</span><span class="w">
+</span><span class="c1">#compute the group level regression</span><span class="w">
+</span><span class="n">rff</span><span class="o">$</span><span class="n">RFF</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">with</span><span class="p">(</span><span class="n">rff</span><span class="p">,</span><span class="n">RF</span><span class="m">+2.16</span><span class="o">*</span><span class="n">Soil</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span><span class="m">1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">rff</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Soil</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">RFF</span><span class="p">,</span><span class="n">ymin</span><span class="o">=</span><span class="n">RFF</span><span class="m">-2</span><span class="o">*</span><span class="n">Var</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="n">RFF</span><span class="m">+2</span><span class="o">*</span><span class="n">Var</span><span class="p">))</span><span class="o">+</span><span class="n">geom_point</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_abline</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="n">slope</span><span class="o">=</span><span class="m">2.16</span><span class="p">))</span><span class="o">+</span><span class="n">geom_linerange</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">"Group-level effect"</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s2">"Group-level regression"</span><span class="p">)</span><span class="w">
 
-#predict individual effect for average group and average soil
-newdat &lt;- expand.grid(Light=seq(-2,2,length=20),Soil=c(-2,0,2))
-newdat$Pred &lt;- predict(m,newdata=newdat,re.form=~0)
+</span><span class="c1">#predict individual effect for average group and average soil</span><span class="w">
+</span><span class="n">newdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">expand.grid</span><span class="p">(</span><span class="n">Light</span><span class="o">=</span><span class="n">seq</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="m">20</span><span class="p">),</span><span class="n">Soil</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">2</span><span class="p">))</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">newdata</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">re.form</span><span class="o">=~</span><span class="m">0</span><span class="p">)</span><span class="w">
 
-p2 &lt;- ggplot(dat,aes(x=Light,y=Growth))+geom_point()+
-  geom_line(data=newdat,aes(x=Light,y=Pred,color=factor(Soil)))+
-  labs(title="Individual-level regression")+
-  scale_color_discrete(name="Soil")
-
-grid.arrange(p1,p2,ncol=2)
-</code></pre></div></div>
-
+</span><span class="n">p</span><span class="m">2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Light</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Growth</span><span class="p">))</span><span class="o">+</span><span class="n">geom_point</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Light</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Pred</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">factor</span><span class="p">(</span><span class="n">Soil</span><span class="p">)))</span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Individual-level regression"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Soil"</span><span class="p">)</span><span class="w">
+  
+</span><span class="n">grid.arrange</span><span class="p">(</span><span class="n">p</span><span class="m">1</span><span class="p">,</span><span class="n">p</span><span class="m">2</span><span class="p">,</span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
 <p><a href="https://biologyforfun.wordpress.com/2017/06/19/adding-group-level-predictors-in-glmm-using-lme4/grplvl2/"><img src="https://biologyforfun.files.wordpress.com/2017/06/grplvl2.png" alt="" /></a></p>
 
 <p>That’s it, one does not need to use more complex modelling technique like maximum likelihood estimation or multilevel bayesian regression, one can use rather straightforward lme4 fits for exploring group-level regressions. 

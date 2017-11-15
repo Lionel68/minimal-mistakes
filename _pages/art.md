@@ -40,8 +40,8 @@ Here are some pattern emerging from (simple) mathematical properties that I find
 
 ## Cardioid
 
-{% include gallery_cardioid caption="Cardioid is based on two moving circles, they form very nice patterns, have a look at the [wiki](https://en.wikipedia.org/wiki/Cardioid) page to find more infos or click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) for the R script used." %}
+{% include gallery id="gallery_cardioid" caption="Cardioid is based on two moving circles, they form very nice patterns, have a look at the [wiki](https://en.wikipedia.org/wiki/Cardioid) page to find more infos or click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) for the R script used." %}
 
 ## Networks
 
-{% include gallery_igraph caption="Networks represent relationships amongst individuals, fortunately drawing lines between fixed dots create mesmerizing pictures, click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) to see the R script used." %}
+{% include gallery id="gallery_igraph" caption="Networks represent relationships amongst individuals, fortunately drawing lines between fixed dots create mesmerizing pictures, click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) to see the R script used." %}
