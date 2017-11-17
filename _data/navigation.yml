@@ -23,11 +23,11 @@ docs:
   - title: Blogroll
     children:
       - title: dynamical ecology
-	url: http://dynamicecology.wordpress.com/
+        url: http://dynamicecology.wordpress.com/
       - title: small pond science
-	url: https://smallpondscience.com/
+        url: https://smallpondscience.com/
       - title: r-bloggers
-	url: http://r-bloggers.com/
+        url: http://r-bloggers.com/
       - title: scientists see squirel
         url: https://scientistseessquirrel.wordpress.com/
      
