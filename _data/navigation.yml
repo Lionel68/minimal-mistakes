@@ -22,5 +22,12 @@ docs:
         url: /tags/
   - title: Blogroll
     children:
-      - title: biologyforfun
-        url: http://biologyforfun.wordpress.com/
+      - title: dynamical ecology
+	url: http://dynamicecology.wordpress.com/
+      - title: small pond science
+	url: https://smallpondscience.com/
+      - title: r-bloggers
+	url: http://r-bloggers.com/
+      - title: scientists see squirel
+        url: https://scientistseessquirrel.wordpress.com/
+     
