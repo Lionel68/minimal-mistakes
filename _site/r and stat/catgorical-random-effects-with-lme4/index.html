@@ -1,0 +1,969 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.6.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Categorical random effects with lme4 - biologyforfun</title>
+
+
+
+
+<meta name="description" content="The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For instance imagine the following R formula:">
+
+
+
+
+<meta name="author" content="Lionel">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="biologyforfun">
+<meta property="og:title" content="Categorical random effects with lme4">
+
+
+  <link rel="canonical" href="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/">
+  <meta property="og:url" content="http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/">
+
+
+
+  <meta property="og:description" content="The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For instance imagine the following R formula:">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-11-11T00:00:00+01:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Lionel Hertzog",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="biologyforfun Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">biologyforfun</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/about/">About</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/research/">Research</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/blog/">Blog</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/art/">ARt</a></li>
+          
+        </ul>
+        <button type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="http://localhost:4000/assets/images/ID.jpeg" class="author__avatar" alt="Lionel" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name" itemprop="name">Lionel</h3>
+    
+      <p class="author__bio" itemprop="description">
+        Ecologist with quasi-pathological addiction for data
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Gent, Belgium</span>
+        </li>
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:lionel.hertzog[a]ugent.be">
+            <meta itemprop="email" content="lionel.hertzog[a]ugent.be" />
+            <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/lionel68" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+    
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Blog quick-links</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/categories/" class="">Categories</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://localhost:4000/tags/" class="">Tags</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Blogroll</span>
+        
+
+        
+        <ul>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://dynamicecology.wordpress.com/" class="">dynamical ecology</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="https://smallpondscience.com/" class="">small pond science</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="http://r-bloggers.com/" class="">r-bloggers</a></li>
+          
+            
+            
+
+            
+            
+
+            <li><a href="https://scientistseessquirrel.wordpress.com/" class="">scientists see squirel</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+    
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Categorical random effects with lme4">
+    <meta itemprop="description" content="The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For instance imagine the following R formula:">
+    <meta itemprop="datePublished" content="November 11, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Categorical random effects with lme4
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  10 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
+              
+<ul class="toc__menu">
+  <li><a href="#first-example-full-factorial-design">First example: full factorial design</a></li>
+  <li><a href="#second-example-incomplete-factorial-design">Second example: incomplete factorial design</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>The aim of this post is to see how to fit mixed effect models with varying effects when the explanatory variable that varies is a categorical variables. For instance imagine the following R formula:</p>
+
+<script type="math/tex; mode=display">y \sim X1 + (X1 | Group)</script>
+
+<p>Where X1 is a categorical variable like sex, treatment or nationality.</p>
+
+<h2 id="first-example-full-factorial-design">First example: full factorial design</h2>
+
+<p>In this first example we will put together some simulated data from a full factorial design meaning that all groups (say all individuals) have data for all levels of the categorical variables. This can happen for example if you tested the speed of one operation from different workers using different kind of machines.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#load the libraries</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">lme4</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">lattice</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">brms</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">gridExtra</span><span class="p">)</span><span class="w">
+</span><span class="c1">#a function to create appropriate variance-covariance matrices</span><span class="w">
+</span><span class="c1">#adapted from here: https://stats.stackexchange.com/questions/2746/how-to-efficiently-generate-random-positive-semidefinite-correlation-matrices</span><span class="w">
+</span><span class="n">posDef</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">corr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">){</span><span class="w">
+  </span><span class="n">W</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="n">rnorm</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">k</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="n">k</span><span class="p">)</span><span class="w">
+  </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tcrossprod</span><span class="p">(</span><span class="n">W</span><span class="p">)</span><span class="w"> 
+  </span><span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">runif</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">corr</span><span class="p">){</span><span class="w">
+    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cov2cor</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">set.seed</span><span class="p">(</span><span class="m">20171105</span><span class="p">)</span><span class="w">
+</span><span class="n">N</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">120</span><span class="w"> </span><span class="c1">#number of observations</span><span class="w">
+</span><span class="n">J</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="c1">#number of workers</span><span class="w">
+
+</span><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Machine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">],</span><span class="n">times</span><span class="o">=</span><span class="m">40</span><span class="p">)))</span><span class="w"> 
+</span><span class="n">modmat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">model.matrix</span><span class="p">(</span><span class="o">~</span><span class="n">.</span><span class="p">,</span><span class="n">dat</span><span class="p">)</span><span class="w"> </span><span class="c1">#the model matrix</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">Ind_ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">J</span><span class="p">,</span><span class="n">each</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="n">J</span><span class="p">)</span><span class="w"> </span><span class="c1">#add the worker ID to the data frame</span><span class="w">
+</span><span class="n">xtabs</span><span class="p">(</span><span class="o">~</span><span class="n">Ind_ID</span><span class="o">+</span><span class="n">Machine</span><span class="p">,</span><span class="n">dat</span><span class="p">)</span><span class="w"> </span><span class="c1">#to check the design</span><span class="w">
+</span><span class="c1">##       Machine</span><span class="w">
+</span><span class="c1">## Ind_ID a b c</span><span class="w">
+</span><span class="c1">##     1  4 3 3</span><span class="w">
+</span><span class="c1">##     2  3 4 3</span><span class="w">
+</span><span class="c1">##     3  3 3 4</span><span class="w">
+</span><span class="c1">##     4  4 3 3</span><span class="w">
+</span><span class="c1">##     5  3 4 3</span><span class="w">
+</span><span class="c1">##     6  3 3 4</span><span class="w">
+</span><span class="c1">##     7  4 3 3</span><span class="w">
+</span><span class="c1">##     8  3 4 3</span><span class="w">
+</span><span class="c1">##     9  3 3 4</span><span class="w">
+</span><span class="c1">##     10 4 3 3</span><span class="w">
+</span><span class="c1">##     11 3 4 3</span><span class="w">
+</span><span class="c1">##     12 3 3 4</span><span class="w">
+
+</span><span class="c1">#the coefficient for the regression</span><span class="w">
+</span><span class="n">mu_b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">-4</span><span class="p">)</span><span class="w"> </span><span class="c1">#these are the population-level coefficients, the average operation time parameters</span><span class="w">
+</span><span class="n">sigma_b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">posDef</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="c1">#this is the variance-covariance matrix, how variable are the population-level coefficients</span><span class="w">
+</span><span class="n">betas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">J</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu_b</span><span class="p">,</span><span class="w"> </span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sigma_b</span><span class="p">)</span><span class="w"> </span><span class="c1">#sample for each worker the effect of working on the different machines</span><span class="w">
+</span><span class="c1">#the predicted values</span><span class="w">
+</span><span class="n">linpred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rowSums</span><span class="p">(</span><span class="n">modmat</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">betas</span><span class="p">[</span><span class="n">dat</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">,])</span><span class="w">
+</span><span class="c1">#simulate some response</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">linpred</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The tricky part to get at this point is the generation of the worker-level coefficients. One need to imagine that there is a population of worker out there and that there is some average operating time per machine types at the population-level. These average operating time is what we set in the <em>mu_b</em> object. Now, we assume that single worker would deviate from this population average and we encapsulate this deviation in the variance-covariance <em>sigma_b</em> matrix. A key point to note is that the operating time may not deviate independetly form one another. For example worker better than average with machine <strong>a</strong> might worse than average with machine <strong>b</strong>. This is what the covariance indicates.</p>
+
+<p>A plot of the data might be helpful at this point:</p>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Ind_ID</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">Machine</span><span class="p">))</span><span class="o">+</span><span class="n">geom_point</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">stat_summary</span><span class="p">(</span><span class="n">fun.y</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="s2">"line"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">coord_flip</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">12</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">12</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">-3</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">),</span><span class="n">linetype</span><span class="o">=</span><span class="s2">"dashed"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="http://localhost:4000/assets/images/factor_re_1.png" alt="fig1" /></p>
+
+<p>The dotted line show the population-level effect of the different machines, workers are, on average faster with machine <strong>b</strong> and slower on machine <strong>c</strong>. The solid line is joining the average values per machine across the different workers. We can see that, for instance, that Worker 3 is worse than average across all machines, Worker 1 show average operating time for machine b and c but much faster operating time on machine a.</p>
+
+<p>In the model we want to have variation in the effect of machines on operating time for the different workers. There are two main ways to fit such a model, the first one is:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lmer</span><span class="p">(</span><span class="n">Time</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Machine</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">Machine</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Ind_ID</span><span class="p">),</span><span class="w"> </span><span class="n">dat</span><span class="p">))</span><span class="w">
+</span><span class="c1">## Linear mixed model fit by REML ['lmerMod']</span><span class="w">
+</span><span class="c1">## Formula: Time ~ Machine + (Machine | Ind_ID)</span><span class="w">
+</span><span class="c1">##    Data: dat</span><span class="w">
+</span><span class="c1">## REML criterion at convergence: 419.9672</span><span class="w">
+</span><span class="c1">## Random effects:</span><span class="w">
+</span><span class="c1">##  Groups   Name        Std.Dev. Corr       </span><span class="w">
+</span><span class="c1">##  Ind_ID   (Intercept) 2.0730              </span><span class="w">
+</span><span class="c1">##           Machineb    0.9329   -0.22      </span><span class="w">
+</span><span class="c1">##           Machinec    1.2394   -0.32  0.16</span><span class="w">
+</span><span class="c1">##  Residual             1.0605              </span><span class="w">
+</span><span class="c1">## Number of obs: 120, groups:  Ind_ID, 12</span><span class="w">
+</span><span class="c1">## Fixed Effects:</span><span class="w">
+</span><span class="c1">## (Intercept)     Machineb     Machinec  </span><span class="w">
+</span><span class="c1">##       1.029        2.687       -3.769</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This model estimated for all parameters their variation between the workers (see the Std.Dev column above) plus the correlation in the varying effect. Basically this tells us that worker that were better than average on machine <strong>a</strong> tended to be a bit worst than average on machine <strong>b</strong> and <strong>c</strong>. We can compare the fitted correlation to the one we used to simulate our data:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cov2cor</span><span class="p">(</span><span class="n">sigma_b</span><span class="p">)</span><span class="w">
+</span><span class="c1">##            [,1]       [,2]        [,3]</span><span class="w">
+</span><span class="c1">## [1,]  1.0000000 0.17863836 -0.15839289</span><span class="w">
+</span><span class="c1">## [2,]  0.1786384 1.00000000  0.02149436</span><span class="w">
+</span><span class="c1">## [3,] -0.1583929 0.02149436  1.00000000</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This might seem a bit far from the actual values that we fed in. One could look at the confidence intervals (using profile or bootMer) on these values to see how precise the estimates are.</p>
+
+<p>Anyhow it is pretty costly and hard for a mixed effect model to estimate many variance-covariance parameters, one can quickly get into convergence warnings when the number of levels increase (remember that for N levels there is N * (N + 1) / 2 variance-covariance parameter to estimate). So an alternative model structure would be:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">m_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lmer</span><span class="p">(</span><span class="n">Time</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Machine</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Ind_ID</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Ind_ID</span><span class="o">:</span><span class="n">Machine</span><span class="p">),</span><span class="w"> </span><span class="n">dat</span><span class="p">))</span><span class="w">
+</span><span class="c1">## Linear mixed model fit by REML ['lmerMod']</span><span class="w">
+</span><span class="c1">## Formula: Time ~ Machine + (1 | Ind_ID) + (1 | Ind_ID:Machine)</span><span class="w">
+</span><span class="c1">##    Data: dat</span><span class="w">
+</span><span class="c1">## REML criterion at convergence: 421.1847</span><span class="w">
+</span><span class="c1">## Random effects:</span><span class="w">
+</span><span class="c1">##  Groups         Name        Std.Dev.</span><span class="w">
+</span><span class="c1">##  Ind_ID:Machine (Intercept) 0.8559  </span><span class="w">
+</span><span class="c1">##  Ind_ID         (Intercept) 1.8806  </span><span class="w">
+</span><span class="c1">##  Residual                   1.0616  </span><span class="w">
+</span><span class="c1">## Number of obs: 120, groups:  Ind_ID:Machine, 36; Ind_ID, 12</span><span class="w">
+</span><span class="c1">## Fixed Effects:</span><span class="w">
+</span><span class="c1">## (Intercept)     Machineb     Machinec  </span><span class="w">
+</span><span class="c1">##       1.032        2.682       -3.766</span><span class="w">
+</span></code></pre></div></div>
+
+<p>According to the <a href="https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#model-specification">github FAQ</a> this random effect notation assume intercept varying among workers and among machines within workers (nested random effects). So the model will estimate for each worker a deviation from the average operating time, the model estimated that the standard deviation of these deviations was 1.88. In addition there will be an extra deviation for each worker on each machines, the model estimated that the standard deviation of these deviation was 0.86.</p>
+
+<p>This model is simpler because it does not estimates the correlation between the varying effects, it assumes that workers are faster or slower on the machines in independant ways.</p>
+
+<p>We can gather the model predictions and plot them against the data:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#get model prediction plus error taking into account individual variations</span><span class="w">
+</span><span class="n">newdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Machine</span><span class="o">=</span><span class="n">factor</span><span class="p">(</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">]))</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">newdat</span><span class="p">,</span><span class="n">re.form</span><span class="o">=</span><span class="kc">NA</span><span class="p">)</span><span class="w"> </span><span class="c1">#this is the predicted average operating time per machines</span><span class="w">
+</span><span class="n">mm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">model.matrix</span><span class="p">(</span><span class="o">~</span><span class="n">Machine</span><span class="p">,</span><span class="n">newdat</span><span class="p">)</span><span class="w">
+</span><span class="n">var_eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">mm</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">tcrossprod</span><span class="p">(</span><span class="n">vcov</span><span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="n">mm</span><span class="p">))</span><span class="w"> </span><span class="c1">#the variation in the effect without taking into account worker effect</span><span class="w">
+</span><span class="n">var_RE</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">],</span><span class="w">
+            </span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">2</span><span class="p">,</span><span class="m">1</span><span class="p">]),</span><span class="w">
+            </span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">3</span><span class="p">,</span><span class="m">3</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">[</span><span class="m">3</span><span class="p">,</span><span class="m">1</span><span class="p">]))</span><span class="w"> </span><span class="c1">#the added worker effect</span><span class="w">
+</span><span class="n">var_eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">var_eff</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">var_RE</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">LCI</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var_eff</span><span class="p">)</span><span class="w"> </span><span class="c1">#the lower 95% CI bond</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">UCI</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var_eff</span><span class="p">)</span><span class="w"> </span><span class="c1">#the upper 95% CI bond</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1.1</span><span class="p">,</span><span class="m">2.1</span><span class="p">,</span><span class="m">3.1</span><span class="p">)</span><span class="w"> </span><span class="c1">#for easier plotting afterwards</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Method</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Full"</span><span class="w">
+</span><span class="n">newdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">newdat</span><span class="p">,</span><span class="n">newdat</span><span class="p">)</span><span class="w"> </span><span class="c1">#duplicate the dataframe for adding the results of the second model</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">m_2</span><span class="p">,</span><span class="n">newdat</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">,],</span><span class="n">re.form</span><span class="o">=</span><span class="kc">NA</span><span class="p">)</span><span class="w">
+</span><span class="c1">#for the second model the random effect structure is simpler we can just add the two random variation sources</span><span class="w">
+</span><span class="n">var_eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">mm</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">tcrossprod</span><span class="p">(</span><span class="n">vcov</span><span class="p">(</span><span class="n">m_2</span><span class="p">),</span><span class="n">mm</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m_2</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m_2</span><span class="p">)</span><span class="o">$</span><span class="n">`Ind_ID:Machine`</span><span class="p">)</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">LCI</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var_eff</span><span class="p">)</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">UCI</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var_eff</span><span class="p">)</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">x</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.9</span><span class="p">,</span><span class="m">1.9</span><span class="p">,</span><span class="m">2.9</span><span class="p">)</span><span class="w"> </span><span class="c1">#for easier plotting afterwards</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Method</span><span class="p">[</span><span class="m">4</span><span class="o">:</span><span class="m">6</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Reduced"</span><span class="w">
+
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Machine</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Time</span><span class="p">))</span><span class="o">+</span><span class="n">geom_jitter</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_linerange</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">ymin</span><span class="o">=</span><span class="n">LCI</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="n">UCI</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="http://localhost:4000/assets/images/factor_re_2.png" alt="fig2" /></p>
+
+<p>So for this particular dataset it did not appear worthwhile to actually estimate the extra covariance parameters. There is quite some discussion on which strategy one should adopt when chosing between alternative random effect structure, see the discussion and the article linked in <a href="https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#singular-models-random-effect-variances-estimated-as-zero-or-correlations-estimated-as---1">the FAQ</a>.</p>
+
+<p>For this specific type of models if there is no inversion, like some the order of processing time per machines does not change across the workers (workers always work faster on machine b than on machine a and machine c). Then the simpler model, without covariation between the varying processing times between the machines, is a good choice.</p>
+
+<p>On a side note, this particular data structure is well known in experimental biology / ecology, it is called split-plot design. You have a bunch of treatment that you want to apply to your plots and you basically sub-divide each plots into subplot and apply the treatments on the subplots. In the end each plot should get all treatments on its different subplots. There have been quite some efforts put into developping proper statistical methods (mainly in the ANOVA realm) for analyzing such data, but here we see that we can also analyze such data with lme4.</p>
+
+<h2 id="second-example-incomplete-factorial-design">Second example: incomplete factorial design</h2>
+
+<p>Sometime we cannot have all levels of a categorical variable on each units. For instance a personn cannot be classified as both adult and teenager, or it might be unethical to expose test animals to all the drugs. In these cases we might still expect different units to respond differently to the categories and so want to fit similar models as before:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dat2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Machine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">],</span><span class="n">times</span><span class="o">=</span><span class="m">40</span><span class="p">)))</span><span class="w"> 
+</span><span class="n">modmat2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">model.matrix</span><span class="p">(</span><span class="o">~</span><span class="n">.</span><span class="p">,</span><span class="n">dat2</span><span class="p">)</span><span class="w"> </span><span class="c1">#the model matrix</span><span class="w">
+</span><span class="n">dat2</span><span class="o">$</span><span class="n">Ind_ID</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">J</span><span class="p">,</span><span class="n">times</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="n">J</span><span class="p">)</span><span class="w"> </span><span class="c1">#add the worker ID to the data frame</span><span class="w">
+</span><span class="n">xtabs</span><span class="p">(</span><span class="o">~</span><span class="n">Ind_ID</span><span class="o">+</span><span class="n">Machine</span><span class="p">,</span><span class="n">dat2</span><span class="p">)</span><span class="w"> </span><span class="c1">#to check the design</span><span class="w">
+</span><span class="c1">##       Machine</span><span class="w">
+</span><span class="c1">## Ind_ID  a  b  c</span><span class="w">
+</span><span class="c1">##     1  10  0  0</span><span class="w">
+</span><span class="c1">##     2   0 10  0</span><span class="w">
+</span><span class="c1">##     3   0  0 10</span><span class="w">
+</span><span class="c1">##     4  10  0  0</span><span class="w">
+</span><span class="c1">##     5   0 10  0</span><span class="w">
+</span><span class="c1">##     6   0  0 10</span><span class="w">
+</span><span class="c1">##     7  10  0  0</span><span class="w">
+</span><span class="c1">##     8   0 10  0</span><span class="w">
+</span><span class="c1">##     9   0  0 10</span><span class="w">
+</span><span class="c1">##     10 10  0  0</span><span class="w">
+</span><span class="c1">##     11  0 10  0</span><span class="w">
+</span><span class="c1">##     12  0  0 10</span><span class="w">
+
+</span><span class="c1">#we will use the same coefficients as before</span><span class="w">
+</span><span class="c1">#the predicted values</span><span class="w">
+</span><span class="n">linpred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rowSums</span><span class="p">(</span><span class="n">modmat2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">betas</span><span class="p">[</span><span class="n">dat2</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">,])</span><span class="w">
+</span><span class="c1">#simulate some response</span><span class="w">
+</span><span class="n">dat2</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">linpred</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w">
+
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">dat2</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Ind_ID</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">Machine</span><span class="p">))</span><span class="o">+</span><span class="n">geom_point</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">stat_summary</span><span class="p">(</span><span class="n">fun.y</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="s2">"line"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">coord_flip</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">12</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">12</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">-3</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">),</span><span class="n">linetype</span><span class="o">=</span><span class="s2">"dashed"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="http://localhost:4000/assets/images/factor_re_3.png" alt="fig3" /></p>
+
+<p>We can start to fit the same two models as before:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">m_3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lmer</span><span class="p">(</span><span class="n">Time</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Machine</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">Machine</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Ind_ID</span><span class="p">),</span><span class="n">dat2</span><span class="p">)</span><span class="w">
+</span><span class="c1">## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control</span><span class="w">
+</span><span class="c1">## $checkConv, : Hessian is numerically singular: parameters are not uniquely</span><span class="w">
+</span><span class="c1">## determined</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The model did not fit due to some numerical issues, basically we do not have enough data to fit the complexity we are asking for with this model. One option is to go out and collect more data, another option is to try out a simpler model:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">m_4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lmer</span><span class="p">(</span><span class="n">Time</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Machine</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Ind_ID</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Ind_ID</span><span class="o">:</span><span class="n">Machine</span><span class="p">),</span><span class="n">dat2</span><span class="p">))</span><span class="w">
+</span><span class="c1">## Linear mixed model fit by REML ['lmerMod']</span><span class="w">
+</span><span class="c1">## Formula: Time ~ Machine + (1 | Ind_ID) + (1 | Ind_ID:Machine)</span><span class="w">
+</span><span class="c1">##    Data: dat2</span><span class="w">
+</span><span class="c1">## REML criterion at convergence: 386.2318</span><span class="w">
+</span><span class="c1">## Random effects:</span><span class="w">
+</span><span class="c1">##  Groups         Name        Std.Dev.</span><span class="w">
+</span><span class="c1">##  Ind_ID         (Intercept) 1.288   </span><span class="w">
+</span><span class="c1">##  Ind_ID:Machine (Intercept) 1.490   </span><span class="w">
+</span><span class="c1">##  Residual                   1.047   </span><span class="w">
+</span><span class="c1">## Number of obs: 120, groups:  Ind_ID, 12; Ind_ID:Machine, 12</span><span class="w">
+</span><span class="c1">## Fixed Effects:</span><span class="w">
+</span><span class="c1">## (Intercept)     Machineb     Machinec  </span><span class="w">
+</span><span class="c1">##       2.216        1.932       -5.978</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This model worked. We can explore the random terms that were fitted with this model:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid.arrange</span><span class="p">(</span><span class="n">dotplot</span><span class="p">(</span><span class="n">ranef</span><span class="p">(</span><span class="n">m_4</span><span class="p">,</span><span class="n">condVar</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="n">whichel</span><span class="o">=</span><span class="s2">"Ind_ID"</span><span class="p">))[[</span><span class="m">1</span><span class="p">]],</span><span class="n">dotplot</span><span class="p">(</span><span class="n">ranef</span><span class="p">(</span><span class="n">m_4</span><span class="p">,</span><span class="n">condVar</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="n">whichel</span><span class="o">=</span><span class="s2">"Ind_ID:Machine"</span><span class="p">))[[</span><span class="m">1</span><span class="p">]],</span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="http://localhost:4000/assets/images/factor_re_4.png" alt="fig4" /></p>
+
+<p>You can check with the figure above that indeed worker 9 was faster than average on machine c, while worker 3 was slower than average on machine c. Using the code from above one can also plot the model predictions:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">newdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Machine</span><span class="o">=</span><span class="n">factor</span><span class="p">(</span><span class="nb">letters</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">]))</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">m_4</span><span class="p">,</span><span class="n">newdat</span><span class="p">,</span><span class="n">re.form</span><span class="o">=</span><span class="kc">NA</span><span class="p">)</span><span class="w"> </span><span class="c1">#this is the predicted average operating time per machines</span><span class="w">
+</span><span class="n">mm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">model.matrix</span><span class="p">(</span><span class="o">~</span><span class="n">Machine</span><span class="p">,</span><span class="n">newdat</span><span class="p">)</span><span class="w">
+</span><span class="n">var_eff</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">mm</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">tcrossprod</span><span class="p">(</span><span class="n">vcov</span><span class="p">(</span><span class="n">m_4</span><span class="p">),</span><span class="n">mm</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m_4</span><span class="p">)</span><span class="o">$</span><span class="n">Ind_ID</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">VarCorr</span><span class="p">(</span><span class="n">m_4</span><span class="p">)</span><span class="o">$</span><span class="n">`Ind_ID:Machine`</span><span class="p">)</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">LCI</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var_eff</span><span class="p">)</span><span class="w"> </span><span class="c1">#the lower 95% CI bond</span><span class="w">
+</span><span class="n">newdat</span><span class="o">$</span><span class="n">UCI</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newdat</span><span class="o">$</span><span class="n">Time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">var_eff</span><span class="p">)</span><span class="w"> </span><span class="c1">#the upper 95% CI bond</span><span class="w">
+
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Machine</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Time</span><span class="p">))</span><span class="o">+</span><span class="n">geom_jitter</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s2">"red"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_linerange</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">newdat</span><span class="p">,</span><span class="n">aes</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">LCI</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="n">UCI</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s2">"red"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="http://localhost:4000/assets/images/factor_re_5.png" alt="fig5" /></p>
+
+<p>We see here that the model prediction are slightly off, especially for machine a, this is certainly due to small samples combined with large variations.</p>
+
+<p>To wrap up: one can use categorical variables as varying terms in lme4 but one need to be aware of what the model specification means and if there are enough data to allow the model to fit. An important point here is that more data will not always solve the issue, for instance with the second example if we recorded worker 1 on machine a another 50 times this won’t help much further. More data help building more complex models when they fill some gaps, like when you ensure that all workers where recorded on all machines (at least one time).</p>
+
+<p>This post is inspired by <a href="http://www.stat.wisc.edu/~bates/UseR2008/WorkshopD.pdf">this presentation</a> by Douglas Bates around slides 85-90.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#lme4" class="page__taxonomy-item" rel="tag">lme4</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#r" class="page__taxonomy-item" rel="tag">R</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/categories/#r-and-stat" class="page__taxonomy-item" rel="tag">R and Stat</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-11-11T00:00:00+01:00">November 11, 2017</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Categorical+random+effects+with+lme4%20http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcatgorical-random-effects-with-lme4%2F" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcatgorical-random-effects-with-lme4%2F" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcatgorical-random-effects-with-lme4%2F" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fr%2520and%2520stat%2Fcatgorical-random-effects-with-lme4%2F" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" class="pagination--pager" title="Mind the gap: when the news article run ahead of the science
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/simulation-sem-2/" class="pagination--pager" title="Simulating SEMs: part 2 extensions
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/r%20and%20stat/simulation-sem-2/" rel="permalink">Simulating SEMs: part 2 extensions
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Back in May I published a first post which simulated simple Structural Equation Models (SEMs) to check the capacity of piecewieseSEM to deal with noise. At t...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/biological%20stuff/opinion%20posts/mind-the-gap-when-the-news-article-run-ahead-of-the-science/" rel="permalink">Mind the gap: when the news article run ahead of the science
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">This is a quick post on a blatant example on how careful and prudent interpretation in scientific articles are over-simplified in news article.
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/three-way-interactions-in-r/" rel="permalink">Interpreting three-way interactions in R
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">A reader asked in a comment to my post on interpreting two-way interactions if I could also explain interaction between two categorical variables and one con...</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src=
+          
+            "http://localhost:4000/assets/images/tease.png"
+          
+          alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/r%20and%20stat/introduction-to-point-pattern-analysis-for-ecologists/" rel="permalink">Introduction to point pattern analysis for ecologists
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  12 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Point pattern analysis is a set of techniques to analyze spatial point data. In ecology this type of analysis may arise in several context but make specific ...</p>
+  </article>
+</div>
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/lionel68"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Lionel Hertzog. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/r%20and%20stat/catgorical-random-effects-with-lme4/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/r%20and%20stat/catgorical-random-effects-with-lme4"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-lionel68-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+  </body>
+</html>
