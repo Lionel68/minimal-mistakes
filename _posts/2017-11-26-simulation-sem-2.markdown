@@ -13,11 +13,19 @@ Back in May I published a [first post](https://lionel68.github.io/biological%20s
 
 ## lavaan vs piecewieseSEM
 
-The basic idea of lavaan is to take the modelled relations between the variables, derive the expected variance-covariance 
+The basic idea of lavaan is to take the modelled relations between the variables, derive the expected variance-covariance matrix between all variables and compare the expected against the observed variance-covariance matrix. If the two matrices are not too far away the model is accepted and inferences are drawn from the fitted relations between the variables. The criteria most often used to assess if the model fit is acceptable is the model fit statistic which test the difference between the expected and observed variance-covariance matrix. If the p-value of the test is larger than 0.05 the model is generally accepted. 
+
+piecewiseSEM takes a different approach. The idea is to evaluate all relations not included in the model, compute some conditional probabilities and the Fischer's C statistics. If all important relations are included in the set of models then the p-value of Fischer's C statistic should be high. So again piecewiseSEM models are generally accepted if the p-value of the test statistics is greater than 0.05.
+
+I won't dwell that much here on the advantages and disadvantages of both approaches. Briefly lavaan main disadvantage is that it assumes that the data are multivariate normal which is a pretty strong constraints, the main advantages of lavaan are that it allows modeling latent variables and can directly compute strength and significance of mediating/indirect effects. On the other hand the main disadvantages of piecewiseSEM is that it allow almost infinite freedom in the sets of models that can be combined making it harder to relate these so-called path models to concepts like causality and mechanisms (see this earlier post on that). The main advantage of piecewiseSEM is its flexibility one can model hierarchical structure or non-normal distributions.
+
+The two approaches deserve being compared in their strength and weaknesses against simulated datasets.  
 
 ## About the simulations
 
+You can find all the code at the end of this article. The basic idea is to create a matrix summarising the presence/absence of relations between a set of variables. From these SEM models are set. The data simulation can follow three different scenarios, (i) the data are completely random, there is no signal in it, (ii) the data simulation follows exactly the set of relations indicated by the model, the data represent the model albeit with some added random variations, (iii) some of the causal relation are reversed, the model miht say that A -> B but the data follow B -> A. In addition to this variation the sample size (number of data points) vary from 20 to 100 and the number of variables vary from 5 to 10.
 
+The data simulation and model fitting is done many times for the different sample size and number of variables values. At the end what is recorded is: (i) the proportion of models that would be accepted (p-value > 0.05), (ii) the proportion of paths/slopes that were significant, (iii) the average value of the significant paths. 
 
 ## Results
 
