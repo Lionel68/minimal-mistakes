@@ -29,19 +29,29 @@ The data simulation and model fitting is done many times for the different sampl
 
 ## Results
 
-The first result is to look at the proportion of accepted models. Typically in lavaan if the p-value for the difference between the fitted and observed variance-covariance matrix is higher than 0.05 the model is accepted. For piecewieseSEM, the Fischer C statistic is computed, if you did not miss out important relations in your model the p-value of the Fischer C statistic will be large, in general models are accepted for p-value of the C statistic larger than 0.05.
+The first result is to look at the proportion of accepted models. 
 
 ![fig1]({{ site.url }}{{ site.baseurl }}/assets/images/sem_1.png)
 
-In this figure the colors represent the different data generation strategy (random, exact or shuffled), the linetype show the model fitting technique (lavaan or piecewieseSEM), the x-axis is the sample size, the different facets the number of variables in the model from 5 to 10 and the y-axis is the proportion of accepted models. The first intersting result is that the number of accepted models is pretty equivalent between the 
+In this figure the colors represent the different data generation strategy (random, exact or shuffled), the linetype show the model fitting technique (lavaan or piecewieseSEM), the x-axis is the sample size, the different facets the number of variables in the model from 5 to 10 and the y-axis is the proportion of accepted models. The first intersting result is that the number of accepted models is pretty equivalent between the two approaches and is around 0.9 for both random and exact data generation. In other words whether you fitted just noise or some actual signal both lavaan and piecewiseSEM models will be accepted at a similar rate. More bluntly, the model test statistics used here are of no help to discriminate between models or to reject them. Interestingly as the number of variables included in the model increase, lavaan reject model more often for small sample sizes while piecewiseSEM acceptance rate is pretty constant overall cases. Shuffling causal relations leads to lower acceptance rate especially for high number of variables. Again piecewiseSEM and lavaan are pretty similar. In a nutshell, lavaan and piecewiseSEM have similar behvior regarding model acceptance, wrongly setting causal relation can lead to important drop in model acceptance but fitted to random data the models are accepted around 90% of the time.
+
+Let's turn to the second output, the proportion of significant paths:
 
 ![fig1]({{ site.url }}{{ site.baseurl }}/assets/images/sem_2.png)
 
+The structure of the figure is the same as before so can directly pluge into some interpretations. lavaan and piecewiseSEM patterns are again pretty close in this figure. There is a slight relation between sample size and proportion of singificant paths for exact and shuffled data generation, going from 20 to 100 data points increase proportion of significant paths from around 60 to 80%. With more variables in the model the average accepted proportion seem to decline, so more variables means less chance to detect (all) effects. The random data generation led to super-low proportions around 5-10% so close to the type I error rate. So it seems that accepting a model is no guarantee that there is something happening within the data, one needs to look at the relations (slopes) between the data. But there again getting significant slopes between variables does not tell whether the causal directions were correct, the model could say that A causes B when in fact B causes A in the data ...
+
+A final output is the average value of the significant paths:
+
 ![fig1]({{ site.url }}{{ site.baseurl }}/assets/images/sem_3.png)
+
+There is quite some noise in this figure, I might try later on the use the median rather than the mean, for some data simulations there were pretty large coefficient values mess up a bit with the lines. There is a slight decrease in the average path value for random data generation with sample size, meaning that as you collect more and more data, the significance threshold becomes easier to breach for smaller and smaller effects. Again lavaan and piecewiseSEM are pretty close together.
 
 ## Conclusion
 
-Some bla bla
+The main conclusion from this epxloration is that lavaan and piecewiseSEM are pretty identical, so use the one that fits closest to your need. Also the model test statistic is a poor indication that things are actually going on in your data so do not trust it. With relatively large sample size lavaan and piecewiseSEM have an adequate power of around 80% to detect effects between the variables yet there is no guarantee that you fitted the causal relations in the correct directions. 
+
+Next step for me would be to include some (hierarchical) structure in the data and simulate non-normal responses.
 
 ## The code
 
