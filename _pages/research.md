@@ -4,7 +4,6 @@ permalink: /research/
 toc: true
 ---
 
-# Research:
 
 My main research interest is in understanding the consequences of diversity loss and turnover on ecosystem functioning in managed landscape. The overall aim being to forecast future functioning rates in impoverished, fragmented and/ or increasingly homogeneous systems. 
 
