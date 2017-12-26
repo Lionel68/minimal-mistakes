@@ -1,15 +1,16 @@
 ---
 title: Research
 permalink: /research/
+toc: true
 ---
 
-#Research:
+# Research:
 
 My main research interest is in understanding the consequences of diversity loss and turnover on ecosystem functioning in managed landscape. The overall aim being to forecast future functioning rates in impoverished, fragmented and/ or increasingly homogeneous systems. 
 
 To achieve this my work mainly turn around analyzing diverse chuncks of data, in other words I spend most of my (research) time sieving through R scripts. As a service to the lab I am co-organizing regular [coding club](https://github.com/lionel68/CodingClub_UGent) sessions to collectively exchange knowledge on coding and computing. My stat interest revolve around: hierarchical models, Bayesian data analysis, graphs and networks, dynamical equation systems. You may find more about this on my personal [website](https://lionel68.github.io).
 
-#Major topics
+# Major topics
 
 ## Effect of plant diversity on arthropod communities and their functions
 
