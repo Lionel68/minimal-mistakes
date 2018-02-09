@@ -361,6 +361,10 @@
 <lastmod>2017-11-26T00:00:00+01:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/meeting-with-Yves-Rosseel/</loc>
+<lastmod>2018-02-09T00:00:00+01:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/about/</loc>
 </url>
 <url>
@@ -383,6 +387,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/research/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/</loc>
