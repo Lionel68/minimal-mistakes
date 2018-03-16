@@ -33,6 +33,20 @@ gallery_igraph:
     image_path: /assets/images/igraph3.png
     alt: "Igraph 3"
     title: "Igraph 3"
+gallery_mandalas:
+  - url: /assets/images/igraph1.png
+    image_path: /assets/images/mandala1.png
+    alt: "Igraph 1"
+    title: "igraph"
+  - url: /assets/images/igraph2.png
+    image_path: /assets/images/mandalas1.png
+    alt: "Igraph 2"
+    title: "Igraph 2"
+  - url: /assets/images/igraph3.png
+    image_path: /assets/images/Mand1.png
+    alt: "Igraph 3"
+    title: "Igraph 3"
+
 ---
 
 
@@ -45,3 +59,7 @@ Here are some pattern emerging from (simple) mathematical properties that I find
 ## Networks
 
 {% include gallery id="gallery_igraph" caption="Networks represent relationships amongst individuals, fortunately drawing lines between fixed dots create mesmerizing pictures, click [here](https://github.com/lionel68/lionel68.github.io/blob/master/_art_script/cardioid.R) to see the R script used." %}
+
+## Mandalas
+
+{% include gallery id="gallery_mandalas" caption="Mandalas are ancient drawings bringing inner peace, they can also be generated from regular points spacing and voronoi tessalation, click [here](https://github.com/lionel68/mandalas) to see the R script used, heavily inspired from [asincron](https://fronkonstin.com/about/)." %}
