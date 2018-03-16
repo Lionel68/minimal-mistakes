@@ -7,6 +7,7 @@ tags:
 - R
 - covariance
 - ecology
+usemathjax: true
 ---
 
 
@@ -18,19 +19,17 @@ In this first post on recurrent themes I will explore covariance matrices, what 
 
 A covariance matrix is an ordered collection of covariance between a group of variables. Covariance is always defined between two variables, it measures how much the two variables are moving together. Positive covariance means that when values of one variables get high, the values of the other variables also get high. Negative covariance means that when one variable is increasing the other is decreasing. This sounds pretty much like correlation. This is because correlation is the scaled covariance, in other words covariance can go from -Inf up to +Inf, correlation is constrained between -1 and 1. In more mathematical terms we have: 
 
-\[
- Cov(X, Y) = \frac{\sum_{i=1}^{N} (X - \xoverline{X}) * (Y - \xoverline{Y})}{N - 1}
-\]
+$$ Cov(X, Y) = \frac{\sum_{i=1}^{N} (X_i - \bar{X}) * (Y_i - \bar{Y})}{N - 1} $$
 
-for the covariance and
 
-\[
-  Cor(X, Y) = \frac{Cov(X, Y)}{\sigma_X * \sigma_Y}
-\]
+for the covariance, with the $$ \bar{X} $$ representing the mean X value and
 
-for the correlation where the \(\sigma\) are the standard deviation of the variables.
+$$ Cor(X, Y) = \frac{Cov(X, Y)}{\sigma_X * \sigma_Y} $$
 
-So covariance is in unit-dependent, if you measure the covariance between a variable in m and a variable in g you will get a covariance value in m . g, turning these variables into km and kg will get you different covariance. On the other hand correlations are unitless, so you can apply any linear transformation to your data and the correlation will remain constant. In other words covariance might be trickier to interpret than correlation.
+
+for the correlation where the $$ \sigma $$ are the standard deviation of the variables.
+
+So covariance is unit-dependent, if you measure the covariance between a variable in meter and a variable in gramm you will get a covariance value in metergramm, turning these variables into km and kg will get you different covariance. On the other hand correlations are unitless, so you can apply any linear transformation to your data and the correlation will remain constant. In other words covariance might be trickier to interpret than correlation.
 
 Below is how a covariance matrix could look like:
 
@@ -71,9 +70,11 @@ The important part there is the Corr information, the model tell us that there i
 
 Another modelling approach that intensively use covariance matrix is structural equation modelling.  In structural equation models relationships between variables are estimated from patterns in the covariance. Basically the covariance between a pair of variables is expressed in terms of their hypothetical relations. Some algorithm is then running trying to best accommodate hypothetical relations and observed covariance matrices and if the two are pretty close then the model does a good job of extracting the relation between the variables.
 
-![From James Grace: Structural Equation Modeling and Natural Systems, Cambridge University Press]({{ site.url }}{{ site.baseurl }}/assets/images/sem.png)
+![Img]({{ site.url }}{{ site.baseurl }}/assets/images/sem.png)
 
-A final place where covariance matrices pop in is when independence of the residuals is violated by some kind of temporal or spatial relations (whether this is always a bad thing is discussed [here](https://dynamicecology.wordpress.com/2018/02/12/in-praise-of-courtesy-p-values-perfectly-correct-p-values-vs-pragmatically-approximate-p-values/)). One way to take these components into account is by allowing errors to covary following some kind of functions. For spatial or photogenically-correlated errors the idea is then to make the covariance between two data points depend on the spatial or phylogenetic distance between the two points. In R such models can be ran via MCMCglmm, INLA, gstat or other packages.
+_From James Grace: Structural Equation Modeling and Natural Systems, Cambridge University Press_
+
+A final place where covariance matrices pop in is when independence of the residuals is violated by some kind of temporal or spatial relations (whether this is always a bad thing is discussed [here](https://dynamicecology.wordpress.com/2018/02/12/in-praise-of-courtesy-p-values-perfectly-correct-p-values-vs-pragmatically-approximate-p-values/)). One way to take these components into account is by allowing errors to covary following some kind of functions. For spatial or photogenically-correlated errors the idea is then to make the covariance between two data points depend on the spatial or phylogenetic distance between the two points. In R such models can be ran via [MCMCglmm](https://cran.r-project.org/web/packages/MCMCglmm/index.html), [INLA](http://www.r-inla.org/), [gstat](https://cran.r-project.org/web/packages/gstat/index.html) or other packages.
 
 
 ## Some properties of covariance matrices
