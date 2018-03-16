@@ -36,16 +36,16 @@ gallery_igraph:
 gallery_mandalas:
   - url: /assets/images/igraph1.png
     image_path: /assets/images/mandala1.png
-    alt: "Igraph 1"
-    title: "igraph"
+    alt: "Mandala1"
+    title: "mand1"
   - url: /assets/images/igraph2.png
     image_path: /assets/images/mandalas1.png
-    alt: "Igraph 2"
-    title: "Igraph 2"
+    alt: "Mandala2"
+    title: "mand2"
   - url: /assets/images/igraph3.png
     image_path: /assets/images/Mand1.png
-    alt: "Igraph 3"
-    title: "Igraph 3"
+    alt: "Mandala 3"
+    title: "mand3"
 
 ---
 
