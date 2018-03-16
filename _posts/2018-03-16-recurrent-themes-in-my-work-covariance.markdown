@@ -87,7 +87,7 @@ Covariance matrices have a few distinctive features that I will outline below:
 
 - symmetric: covariance matrix are symmetric based on the diagonal, the covariance between A et B  is the same as the covariance between B and A, again looking at the formula this makes sense. For large datasets and complex models this usually means that we do not need to carry the full covariance matrix around, the lower or upper triangle is enough
 
-- positive definitiveness: covariance matrix MUST be positive definitive, this means that multiplying a matrix that is positive-definite by any non-zero vector will always return a positive number. This is a bit of a pain when you want to simulate stuff and you have to generate covariance matrices, you cannot just simulate any numbers, some kind of structure as to be present (but see this post which show some code to randomly generate covariance matrices.
+- positive definitiveness: covariance matrix MUST be positive definitive, this means that multiplying a matrix that is positive-definite by any non-zero vector will always return a positive number. This is a bit of a pain when you want to simulate stuff and you have to generate covariance matrices, you cannot just simulate any numbers, some kind of structure as to be present (but see [this entry](https://stat.ethz.ch/pipermail/r-help/2008-February/153708) which show some code to randomly generate covariance matrices).
 
 - cholesky decomposition: this is a cool trick to pass around the positive definitiveness issue, a positive definite matrix can be cholesky decompose into a lower-triangle matrix that when multiplied with its transpose returns the covariance matrix. This is a neat trick to optimize typical Monte Carlo sampling but also least squares problems.
 
