@@ -18,7 +18,8 @@ Just head over to the [Blog]({{"/blog/" | absolute_url}}) tab, feel free to leav
 
 ## A short CV
 
-* 2017 - : PostDoc at the university of Gent (BE)
+* 2019 - : Researcher at the Thünen Institut for Biodiversity in Braunschweig (DE)
+* 2017 - 2019: PostDoc at the university of Gent (BE)
 * 2013 - 2017: PhD at the Technical University of Munich (DE)
 * 2011 - 2013: Master in Science at the University of Bonn (DE) and Montpellier (FR)
 * 2008 - 2011: Bachelor of Science at the university of Strasbourg (FR) and Leeds (UK)
