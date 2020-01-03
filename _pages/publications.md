@@ -7,7 +7,7 @@ toc: true
 
 _Updated: 17/10/2019_
 
-Below is a list of my publications:
+Below is a list of my peer-reviewed publications:
 
 ## 2019
 
@@ -15,9 +15,15 @@ Below is a list of my publications:
 
 * Dekeukeleire, D., Hertzog, L. R., Vantieghem, P., van Schrojenstein Lantman, I. M., Sercu, B. K., Boonyarittichaikij, R., ... & Lens, L. (2019). Forest fragmentation and tree species composition jointly shape breeding performance of two avian insectivores. Forest Ecology and Management, 443, 95-105. [link](https://www.sciencedirect.com/science/article/abs/pii/S0378112719304207)
 
+* Lionel Hertzog, Daan Dekeukeleire, Dries Bonte, An Martel, Kris Verheyen, Luc Lens, Lander Baeten (2019) Kleine bossen functioneren beter wanneer ze gemengd zijn. Bosrevue 82a, 1-7.
+
 * Hertzog, L. R., Boonyarittichaikij, R., Dekeukeleire, D., de Groote, S. R., van Schrojenstein Lantman, I. M., Sercu, B. K., ... & Martel, A. (2019). Forest fragmentation modulates effects of tree species richness and composition on ecosystem multifunctionality. Ecology, 100(4), e02653. [link](https://esajournals.onlinelibrary.wiley.com/doi/pdf/10.1002/ecy.2653)
 
 * Landuyt, D., De Lombaerde, E., Perring, M. P., Hertzog, L. R., Ampoorter, E., Maes, S. L., ... & Sercu, B. K. (2019). The functional role of temperate forest understorey vegetation in a changing world. Global change biology. Global Change Biology [link](https://onlinelibrary.wiley.com/doi/pdf/10.1111/gcb.14756)
+
+* Liu, J., Hertzog, L., Hu, G., Verheyen, K., & Yu, M. (2019). A Framework to Connect Biodiversity-Ecosystem Functioning Research to Habitat Fragmentation. In Current Trends in Landscape Research (pp. 381-394). Springer, Cham.
+
+* Maes, S. L., Perring, M. P., Depauw, L., Bernhardt‐Römermann, M., Blondeel, H., Brūmelis, G., ... & Hédl, R. (2019). Plant functional trait response to environmental drivers across European temperate forest understorey communities. Plant Biology.
 
 * Sercu, B. K., Hertzog, L. R., De Groote, S. R., Baeten, L., Lens, L., Martel, A., ... & Verheyen, K. (2019). Soil heterogeneity in tree mixtures depends on spatial clustering of tree species. Basic and Applied Ecology, 39, 38-47. [link](https://www.sciencedirect.com/science/article/pii/S1439179118302548)
 
