@@ -5,9 +5,15 @@ comments: false
 toc: true
 ---
 
-_Updated: 17/10/2019_
+_Updated: 30/06/2020_
 
 Below is a list of my peer-reviewed publications:
+
+## 2020
+
+* Buzhdygan, O. Y., Meyer, S. T., Weisser, W. W., Eisenhauer, N., Ebeling, A., Borrett, S. R., ... & Gleixner, G. (2020). Biodiversity increases multitrophic energy use efficiency, flow and storage in grasslands. Nature Ecology & Evolution, 4(3), 393-405. [link](https://www.nature.com/articles/s41559-020-1123-8)
+
+* van Schrojenstein Lantman, I. M., Vesterinen, E. J., Hertzog, L. R., Martel, A., Verheyen, K., Lens, L., & Bonte, D. (2020). Body size and tree species composition determine variation in prey consumption in a forest-inhabiting generalist predator. bioRxiv. [link](https://www.biorxiv.org/content/10.1101/2020.05.20.105866v1.abstract)
 
 ## 2019
 
