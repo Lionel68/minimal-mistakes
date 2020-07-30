@@ -234,6 +234,11 @@ In this post we saw how to estimate landscape-scale effect on variables measured
 
 Here we only had a simple model with one covariate, this can of course be extended by adding more covariates with or without distance decay effect.
 
+Some handy references:
+
+- [Miguet et al 2017](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12830)
+- [Moll et al 2020](https://onlinelibrary.wiley.com/doi/pdf/10.1111/ecog.04762)
+
 Below is the code to simulate the dataset:
 
 
