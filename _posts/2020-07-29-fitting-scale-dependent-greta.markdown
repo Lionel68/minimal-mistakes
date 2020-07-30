@@ -18,22 +18,25 @@ This approach assume consistent landscape effect up to a certain threshold and n
 With the distance-decay approach one need to define a decay or weight function, for this post we will use the following half-normal kernel:
 
 $$ w_i = e^{- \frac{r_i ^ 2}{2 * \delta ^ 2}}$$
-where $w$ is the weight attributed to a ring $i$, $r$ is the radius of the ring and $\delta$ is the decay parameter to be estimated by the model.
+
+where _w_ is the weight attributed to a ring _i_, _r_ is the radius of the ring and $$\delta$$ is the decay parameter to be estimated by the model.
 
 The next step is to turn the weight function into a distance function:
 
 $$ d_i = \frac{w_i * a_i}{\sum_i w_i * a_i}$$
 
-where $a$ is the area of the ring (note that this can be extended to cases where the area of the ring differ between the observation). The division is to ensure that the distance weight sum to one.
+where _a_ is the area of the ring (note that this can be extended to cases where the area of the ring differ between the observation). The division is to ensure that the distance weight sum to one.
 
 Then we can derive the covariate as follow:
 
 $$ x_j = \sum_i d_i * X_{ij} $$
-where $X$ is a matrix with $i$ columns (one for each ring) and $j$ rows (one for each observations).
+
+where _X_ is a matrix with _i_ columns (one for each ring) and _j_ rows (one for each observations).
 
 The weighed covariate can then be plugged into a classical regression framework such as:
 
 $$ y \sim \mathcal{N}(\beta_0 + \beta_1 * x, \sigma) $$
+
 So we have the theory in place, let's see how to fit such a model in greta (check this [website](https://greta-stats.org/) for infos on the package), we will use for this a simulated dataset the you can generate following the code at the end of the post.
 
 
@@ -135,7 +138,7 @@ Multivariate psrf
 greta.checks::pp_check(dd, y, nsim = 50)
 ```
 
-![Posterior predictive checks]({{ site.url }}{{ site.baseurl }}/_posts/figure/dist_kern1.png)
+![Posterior predictive checks]({{ site.url }}{{ site.baseurl }}/assets/images/dist_kern1.png)
 
 For more about post-fitting checks for greta, you can check this [post](https://datascienceplus.com/with-great-powers-come-great-responsibilities-model-checks-in-bayesian-data-analysis/).
 
@@ -161,7 +164,7 @@ for(i in rnd){
 }
 ```
 
-![Distance function]({{ site.url }}{{ site.baseurl }}/_posts/figure/dist_kern2.png)
+![Distance function]({{ site.url }}{{ site.baseurl }}/assets/images/dist_kern2.png)
 
 
 From this graph we can see that landscape conditions beyond 40 have little effect on the response.
@@ -196,7 +199,7 @@ ggplot(pars, aes(x=var, y=med, ymin=lci, ymax=uci)) +
        y = "Radius")
 ```
 
-![Param]({{ site.url }}{{ site.baseurl }}/_posts/figure/dist_kern3.png)
+![Param]({{ site.url }}{{ site.baseurl }}/assets/images/dist_kern3.png)
 
 
 The largest landscape effects are around 8, while 90% of the landscape effect was reached at 15. 
@@ -224,7 +227,7 @@ ggplot(pred_df, aes(x=x, y=med, ymin=lci, ymax=uci)) +
        y = "Predicted response")
 ```
 
-![Regression line]({{ site.url }}{{ site.baseurl }}/_posts/figure/dist_kern4.png)
+![Regression line]({{ site.url }}{{ site.baseurl }}/assets/images/dist_kern4.png)
 
 
 In this post we saw how to estimate landscape-scale effect on variables measured at various sites by explicitely taking into account the fact that conditions close to the site have more importance than conditions far away. The distance decay estimated with this model can have practical implication for instance in revealing how landscapes should be managed in order to optimize the response.
