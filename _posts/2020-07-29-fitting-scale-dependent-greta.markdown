@@ -15,6 +15,10 @@ A large number of ecological processes depend not only on the local conditions b
 
 This approach assume consistent landscape effect up to a certain threshold and no landscape effect beyond this threshold. Another, conceptually more satisfaying approach, is to assume a distance-decay of a given form of the landscape effect (see bottom panel of figure). With this approach the different rings are weighted based on their radius, smaller rings having more weight than bigger rings, with the model estimating how fast the landscape effect decay with ring size.
 
+![Regression line]({{ site.url }}{{ site.baseurl }}/assets/images/miguet2017.jpg)
+
+_Figure from Miguet et al 2017: https://doi.org/10.1111/2041-210X.12830_
+
 With the distance-decay approach one need to define a decay or weight function, for this post we will use the following half-normal kernel:
 
 $$ w_i = e^{- \frac{r_i ^ 2}{2 * \delta ^ 2}}$$
